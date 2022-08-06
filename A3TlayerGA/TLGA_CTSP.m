@@ -27,7 +27,7 @@ function TSP_Solve_Struct = TLGA_CTSP(tspData, K)
     Pc=0.5;         %交叉概率
     Pm=0.05;        %变异概率
     
-    MAXGEN=5000;
+    MAXGEN=2000;
     NIND=60; %
     CF = 0.5;
     MF_1 = 0.1;
@@ -102,11 +102,6 @@ function TSP_Solve_Struct = TLGA_CTSP(tspData, K)
         for i = 1:K
             s = [s ; Chrom(j).LowerChrom{i}];
 
-        end
-        if length(unique(s))~= 442
-                disp(j)
-                disp(length(unique(s)))
-            end
         end
     end
     t3 = cputime;

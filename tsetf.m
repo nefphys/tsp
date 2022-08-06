@@ -12,13 +12,21 @@ system('taskkill /f /t /im cmd.exe')
 DrawPath(TSP_Solve_Struct.route,City)
 
 %双层遗传算法求解器
-TSP_Solve_Struct = TLGA_CTSP(tspData,20)
+TSP_Solve_Struct = TLGA_CTSP(tspData,10)
 DrawPath(TSP_Solve_Struct.route,City)
 DrawCluster(City, TSP_Solve_Struct.cate, TSP_Solve_Struct.route)
 
 %双层蚁群算法求解器
-TSP_Solve_Struct = TLACS_Solver(tspData,20)
+profile on;
+TSP_Solve_Struct = TLACS_Solver(tspData,10)
+profile viewer;
+profile off;
 DrawPath(TSP_Solve_Struct.route,City)
+%%
+% 
+%  PREFORMATTED
+%  TEXT
+% 
 
 %经典遗传算法求解器
 

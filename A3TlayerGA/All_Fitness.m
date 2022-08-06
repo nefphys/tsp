@@ -10,16 +10,21 @@ function [ttlDistance,FitnV]=All_Fitness(Distance,Chrom)
 % 首先计算每一条路径的距离
 NIND=length(Chrom); %个体数
 ttlDistance=zeros(NIND,1); %分配矩阵内存
+route = zeros(size(Distance,1),1);
 for i = 1:NIND
-    route = [];
     higherlayer = Chrom(i).HigherChrom;
+    J = 1;
     for h = 1: length(higherlayer)
-        route = [route;  Chrom(i).LowerChrom{higherlayer(h)}];
+        temp = Chrom(i).LowerChrom{higherlayer(h)};
+        L = length(temp);
+        route(J:(J+L-1)) = temp;
+        J = J + L;
     end
     % route即为id，然后计算距离
     rowid = route;
     colid = [route(2:end); route(1)];
     mdist = 0;
+    
     for h = 1:length(route)
         mdist = mdist  + Distance(rowid(h),colid(h));
     end

@@ -64,6 +64,16 @@ function  [TSP_Solve_Struct]  =  ACS_Solver(tspData, MaxIterations, target_lengt
     t  =   1 ;
     kp = 1;
     allrev = 0;
+    
+     %% 预分配内存
+    current_node = 0;
+    c_tv = 0;
+    r = 0;
+    select = 0;
+    city_to_visit = 0;
+    L_T  =  zeros( 1 ,m);
+    best_ant = 0;
+    
     while  ((t  <=  t_max)  &&  (L_target  <=  L_best))
 
 
@@ -74,14 +84,11 @@ function  [TSP_Solve_Struct]  =  ACS_Solver(tspData, MaxIterations, target_lengt
             for  k  =   1  : m %蚂蚁
                 current_node  =  ant_tours(k,s - 1 );
                 visited  =  ant_tours(k,:);
-                to_visit  =  setdiff([1:n],visited);
+                visited = visited(visited ~= 0);
+                to_visit  =  MY_setdiff(1:n,visited);
                 c_tv  =  length(to_visit);
-                p  =  zeros( 1 ,c_tv);
-                for  i  =   1  : c_tv
-                    p(i)  =  (tau(current_node,to_visit(i))) ^ alpha  *  ( 1 / d(current_node,to_visit(i))) ^ beta;
-                end
-                sum_p  =  sum(p);
-                p  =  p  /  sum_p;
+                p  =  (tau(current_node,to_visit)) .^ alpha  .*  ( 1 ./ d(current_node,to_visit)) .^ beta;
+                p  =  p  /  sum(p);
                 for  i  =   2  : c_tv
                     p(i)  =  p(i)  +  p(i - 1 );
                 end
@@ -105,15 +112,10 @@ function  [TSP_Solve_Struct]  =  ACS_Solver(tspData, MaxIterations, target_lengt
         %% 更新最短路径，更新参数
 
         ant_tours(:,n + 1 )  =  ant_tours(:, 1 );
-        L_T  =  zeros( 1 ,m);
         best_ant  =   1 ;
         for  k  =   1  : m
             P  =  ant_tours(k,:);
-            L  =   0 ;
-            for  i  =   1  : n
-                L  =  L  +  d(P(i),P(i + 1 ));
-            end
-            L_T(k)  =  L;
+            L_T(k)  =   sum(d(sub2ind(size(d),P(1:(end-1)),P(2:end))));
             if  (L_T(k)  <  L_T(best_ant))
                 best_ant  =  k;
             end

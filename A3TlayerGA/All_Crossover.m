@@ -11,9 +11,9 @@ function SelCh=All_Crossover(SelCh,Pc)
     for i = 1: floor(NSel/2)
         if Pc >= rand
             %选择两条染色体
-            nid1 = datasample(LX, 1, 'Replace', false);
+            nid1 = randsample(LX, 1, false);
             LX(LX == nid1) = [];
-            nid2 = datasample(LX, 1, 'Replace', false);
+            nid2 = randsample(LX, 1, false);
             LX(LX == nid2) = [];
             [SelCh(nid1,:) SelCh(nid2,:)] = interCross(SelCh(nid1,:), SelCh(nid2,:));
         end
@@ -27,17 +27,17 @@ function [ta tb] = interCross(a, b)
     %多点交叉
     LY = length(a);
     %从0开始计数
-    Ystart =  datasample(2:floor(LY/2),1);
-    Yend = datasample(floor(LY/2):(LY-1),1);
+    Ystart =  randsample(2:floor(LY/2),1);
+    Yend = randsample(floor(LY/2):(LY-1),1);
     repa = a(Ystart:Yend);
     repb = b(Ystart:Yend);
     ta = [a(1:(Ystart-1)) repb a((Yend+1):LY)];
     tb = [b(1:(Ystart-1)) repa b((Yend+1):LY)];
     
     %ta 中重复的城市
-    morea = setdiff(repb,repa);
+    morea = MY_setdiff(repb+1,repa+1)-1;
     %tb 中重复的城市
-    moreb = setdiff(repa,repb);
+    moreb = MY_setdiff(repa+1,repb+1)-1;
     
     j = 1;
     for i = 1:length(morea)
