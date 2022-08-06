@@ -1,0 +1,80 @@
+PARAMETER_FILE = par.txt
+Reading PROBLEM_FILE: "temp.tsp" ... done
+ASCENT_CANDIDATES = 50
+BACKBONE_TRIALS = 0
+BACKTRACKING = NO
+# CANDIDATE_FILE =
+CANDIDATE_SET_TYPE = ALPHA
+# EDGE_FILE =
+EXCESS = 0.0208333
+EXTRA_CANDIDATES = 0 
+EXTRA_CANDIDATE_SET_TYPE = QUADRANT
+GAIN23 = YES
+GAIN_CRITERION = YES
+INITIAL_PERIOD = 100
+INITIAL_STEP_SIZE = 1
+INITIAL_TOUR_ALGORITHM = WALK
+# INITIAL_TOUR_FILE = 
+INITIAL_TOUR_FRACTION = 1.000
+# INPUT_TOUR_FILE = 
+KICK_TYPE = 0
+KICKS = 1
+# MAX_BREADTH =
+MAX_CANDIDATES = 5 
+MAX_SWAPS = 48
+MAX_TRIALS = 48
+# MERGE_TOUR_FILE =
+MOVE_TYPE = 5
+# NONSEQUENTIAL_MOVE_TYPE = 5
+# OPTIMUM =
+OUTPUT_TOUR_FILE = out.txt
+PATCHING_A = 1 
+PATCHING_C = 0 
+# PI_FILE = 
+POPMUSIC_INITIAL_TOUR = NO
+POPMUSIC_MAX_NEIGHBORS = 5
+POPMUSIC_SAMPLE_SIZE = 10
+POPMUSIC_SOLUTIONS = 50
+POPMUSIC_TRIALS = 1
+# POPULATION_SIZE = 0
+PRECISION = 100
+PROBLEM_FILE = temp.tsp
+RECOMBINATION = IPT
+RESTRICTED_SEARCH = YES
+RUNS = 10
+SEED = 1
+STOP_AT_OPTIMUM = YES
+SUBGRADIENT = YES
+# SUBPROBLEM_SIZE =
+# SUBPROBLEM_TOUR_FILE = 
+SUBSEQUENT_MOVE_TYPE = 5
+SUBSEQUENT_PATCHING = YES
+# TIME_LIMIT =
+# TOUR_FILE = 
+TRACE_LEVEL = 1
+
+Lower bound = 50436.8, Ascent time = 0.07 sec.
+Cand.min = 5, Cand.avg = 5.0, Cand.max = 5
+Preprocessing time = 0.07 sec.
+* 1: Cost = 51013, Time = 0.01 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+* 2: Cost = 50785, Time = 0.02 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+* 25: Cost = 50778, Time = 0.12 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+Run 1: Cost = 50778, Time = 0.20 sec. 
+
+* 1: Cost = 50971, Time = 0.01 sec.
+* 2: Cost = 50831, Time = 0.02 sec.
+* 3: Cost = 50825, Time = 0.02 sec.
+* 12: Cost = 50785, Time = 0.04 sec.
+* 40: Cost = 50778, Time = 0.08 sec.
+Run 2: Cost = 50778, Time = 0.11 sec. 
+
+* 1: Cost = 50825, Time = 0.01 sec.
+* 3: Cost = 50785, Time = 0.01 sec.
+Run 3: Cost = 50785, Time = 0.11 sec. 
+
+* 1: Cost = 50950, Time = 0.02 sec.
+* 3: Cost = 50847, Time = 0.03 sec.
