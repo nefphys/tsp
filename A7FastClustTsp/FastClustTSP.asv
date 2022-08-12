@@ -67,14 +67,15 @@ while(true)
                     tempStruct.out = 0;
                     tempStruct.set = tarStruct.set;
                     tempStruct.isover = 1;
-                    tempStruct.tsp = TSPSolver(tarStruct.set); %调用求解器
+                    tempStruct.tsp = TSP_Solver(City(tarStruct.set,:)); %调用求解器
                     tempStruct.order = '0';
-                end
-                
                 %如果点的数量大于200，但是小于10000，则计算密度聚类
-                
+                elseif setSize <= 10000
+                    tempCity = 
                 %如果点的数量大于10000，则进行kmeans聚类
-                
+                else
+                    
+                end
                 
             else
                 %不是第一次进入计算了，也判断是否进行聚类

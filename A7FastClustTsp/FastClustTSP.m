@@ -71,7 +71,7 @@ while(true)
                     tempStruct.order = '0';
                 %如果点的数量大于200，但是小于10000，则计算密度聚类
                 elseif setSize <= 10000
-                
+                    tempCity = 
                 %如果点的数量大于10000，则进行kmeans聚类
                 else
                     
