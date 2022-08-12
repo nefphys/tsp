@@ -8,6 +8,7 @@ function [TSP_Solve_Struct] = FastClustTSP(tspData,MaxDistNum)
 %判断数据量大小，如果数据量大于某个值，则不计算distance
 [Distance, City] = readfile(tspData,0);
 DataLen = size(City,1); %总数据大小
+ID = 1:DataLen;
 if DataLen < 20000
     [Distance, City] = readfile(tspData,1);
 else

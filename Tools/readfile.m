@@ -5,13 +5,14 @@ data = 0;
 if size(fileAddress,1) > 1
     position = fileAddress;
     if isdist
-        data = zeros(size(position,1),size(position,1));
-        for i = 1:size(position,1)
-            for j = i:size(position,1)
-                data(i,j) = norm(position(i,:) - position(j,:));
-            end
-        end
-        data = data + data';
+        data = squareform(pdist(position));
+%         data = zeros(size(position,1),size(position,1));
+%         for i = 1:size(position,1)
+%             for j = i:size(position,1)
+%                 data(i,j) = norm(position(i,:) - position(j,:));
+%             end
+%         end
+%         data = data + data';
     end
 else
     fid = fopen(fileAddress);
@@ -41,13 +42,14 @@ else
         position(i,2) = str2double(temp{3});
     end
     if isdist 
-        data = zeros(length(s),length(s));
-        for i = 1:length(s)
-            for j = i:length(s)
-                data(i,j) = norm(position(i,:) - position(j,:),2);
-            end
-        end
-        data = data + data';
+        data = squareform(pdist(position));
+%         data = zeros(length(s),length(s));
+%         for i = 1:length(s)
+%             for j = i:length(s)
+%                 data(i,j) = norm(position(i,:) - position(j,:),2);
+%             end
+%         end
+%         data = data + data';
     end
     fclose('all');
 end
