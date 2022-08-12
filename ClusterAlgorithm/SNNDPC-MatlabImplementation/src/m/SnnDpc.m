@@ -17,6 +17,7 @@ parse(parser,data,answer,K,varargin{:});
 import java.util.LinkedList
 import Library.*
 
+t1 = cputime;
 %Number of points
 N=size(data,1);
 
@@ -192,6 +193,7 @@ if parser.Results.Ui
   UiPlotResultAndDelta(cluster,center,delta,data,cmap,fig,subplot(2,2,4));
 end
 
+t2 = cputime;
 %Wrap all data into a structure
 result=struct;
 result.NC=NC;
@@ -209,6 +211,7 @@ result.fmi=fmi;
 result.x=x;
 result.y=y;
 result.click=click;
+result.time = t2-t1;
 
 end
 
@@ -220,7 +223,7 @@ function [dist1Order, dist2, sharedCount, rho, delta, deltaSelect] = CalDist1(di
     %ismembc() needs sorted arrays
     dist1OrderSort=sort(dist1Order(:,1:K),2);
     dist2=zeros(N);
-    shared=cell(N);
+    %shared=cell(N);
     sharedCount=zeros(N);
     for p=1:N
       %Use distance to determine whether it is neighbor
@@ -228,13 +231,13 @@ function [dist1Order, dist2, sharedCount, rho, delta, deltaSelect] = CalDist1(di
       for o=p+1:N
         %Faster version of intersect(), but still slower than the line below
     %     shared{p,o}=dist1OrderSort(p,ismembc(dist1OrderSort(p,:),dist1OrderSort(o,:)));
-        shared{p,o}=dist1OrderSort(p,isNeighbor(o-p,:));
-        sharedCount(p,o)=length(shared{p,o});
+        shared=dist1OrderSort(p,isNeighbor(o-p,:));
+        sharedCount(p,o)=length(shared);
         %ismembc() is much faster, but still slower than the line below
     %     if ismembc([p,o],shared{p,o})
         if dist1(p,o)<min(dist1Sort(p,K+1),dist1Sort(o,K+1))
     %       Previously, there is no square, and is not sum() but mean()
-          dist2(p,o)=sharedCount(p,o)^2/sum(dist1(p,shared{p,o})+dist1(o,shared{p,o}));
+          dist2(p,o)=sharedCount(p,o)^2/sum(dist1(p,shared)+dist1(o,shared));
         end
       end
     end
