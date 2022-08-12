@@ -8,7 +8,7 @@ close all;clear;
 K=30;
 for p=1:length(K)
   %If you want to choose centers manually, set AutoPick to 0, otherwise, number of centers
-  result(p)=KnnDpc(data,answer,K(p),'AutoPick',3,'Distance',dist1,'Ui',true);
+  result(p)=KnnDpc(data,answer,K(p),'AutoPick',4,'Distance',dist1,'Ui',true);
 %   fprintf('K=%i,AMI=%f,ARI=%f,FMI=%f\n',K(p),result(p).ami,result(p).ari,result(p).fmi);
 end
 
