@@ -71,7 +71,23 @@ while(true)
                     tempStruct.order = '0';
                 %如果点的数量大于200，但是小于10000，则计算密度聚类
                 elseif setSize <= 10000
-                    tempCity = 
+                    tempCity = City(tarStruct.set,:); %先读取当前城市数据
+                    tempCityDist = squareform(pdist(tempCity));
+                    %赋予新ID
+                    NewID = 1:setSize;
+                    %基于密度聚类，只需要返回聚类中心，每个点的类别
+                    %传入点坐标，点之间的距离矩阵，K，中心点数
+                    Centers = int8(setSize/50);
+                    K = 10;
+                    Clust_Ans = SnnDpc(tempCity,answer,K,'AutoPick',Centers,'Distance',tempCityDist,'Ui',false);
+                    %返回一个结构体，包含
+                        %NC 簇数
+                        %K 参数K
+                        %cluster 一个数组，每个点对应的分类，最小为1
+                        %center 中心点的id
+                    %生成一个Centers个结构体数组
+                    tempClustStruct = repmat(std_struct,1,Centers);
+                    
                 %如果点的数量大于10000，则进行kmeans聚类
                 else
                     

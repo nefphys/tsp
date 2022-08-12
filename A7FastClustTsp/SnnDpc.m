@@ -1,5 +1,5 @@
 function [result]=SnnDpc(data,answer,K,varargin)
-%
+%精简版，仅返回需要的值
 
 %Parse arguments
 parser=inputParser;
@@ -198,21 +198,9 @@ t2 = cputime;
 result=struct;
 result.NC=NC;
 result.K=KBackup;
-result.dist2=dist2;
-result.rho=rho;
-result.delta=delta;
-result.deltaSelect=deltaSelect;
-result.gamma=gamma;
 result.cluster=cluster;
 result.center=center;
-result.ami=ami;
-result.ari=ari;
-result.fmi=fmi;
-result.x=x;
-result.y=y;
-result.click=click;
 result.time = t2-t1;
-
 end
 
 
