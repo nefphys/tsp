@@ -38,54 +38,52 @@ end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Calculate dist2
-% [dist1Sort,dist1Order]=sort(dist1,2);
-% %ismembc() needs sorted arrays
-% dist1OrderSort=sort(dist1Order(:,1:K),2);
-% dist2=zeros(N);
-% shared=cell(N);
-% sharedCount=zeros(N);
-% for p=1:N
-%   %Use distance to determine whether it is neighbor
-%   isNeighbor=dist1(p+1:N,dist1OrderSort(p,:))<=dist1Sort(p+1:N,K);
-%   for o=p+1:N
-%     %Faster version of intersect(), but still slower than the line below
-% %     shared{p,o}=dist1OrderSort(p,ismembc(dist1OrderSort(p,:),dist1OrderSort(o,:)));
-%     shared{p,o}=dist1OrderSort(p,isNeighbor(o-p,:));
-%     sharedCount(p,o)=length(shared{p,o});
-%     %ismembc() is much faster, but still slower than the line below
-% %     if ismembc([p,o],shared{p,o})
-%     if dist1(p,o)<min(dist1Sort(p,K+1),dist1Sort(o,K+1))
-% %       Previously, there is no square, and is not sum() but mean()
-%       dist2(p,o)=sharedCount(p,o)^2/sum(dist1(p,shared{p,o})+dist1(o,shared{p,o}));
-%     end
-%   end
-% end
-% dist2=dist2+dist2';
-% sharedCount=sharedCount+sharedCount';
-% 
-% %Calculate \rho
-% dist2Sort=sort(dist2,2,'descend');
-% rho=sum(dist2Sort(:,1:K),2)';
-% 
-% %Calculate \delta
-% delta=inf(1,N);
-% deltaSelect=zeros(1,N);
-% [~,rhoOrder]=sort(rho,'descend');
-% %Sum in advance to speed up
-% dist1SortSum=sum(dist1Sort(:,1:K),2);
-% for p=2:N
-%   for o=1:p-1
-%     deltaCandi=dist1(rhoOrder(p),rhoOrder(o))*(dist1SortSum(rhoOrder(p))+dist1SortSum(rhoOrder(o)));
-%     if deltaCandi<delta(rhoOrder(p))
-%       delta(rhoOrder(p))=deltaCandi;
-%       deltaSelect(rhoOrder(p))=rhoOrder(o);
-%     end
-%   end
-% end
-% delta(rhoOrder(1))=-1;
-% delta(rhoOrder(1))=max(delta);
+[dist1Sort,dist1Order]=sort(dist1,2);
+%ismembc() needs sorted arrays
+dist1OrderSort=sort(dist1Order(:,1:K),2);
+dist2=zeros(N);
+shared=cell(N);
+sharedCount=zeros(N);
+for p=1:N
+  %Use distance to determine whether it is neighbor
+  isNeighbor=dist1(p+1:N,dist1OrderSort(p,:))<=dist1Sort(p+1:N,K);
+  for o=p+1:N
+    %Faster version of intersect(), but still slower than the line below
+%     shared{p,o}=dist1OrderSort(p,ismembc(dist1OrderSort(p,:),dist1OrderSort(o,:)));
+    shared{p,o}=dist1OrderSort(p,isNeighbor(o-p,:));
+    sharedCount(p,o)=length(shared{p,o});
+    %ismembc() is much faster, but still slower than the line below
+%     if ismembc([p,o],shared{p,o})
+    if dist1(p,o)<min(dist1Sort(p,K+1),dist1Sort(o,K+1))
+%       Previously, there is no square, and is not sum() but mean()
+      dist2(p,o)=sharedCount(p,o)^2/sum(dist1(p,shared{p,o})+dist1(o,shared{p,o}));
+    end
+  end
+end
+dist2=dist2+dist2';
+sharedCount=sharedCount+sharedCount';
 
-[dist1Order, dist2, sharedCount, rho, delta, deltaSelect] = CalDist1(dist1, K, N);
+%Calculate \rho
+dist2Sort=sort(dist2,2,'descend');
+rho=sum(dist2Sort(:,1:K),2)';
+
+%Calculate \delta
+delta=inf(1,N);
+deltaSelect=zeros(1,N);
+[~,rhoOrder]=sort(rho,'descend');
+%Sum in advance to speed up
+dist1SortSum=sum(dist1Sort(:,1:K),2);
+for p=2:N
+  for o=1:p-1
+    deltaCandi=dist1(rhoOrder(p),rhoOrder(o))*(dist1SortSum(rhoOrder(p))+dist1SortSum(rhoOrder(o)));
+    if deltaCandi<delta(rhoOrder(p))
+      delta(rhoOrder(p))=deltaCandi;
+      deltaSelect(rhoOrder(p))=rhoOrder(o);
+    end
+  end
+end
+delta(rhoOrder(1))=-1;
+delta(rhoOrder(1))=max(delta);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Calculate \gamma
@@ -210,56 +208,4 @@ result.x=x;
 result.y=y;
 result.click=click;
 
-end
-
-
-
-% Calculate dist2
-function [dist1Order, dist2, sharedCount, rho, delta, deltaSelect] = CalDist1(dist1, K, N)
-    [dist1Sort,dist1Order]=sort(dist1,2);
-    %ismembc() needs sorted arrays
-    dist1OrderSort=sort(dist1Order(:,1:K),2);
-    dist2=zeros(N);
-    shared=cell(N);
-    sharedCount=zeros(N);
-    for p=1:N
-      %Use distance to determine whether it is neighbor
-      isNeighbor=dist1(p+1:N,dist1OrderSort(p,:))<=dist1Sort(p+1:N,K);
-      for o=p+1:N
-        %Faster version of intersect(), but still slower than the line below
-    %     shared{p,o}=dist1OrderSort(p,ismembc(dist1OrderSort(p,:),dist1OrderSort(o,:)));
-        shared{p,o}=dist1OrderSort(p,isNeighbor(o-p,:));
-        sharedCount(p,o)=length(shared{p,o});
-        %ismembc() is much faster, but still slower than the line below
-    %     if ismembc([p,o],shared{p,o})
-        if dist1(p,o)<min(dist1Sort(p,K+1),dist1Sort(o,K+1))
-    %       Previously, there is no square, and is not sum() but mean()
-          dist2(p,o)=sharedCount(p,o)^2/sum(dist1(p,shared{p,o})+dist1(o,shared{p,o}));
-        end
-      end
-    end
-    dist2=dist2+dist2';
-    sharedCount=sharedCount+sharedCount';
-
-    %Calculate \rho
-    dist2Sort=sort(dist2,2,'descend');
-    rho=sum(dist2Sort(:,1:K),2)';
-
-    %Calculate \delta
-    delta=inf(1,N);
-    deltaSelect=zeros(1,N);
-    [~,rhoOrder]=sort(rho,'descend');
-    %Sum in advance to speed up
-    dist1SortSum=sum(dist1Sort(:,1:K),2);
-    for p=2:N
-      for o=1:p-1
-        deltaCandi=dist1(rhoOrder(p),rhoOrder(o))*(dist1SortSum(rhoOrder(p))+dist1SortSum(rhoOrder(o)));
-        if deltaCandi<delta(rhoOrder(p))
-          delta(rhoOrder(p))=deltaCandi;
-          deltaSelect(rhoOrder(p))=rhoOrder(o);
-        end
-      end
-    end
-    delta(rhoOrder(1))=-1;
-    delta(rhoOrder(1))=max(delta);
 end
