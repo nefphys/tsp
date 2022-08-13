@@ -37,7 +37,7 @@ DrawPath(TSP_Solve_Struct.route,City)
 
 
 %混合聚类递归蚁群算法求解器
-
+[TSP_Solve_Struct] = FastClustTSP(City,10000);
 
 
 %CGA 不同规模数据参数设置

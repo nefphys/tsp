@@ -7,7 +7,7 @@ function [TSP_Solve_Struct] = FastClustTSP(tspData,MaxDistNum)
 %算法内智能算法求解TSP最多可以计算999个点的情况
 t1 = cputime;
 MaxTspSize = 100;%可计算的最大规模TSP
-MaxKmeans = 100;%kmeans最大K值
+MaxKmeans = 50;%kmeans最大K值
 StdKmeans = 500;%kmeans数据集分割大小
 MaxDP = 10000;%基于密度聚类的最大点集
 %读取数据
@@ -98,7 +98,7 @@ while(true)
                 [ACS_TEMP_SOLVE]  =  ACS_SE_Solver(City(tempStruct.set,:),...
                         300, find(tempStruct.set==tempStruct.inID),...
                         find(tempStruct.set==tempStruct.outID), 0);
-                    tempStruct.tsp = tempStruct.set(ACS_TEMP_SOLVE.route);
+                tempStruct.tsp = tempStruct.set(ACS_TEMP_SOLVE.route);
              
             %% 不管是否第一次进入，数据量都大于指定TSP求解规模
             else
@@ -115,7 +115,7 @@ while(true)
                     %传入点坐标，点之间的距离矩阵，K，中心点数
                     %cluster 一个数组，每个点对应的分类，最小为1
                     %center 中心点的id
-                    Centers = ceil(setSize/MaxTspSize);
+                    Centers = ceil(setSize/MaxTspSize/5); %保证至少可以有5个聚类
                     K = 10;
                     Clust_Ans = SnnDpc(tempCity,1:setSize,K,'AutoPick',...
                         Centers,'Distance',tempCityDist,'Ui',false);
@@ -165,7 +165,7 @@ while(true)
                             break;
                         end
                     end
-                    [ACS_TEMP_SOLVE]  =  ACS_Solver(Clust_Ans.center, 300, startClustID, endClustID, 0);
+                    [ACS_TEMP_SOLVE]  =  ACS_SE_Solver(Clust_Ans.center, 300, startClustID, endClustID, 0);
                 end
                 
                 %对团簇的order进行赋值
@@ -174,7 +174,11 @@ while(true)
                         num2str(find(ACS_TEMP_SOLVE.route==h),'%03d')];
                 end
                 
+                %按照顺序重排
+                tempStruct = tempStruct(ACS_TEMP_SOLVE.route);
+                
                 %寻找起点和终点，有的团簇已经有了起点或者终点
+                %同一个点不能同时是起点或者终点，除非是单点集
                 CX1 = []; %起点团簇的坐标集
                 CX2 = []; %终点团簇的坐标集
                 tempStruct = [tempStruct tempStruct(1)];
@@ -203,17 +207,42 @@ while(true)
                         tempStruct(h+1).inID = tempStruct(h+1).set(C2);
                     end       
                 end
+                
                 tempStruct(1).inID = tempStruct(end).inID;
+                %判断是否有既是起点也是终点的情况
+                for h = 1:Centers
+                    if tempStruct(h).outID == tempStruct(h).inID
+                        if length(tempStruct(h).set) > 1
+                            %先判断是否有指定起点或者终点，如果是指定的则不能动
+                            if tempStruct(h).outID == endID
+                                %修改起点 -- tempStruct已经按照标准order排序
+                                CX1 = City(tempStruct(h-1).outID,:);
+                                CX2 = City(tempStruct(h).set,:);
+                                %将终点的坐标进行大量偏移
+                                CX2(tempStruct(h).set == tempStruct(h).inID,:) = [-1000 -1000];
+                                [minDist C1 C2] = setMinDist(CX1,CX2);
+                                tempStruct(h).inID = tempStruct(h).set(C2);
+                            else
+                                %修改终点
+                                CX1 = City(tempStruct(h).set,:);
+                                CX1(tempStruct(h).set == tempStruct(h).outID,:) = [-1000 -1000];
+                                CX2 = City(tempStruct(h+1).inID,:);
+                                [minDist C1 C2] = setMinDist(CX1,CX2);
+                                tempStruct(h).outID = tempStruct(h).set(C1);
+                            end
+                        end
+                    end
+                end
                 tempStruct(end) = [];
             end   
             ANS_GROUP_FAKE = [ANS_GROUP_FAKE tempStruct];
         else
             ANS_GROUP_FAKE = [ANS_GROUP_FAKE tarStruct];
         end
-        %重新赋值ans_group
-        ANS_GROUP = ANS_GROUP_FAKE;
     end
     
+     %重新赋值ans_group
+     ANS_GROUP = ANS_GROUP_FAKE;
     %终止条件，只要后面一次循环isover全部是1，即借宿
      if isCal == 0
          break;
@@ -226,12 +255,44 @@ t2 = cputime;
 TSP_Solve_Struct.time = t2 - t1'
 
 %%解析路径，并求解最短路
+if length(ANS_GROUP) == 1
+    %仅有一个簇，则不需要拼接
+    TSP_Solve_Struct.route = ANS_GROUP.route;
+else
+    %提取order并进行排序，记录最长的order
+    Mlen = 1:length(ANS_GROUP)
+    for i = Mlen
+        Mlen(i) = strlength(ANS_GROUP(i).order);
+    end
+    MAXMlen = max(Mlen);
+    for i = Mlen
+        Mdiff = MAXMlen - Mlen(i);
+        if Mdiff ~= 0
+            Morder(i) = [ANS_GROUP(i).order repelem('0',Mdiff)];
+        else
+            Morder(i) = ANS_GROUP(i).order;
+        end
+    end
+    %对Morder进行从小到大排序
+    Strorder = Morder +"";
+    [Ord1, Ord2] = sort(Strorder);
+    route = [];
+    for i = Mlen
+        route = [route ANS_GROUP(Ord2(i)).route];
+    end
+end
 
+sLen = 0;
+route = [route route(1)];
+for i = 1:length(route)
+    sLen = sLen + pdist([City(route(i),:);City(route(i+1),:)]);
+end
+route(end) = [];
 
-
-TSP_Solve_Struct.route
-TSP_Solve_Struct.City
-TSP_Solve_Struct.clust 
+TSP_Solve_Struct.length = sLen;
+TSP_Solve_Struct.route = route; %City个数据
+TSP_Solve_Struct.City = City;
+TSP_Solve_Struct.clust  = length(ANS_GROUP);
 TSP_Solve_Struct.layer = layer - 1;
 end
 
