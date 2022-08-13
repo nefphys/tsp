@@ -196,8 +196,6 @@ end
 t2 = cputime;
 %Wrap all data into a structure
 result=struct;
-result.NC=NC;
-result.K=KBackup;
 result.cluster=cluster;
 result.center=center;
 result.time = t2-t1;

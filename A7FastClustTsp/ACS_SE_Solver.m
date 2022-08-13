@@ -1,4 +1,4 @@
-function  [TSP_Solve_Struct]  =  ACS_SE_Solver(tspData, MaxIterations, startP, endP, target_length)
+function  [TSP_Solve_Struct]  =  ACS_Solver(tspData, MaxIterations, startP, endP, target_length)
 
 
     %% Ant Colony System  for  the TSP
@@ -27,13 +27,13 @@ function  [TSP_Solve_Struct]  =  ACS_SE_Solver(tspData, MaxIterations, startP, e
     %MaxIterations = 1000;
     %target_length = 100;
 
-    alpha  =   1; 
+    alpha  =   1;
     beta_0 = 1;
     beta = beta_0;
-    beta_max = 7;
-    rho  =   0.1;
-    xi = 0.01;
-    xi_max = 0.5;
+    beta_max = 15;
+    rho  =   0.9;
+    xi = 0.05;
+    xi_max = 1;
 
     d  =  distances_matrix;
     n  =  max(size(d));
@@ -57,6 +57,7 @@ function  [TSP_Solve_Struct]  =  ACS_SE_Solver(tspData, MaxIterations, startP, e
 
     % place m ants in n nodes
     ant_tours  =  zeros(m, n + 1 ); %多了一个终点
+    %ant_tours(:, 1 )  =  randi([ 1 , n ], m, 1); %每条路径在不同起点分配蚂蚁
     %起点和终点是固定的
     ant_tours(:, 1 )  =  startP; %每条路径在不同起点分配蚂蚁
     ant_tours(:, end) = startP;
@@ -67,7 +68,7 @@ function  [TSP_Solve_Struct]  =  ACS_SE_Solver(tspData, MaxIterations, startP, e
     kp = 1;
     allrev = 0;
     
-    %% 预分配内存
+     %% 预分配内存
     current_node = 0;
     c_tv = 0;
     r = 0;
@@ -82,13 +83,38 @@ function  [TSP_Solve_Struct]  =  ACS_SE_Solver(tspData, MaxIterations, startP, e
         % CREATE TOURS  =============================================================
 
         %% 生成新的路径以及局部信息素
-        [ant_tours, tau] = CalLocPh(m, ant_tours, n, alpha, beta,tau, rho, c, d);
+        for  s  =   2  : (n-1) %维数
+            for  k  =   1  : m %蚂蚁
+                current_node  =  ant_tours(k,s - 1 );
+                visited  =  ant_tours(k,:);
+                visited = visited(visited ~= 0);
+                to_visit  =  MY_setdiff(1:n,visited);
+                c_tv  =  length(to_visit);
+                p  =  (tau(current_node,to_visit)) .^ alpha  .*  ( 1 ./ d(current_node,to_visit)) .^ beta;
+                p  =  p  /  sum(p);
+                for  i  =   2  : c_tv
+                    p(i)  =  p(i)  +  p(i - 1 );
+                end
+                r  =  rand; %这个就是q0 这里是每次都更新
+                select   =  to_visit(c_tv);
+                for  i  =   1  : c_tv
+                    if  (r  <=  p(i))
+                        select   =  to_visit(i);
+                        break;
+                    end
+                end
+                city_to_visit  =   select ;
+                ant_tours(k,s)  =  city_to_visit;
+                %原始是1-rho * tau + tau0
+                tau(current_node,city_to_visit)  =  ( 1   -  rho)  *  tau(current_node,city_to_visit)  +  rho * c;
+            end
+        end
 
 
         % UPDATE  ===================================================================
         %% 更新最短路径，更新参数
-           
-        %ant_tours(:,n + 1 )  =  ant_tours(:, 1 );
+
+        ant_tours(:,n + 1 )  =  ant_tours(:, 1 );
         best_ant  =   1 ;
         for  k  =   1  : m
             P  =  ant_tours(k,:);
@@ -101,20 +127,25 @@ function  [TSP_Solve_Struct]  =  ACS_SE_Solver(tspData, MaxIterations, startP, e
         T_min  =  ant_tours(best_ant,:);
 
         %% 如果这次的路径和上次的路径一样，即都是best route，则更新beta和xi
-        if t >  5 && L_best <= L_min %5次之后再判断
-            if (1-0.95^kp) < xi_max
-                xi = 1-0.95^kp;
-            else
-                xi = xi_max;
-            end
+        if(t >  5) %5次之后再判断
+            if(L_best <= L_min)
+                %判断路径是否是一样的
+                %if isequal(T_best,T_min)
+                    if (1-0.95^kp) < xi_max
+                        xi = 1-0.95^kp;
+                    else
+                        xi = xi_max;
+                    end
 
-            if (beta_0 + log(kp)) <= beta_max
-                beta = beta_0 + log(kp);
-            else
-                beta = beta_max;
-            end
+                    if (beta_0 + log(kp)) <= beta_max
+                        beta = beta_0 + log(kp);
+                    else
+                        beta = beta_max;
+                    end
 
-            kp = kp + 1;
+                    kp = kp + 1;
+                %end
+            end
         end
 
         % update pheromone trails;
@@ -125,7 +156,6 @@ function  [TSP_Solve_Struct]  =  ACS_SE_Solver(tspData, MaxIterations, startP, e
 
         % COMPLETE  ================================================================
         t  =  t  +   1;
-        %current_cities  =  ant_tours(:,n);
         ant_tours  =  zeros(m, n + 1 );
         ant_tours(:, 1 )  =  startP; %每条路径在不同起点分配蚂蚁
         ant_tours(:, end) = startP;
@@ -143,38 +173,4 @@ function  [TSP_Solve_Struct]  =  ACS_SE_Solver(tspData, MaxIterations, startP, e
     TSP_Solve_Struct.route = T_best; %点下标从1开始
     TSP_Solve_Struct.City = City;
     TSP_Solve_Struct.BestLine = allrev;
-end
-
-function [ant_tours, tau] = CalLocPh(m, ant_tours, n, alpha, beta,tau, rho, c, d)
-    for  k  =   1  : m %蚂蚁
-        visited  =  ant_tours(k,:);
-        visited = visited(visited ~= 0);
-        to_visit  =  MY_setdiff(1:n,visited);
-        c_tv  =  length(to_visit);
-        p = zeros(1,c_tv);
-        for  s  =   2  : (n-1) %维数
-            current_node  =  ant_tours(k,s - 1 );
-            for LL = 1:c_tv
-                %计算局部信息素
-                p(LL) =  (tau(current_node,to_visit(LL))) ^ alpha  *  ( 1 / d(current_node,to_visit(LL))) ^ beta;
-            end
-            %p  =  (tau(current_node,to_visit)) .^ alpha  .*  ( 1 ./ d(current_node,to_visit)) .^ beta;
-            p  =  p  /  sum(p);
-            for  i  =   2  : c_tv
-                p(i)  =  p(i)  +  p(i - 1 );
-            end
-            r  =  rand; %这个就是q0 这里是每次都更新
-            select   =  to_visit(c_tv);
-            for  i  =   1  : c_tv
-                if  (r  <=  p(i))
-                    select   =  to_visit(i);
-                    break;
-                end
-            end
-            city_to_visit  =   select;
-            ant_tours(k,s)  =  city_to_visit;
-            %原始是1-rho * tau + tau0
-            tau(current_node,city_to_visit)  =  ( 1   -  rho)  *  tau(current_node,city_to_visit)  +  rho * c;
-        end
-    end
 end

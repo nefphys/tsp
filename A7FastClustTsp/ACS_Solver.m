@@ -166,7 +166,7 @@ function  [TSP_Solve_Struct]  =  ACS_Solver(tspData, MaxIterations, target_lengt
     
     TSP_Solve_Struct.time = t2-t1;
     TSP_Solve_Struct.length = L_best;
-    TSP_Solve_Struct.route = T_best; %点下标从1开始
+    TSP_Solve_Struct.route = T_best(1:(end-1)); %点下标从1开始
     TSP_Solve_Struct.City = City;
     TSP_Solve_Struct.BestLine = allrev;
 end
