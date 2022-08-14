@@ -1,4 +1,4 @@
-function  [TSP_Solve_Struct]  =  ACS_Solver(tspData, MaxIterations, startP, endP, target_length)
+function  [TSP_Solve_Struct]  =  ACS_SE_Solver(tspData, MaxIterations, startP, endP, target_length)
 
 
     %% Ant Colony System  for  the TSP
@@ -55,13 +55,7 @@ function  [TSP_Solve_Struct]  =  ACS_Solver(tspData, MaxIterations, startP, endP
     tau  =  ones(n,n)  *  c;
 
 
-    % place m ants in n nodes
-    ant_tours  =  zeros(m, n + 1 ); %多了一个终点
-    %ant_tours(:, 1 )  =  randi([ 1 , n ], m, 1); %每条路径在不同起点分配蚂蚁
-    %起点和终点是固定的
-    ant_tours(:, 1 )  =  startP; %每条路径在不同起点分配蚂蚁
-    ant_tours(:, end) = startP;
-    ant_tours(:,(end-1)) = endP;
+    
 
     %% 主循环
     t  =   1 ;
@@ -81,9 +75,15 @@ function  [TSP_Solve_Struct]  =  ACS_Solver(tspData, MaxIterations, startP, endP
 
 
         % CREATE TOURS  =============================================================
-
+        % place m ants in n nodes
+        ant_tours  =  zeros(m, n + 1 ); %多了一个终点
+        %ant_tours(:, 1 )  =  randi([ 1 , n ], m, 1); %每条路径在不同起点分配蚂蚁
+        ant_tours(:, 1 )  =  startP; %每条路径在不同起点分配蚂蚁
+        ant_tours(:, end) = startP;
+        ant_tours(:,(end-1)) = endP;
         %% 生成新的路径以及局部信息素
-        [ant_tours, tau] = CalLocPh(m, ant_tours, n, alpha, beta,tau, rho, c, d);
+         [ant_tours, tau] = CalLocPh(m, ant_tours, n, alpha, beta,tau, rho, c, d);
+        
 
 
         % UPDATE  ===================================================================
@@ -131,10 +131,6 @@ function  [TSP_Solve_Struct]  =  ACS_Solver(tspData, MaxIterations, startP, endP
 
         % COMPLETE  ================================================================
         t  =  t  +   1;
-        ant_tours  =  zeros(m, n + 1 );
-        ant_tours(:, 1 )  =  startP; %每条路径在不同起点分配蚂蚁
-        ant_tours(:, end) = startP;
-        ant_tours(:,(end-1)) = endP;
         if  (L_min  <  L_best)
             L_best  =  L_min;
             T_best  =  T_min;
@@ -152,34 +148,30 @@ end
 
 function [ant_tours, tau] = CalLocPh(m, ant_tours, n, alpha, beta,tau, rho, c, d)
      %% 生成新的路径以及局部信息素
-        for  s  =   2  : (n-1) %维数
-            for  k  =   1  : m %蚂蚁
-                current_node  =  ant_tours(k,s - 1 );
-                visited  =  ant_tours(k,:);
-                visited = visited(visited ~= 0);
-                to_visit  =  MY_setdiff(1:n,visited);
-                c_tv  =  length(to_visit);
-                for LL = 1:c_tv
-                    %计算局部信息素
-                    p(LL) =  (tau(current_node,to_visit(LL))) ^ alpha  *  ( 1 / d(current_node,to_visit(LL))) ^ beta;
-                end
-                %p  =  (tau(current_node,to_visit)) .^ alpha  .*  ( 1 ./ d(current_node,to_visit)) .^ beta;
-                p  =  p  /  sum(p);
-                for  i  =   2  : c_tv
-                    p(i)  =  p(i)  +  p(i - 1 );
-                end
-                r  =  rand; %这个就是q0 这里是每次都更新
-                select   =  to_visit(c_tv);
-                for  i  =   1  : c_tv
-                    if  (r  <=  p(i))
-                        select   =  to_visit(i);
-                        break;
-                    end
-                end
-                city_to_visit  =   select ;
-                ant_tours(k,s)  =  city_to_visit;
-                %原始是1-rho * tau + tau0
-                tau(current_node,city_to_visit)  =  ( 1   -  rho)  *  tau(current_node,city_to_visit)  +  rho * c;
+    for  s  =   2  : (n-1) %维数
+        for  k  =   1  : m %蚂蚁
+            current_node  =  ant_tours(k,s - 1 );
+            visited  =  ant_tours(k,:);
+            visited = visited(visited ~= 0);
+            to_visit  =  MY_setdiff(1:n,visited);
+            c_tv  =  length(to_visit);
+            p  =  (tau(current_node,to_visit)) .^ alpha  .*  ( 1 ./ d(current_node,to_visit)) .^ beta;
+            p  =  p  /  sum(p);
+            for  i  =   2  : c_tv
+                p(i)  =  p(i)  +  p(i - 1 );
             end
+            r  =  rand; %这个就是q0 这里是每次都更新
+            select   =  to_visit(c_tv);
+            for  i  =   1  : c_tv
+                if  (r  <=  p(i))
+                    select   =  to_visit(i);
+                    break;
+                end
+            end
+            city_to_visit  =   select ;
+            ant_tours(k,s)  =  city_to_visit;
+            %原始是1-rho * tau + tau0
+            tau(current_node,city_to_visit)  =  ( 1   -  rho)  *  tau(current_node,city_to_visit)  +  rho * c;
         end
+    end
 end

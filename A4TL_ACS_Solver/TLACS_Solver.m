@@ -11,7 +11,7 @@ function  [TSP_Solve_Struct]  =  TLACS_Solver(tspData,ck)
     
     %% 对聚类中心进行一次ACS，得到上层的顺序 
     First_Layer_TSP = ACS_Solver(C,300,0);
-    
+    First_Layer_TSP.route = [First_Layer_TSP.route First_Layer_TSP.route(1)];
     opt_route = [];
     start_end_chart = zeros(ck+1,2);
     %% 按顺序寻找每个簇的起点和终点
@@ -35,7 +35,7 @@ function  [TSP_Solve_Struct]  =  TLACS_Solver(tspData,ck)
         F_set_id = find(idx==First_Layer_TSP.route(i));
         F_set = City(F_set_id,:);
         F_set_TSP = ACS_SE_Solver(F_set, 150, start_end_chart(i,1), start_end_chart(i,2), 0);
-        opt_route = [opt_route; F_set_id(F_set_TSP.route(1:(end-1)))];
+        opt_route = [opt_route; F_set_id(F_set_TSP.route(1:end))];
     end
     t2=cputime;
     

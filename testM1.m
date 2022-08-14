@@ -29,3 +29,16 @@ temp = pdist2(City(tempStruct(1).set,:),City(tempStruct(2).set,:))
 temp = pdist2(City([105 120],:),City(139,:))
 
 DrawPath(ANS_GROUP(1).tsp,City(ANS_GROUP(1).set,:))
+
+
+m = randsample(1:442,50);
+TCity = City(m,:);
+[TSP_Solve_Struct]  =  ACS_Solver(TCity, 300, 0)
+DrawPath([TSP_Solve_Struct.route TSP_Solve_Struct.route(1)]-1,TSP_Solve_Struct.City)
+
+[SETSP_Solve_Struct]  =  ACS_SE_Solver(TCity, 300,5,10, 0)
+DrawPath([SETSP_Solve_Struct.route SETSP_Solve_Struct.route(1)]-1,SETSP_Solve_Struct.City)
+
+
+[SETSP_Solve_Struct]  =  New_ACS_SE(TCity, 300,5,10, 0)
+DrawPath([SETSP_Solve_Struct.route]-1,SETSP_Solve_Struct.City)
