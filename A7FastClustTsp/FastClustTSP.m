@@ -10,7 +10,7 @@ MaxTspSize = 50;%可计算的最大规模TSP
 MaxKmeans = 50;%kmeans最大K值
 StdKmeans = 500;%kmeans数据集分割大小
 MaxDP = 10000;%基于密度聚类的最大点集
-ACSTimes = 150;
+ACSTimes = 5;
 DPTSPTimes = 1;%倍数，防止只有极少个聚类中心
 %读取数据
 %判断数据量大小，如果数据量大于某个值，则不计算distance
@@ -97,7 +97,7 @@ while(true)
                 %没有聚类则没有多出来的层数，只需要计算tsp和isover
                 tempStruct = tarStruct;
                 tempStruct.isover = 1;
-                [ACS_TEMP_SOLVE]  =  ACS_SE_Solver(City(tempStruct.set,:),...
+                [ACS_TEMP_SOLVE]  =  Tool_ACS_SE_Solver(City(tempStruct.set,:),...
                         2000, find(tempStruct.set==tempStruct.inID),...
                         find(tempStruct.set==tempStruct.outID), 0);
                 tempStruct.tsp = tempStruct.set(ACS_TEMP_SOLVE.route);
@@ -148,7 +148,7 @@ while(true)
                 endClustID = 0;
                 
                 if startID == 0 && endID == 0
-                    [ACS_TEMP_SOLVE]  =  ACS_Solver(Clust_Ans.center, ACSTimes, 0);
+                    [ACS_TEMP_SOLVE]  =  Tool_ACS_Solver(Clust_Ans.center, ACSTimes, 0);
                 else
                     %查找在哪个团簇
                     for h = 1:Centers
@@ -199,7 +199,7 @@ while(true)
 %                                 ACS_TEMP_SOLVE.route(1:(StrPos-1))];
 %                         end
                     end
-                    [ACS_TEMP_SOLVE]  =  ACS_SE_Solver(Clust_Ans.center, ACSTimes, startClustID, endClustID, 0);
+                    [ACS_TEMP_SOLVE]  =  Tool_ACS_SE_Solver(Clust_Ans.center, ACSTimes, startClustID, endClustID, 0);
                 end
                 
                 %对团簇的order进行赋值

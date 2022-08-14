@@ -1,3 +1,4 @@
+% http://freesourcecode.net/matlabprojects/56882/traveling-salesman-problem---genetic-algorithm-in-matlab#.Yu3xZGNBy8U
 %TSP_GA Traveling Salesman Problem (TSP) Genetic Algorithm (GA)
 %   Finds a (near) optimal solution to the TSP by setting up a GA to search
 %   for the shortest route (least distance for the salesman to travel to
@@ -92,8 +93,8 @@ function TSP_Solve_Struct = CGA_Solver(varargin)
     % Initialize default configuration
     defaultConfig.xy          = 10*rand(50,2);
     defaultConfig.dmat        = [];
-    defaultConfig.popSize     = 10;
-    defaultConfig.numIter     = 1e2;
+    defaultConfig.popSize     = 100;
+    defaultConfig.numIter     = 1e3;
     defaultConfig.showProg    = false;
     defaultConfig.showResult  = false;
     defaultConfig.showWaitbar = false;
