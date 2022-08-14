@@ -49,15 +49,15 @@ DrawPath(TSP_Solve_Struct.route,TSP_Solve_Struct.City)
 
 %% 100 最小参数 迭代次数：400 种群0.2
 
-%推荐参数 迭代次数 300， 种群 0.2
+%推荐参数 迭代次数 500， 种群 0.25
 %统计计算时间
 
-Ctime = [];
+BLen = [];
 for i = 1:20
-    i
-    City = rand(i*10,2)*10;
-    citysize = size(City,1);
-    varargin = struct('xy',City, 'popSize', 10+int32(0.2*citysize), 'numIter', int32(300*citysize));
+%     i
+%     City = rand(i*10,2)*10;
+%     citysize = size(City,1);
+    varargin = struct('xy',City);
     TSP_Solve_Struct = Tool_CGA_Solver(varargin);
-    Ctime(i) = TSP_Solve_Struct.time;
+    BLen(i) = TSP_Solve_Struct.length;
 end

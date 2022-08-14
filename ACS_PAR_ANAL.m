@@ -53,20 +53,26 @@ DrawPath(TSP_Solve_Struct.route,TSP_Solve_Struct.City)
 %统计计算时间
 
 Ctime = [];
-for i = 1:10
+for i = 1:8
     i
     City = rand(i*10,2)*10;
     citysize = size(City,1);
    
-    TSP_Solve_Struct = Tool_ACS_Solver(City,numPar(4)*citysize,int32(popPar(5)*citysize),0);
+    TSP_Solve_Struct = Tool_ACS_Solver(City,0);
     Ctime(i) = TSP_Solve_Struct.time;
 end
 plot(Ctime)
 
 
-i = 4
+i = 5
 City = rand(i*10,2)*10;
 citysize = size(City,1);
 profile on
-TSP_Solve_Struct = Tool_ACS_Solver(City,numPar(4)*citysize,int32(popPar(5)*citysize),0);
+
+
+for h = 1:20
+    TSP_Solve_Struct = Tool_ACS_Solver(City,0);
+    Alen(h) = TSP_Solve_Struct.length;
+end
 profile viewer
+profile off

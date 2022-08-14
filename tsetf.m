@@ -8,7 +8,7 @@ rmpath(genpath('.\Tools'));
 %profile on viewer off 性能分析工具
 
 
-tspData = 'tspdata/pcb442.tsp'
+tspData = 'tspdata/tsplib/att532.tsp'
 [Distance,City] = readfile(tspData,1);
 
 %% concorde 求解器

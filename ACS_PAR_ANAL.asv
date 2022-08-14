@@ -1,16 +1,16 @@
-A%% ACS 参数研究
+%% ACS 参数研究
 
-%% 不同规模的数据集 CGA需要的参数设计
+%% 不同规模的数据集 ACS
 
-%结果 CGA 参数 迭代次数 300， 种群 0.2， 规模70个点
+%结果 ACS 参数 迭代次数 300， 种群 0.2， 规模70个点
 
 
-City = rand(100,2)*10;
+City = rand(50,2)*10;
 %研究自适应参数
 citysize = size(City,1);
 
-popPar = 0.05:0.05:0.3;
-numPar = 100:100:5e2;
+popPar = 0.05:0.05:0.4;
+numPar = 5:5:40;
 
 
 ansMat = zeros(length(popPar),length(numPar))
@@ -19,8 +19,7 @@ for i = 1:length(popPar)
     i
     for h = 1:length(numPar)
         h
-        varargin = struct('xy',City, 'popSize', 10+int32(popPar(i)*citysize), 'numIter', int32(numPar(h)*citysize));
-        TSP_Solve_Struct = Tool_CGA_Solver(varargin);
+        TSP_Solve_Struct = Tool_ACS_Solver(City,numPar(h)*citysize,int32(popPar(i)*citysize),0);
         ansMat(i,h) = TSP_Solve_Struct.length;
     end
 end
@@ -34,15 +33,16 @@ end
 
 DrawPath(TSP_Solve_Struct.route,TSP_Solve_Struct.City)
 
-%% 10 最小参数 迭代次数：50 种群0.05
+%% 10 最小参数 迭代次数：15 种群0.2
+%               迭代次数：20 种群0.05
 
-%% 20 最小参数 迭代次数：100 种群0.05
+%% 20 最小参数 迭代次数：10 种群0.3
 
-%% 30 最小参数 迭代次数：100 种群0.05
+%% 30 最小参数 迭代次数：15 种群0.25
 
-%% 40 最小参数 迭代次数：200 种群0.15
+%% 40 最小参数 迭代次数：15 种群0.15
 
-%% 50 最小参数 迭代次数：200 种群0.3
+%% 50 最小参数 迭代次数：20 种群0.25
 %           迭代次数：500 种群0.1
 
 %% 60 最小参数 迭代次数：300 种群0.15
@@ -53,11 +53,21 @@ DrawPath(TSP_Solve_Struct.route,TSP_Solve_Struct.City)
 %统计计算时间
 
 Ctime = [];
-for i = 1:20
+for i = 1:10
     i
     City = rand(i*10,2)*10;
     citysize = size(City,1);
-    varargin = struct('xy',City, 'popSize', 10+int32(0.2*citysize), 'numIter', int32(300*citysize));
-    TSP_Solve_Struct = Tool_CGA_Solver(varargin);
+   
+    TSP_Solve_Struct = Tool_ACS_Solver(City,numPar(4)*citysize,int32(popPar(5)*citysize),0);
     Ctime(i) = TSP_Solve_Struct.time;
 end
+plot(Ctime)
+
+
+i = 5
+City = rand(i*10,2)*10;
+citysize = size(City,1);
+profile on
+TSP_Solve_Struct = Tool_ACS_Solver(City,0);
+profile viewer
+profile off

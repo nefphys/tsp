@@ -99,7 +99,7 @@ function TSP_Solve_Struct = CGA_Solver(varargin)
     defaultConfig.showResult  = false;
     defaultConfig.showWaitbar = false;
     
-    t1 = cputime;
+    tic;
     % Interpret user configuration inputs
     if ~nargin
         userConfig = struct();
@@ -139,8 +139,10 @@ function TSP_Solve_Struct = CGA_Solver(varargin)
     n = N;
     
     % Sanity Checks
+    popSize     = 10+int32(0.25*N);
     popSize     = 4*ceil(popSize/4);
-    numIter     = max(1,round(real(numIter(1))));
+    %numIter     = max(1,round(real(numIter(1))));
+    numIter     = 500*N;
     showProg    = logical(showProg(1));
     showResult  = logical(showResult(1));
     showWaitbar = logical(showWaitbar(1));
@@ -261,7 +263,7 @@ function TSP_Solve_Struct = CGA_Solver(varargin)
             'showWaitbar', showWaitbar, ...
             'route',    optRoute, ...
             'length',     minDist, ...
-            'time', t2-t1);
+            'time', toc);
         TSP_Solve_Struct = resultStruct;
     end
     
