@@ -42,7 +42,7 @@ function  [TSP_Solve_Struct]  =  TLACS_Solver(tspData,ck)
     end
     start_end_chart(1,1) = start_end_chart(ck+1,1);
     start_end_chart(ck+1,:) = [];
-    for i = 1:ck
+    parfor i = 1:ck
         F_set_id = find(idx==First_Layer_TSP.route(i));
         F_set = City(F_set_id,:);
         %判断是否是单点集

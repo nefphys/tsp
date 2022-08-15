@@ -1,4 +1,4 @@
-function TSP_Solve_Struct = TLGA_CTSP(tspData, K)
+function TSP_Solve_Struct = TLGA_PAR_CTSP(tspData, K)
     %% 似乎应该先切分数据？并对子类进行TSP计算
     [Distance, City] = readfile(tspData,1);
     t1 = tic;
@@ -6,7 +6,7 @@ function TSP_Solve_Struct = TLGA_CTSP(tspData, K)
     [idx C]= kmeans(City,K);
     Data = [idx City];
     use_data = cell(K,1);
-    for i = 1:K
+    parfor i = 1:K
         temp = Data(Data(:,1) == i,:);
         clust_struct.kind = i;
         clust_struct.id = find(Data(:,1) == i);

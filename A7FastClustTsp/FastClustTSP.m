@@ -5,7 +5,7 @@ function [TSP_Solve_Struct] = FastClustTSP(tspData,MaxDistNum)
 % MaxDistNum 最大可计算距离矩阵的大小 n*n, 数据量大于此值则不计算距离矩阵
 % 计算TSP则不改变层数，不赋值TSP则改变层数
 %算法内智能算法求解TSP最多可以计算999个点的情况
-t1 = cputime;
+stp = tic;
 MaxTspSize = 50;%可计算的最大规模TSP
 MaxKmeans = 50;%kmeans最大K值
 StdKmeans = 500;%kmeans数据集分割大小
@@ -42,7 +42,7 @@ while(true)
         %isover==0则需要继续计算，否则返回原来的结构体
         %计算之后返回的也是一个结构体数组, 如果有变化则删除原本的结构体，并拼接新的
         if tarStruct.isover == 0
-            isCal = 1;
+            isCal(i) = 1;
             %判断集合内点的数量，以确定是聚类还是计算TSP
             setSize = length(tarStruct.set);
             
@@ -200,8 +200,8 @@ while(true)
 %                         end
                     end
                     %重新判断中心点，用平均距离构建
-                    for i = 1:length(unique(Clust_Ans.cluster))
-                        Clust_Ans.center(i,:) = mean(tempCity(Clust_Ans.cluster==i,:));
+                    for h = 1:length(unique(Clust_Ans.cluster))
+                        Clust_Ans.center(h,:) = mean(tempCity(Clust_Ans.cluster==h,:));
                     end
                     [ACS_TEMP_SOLVE]  =  Tool_ACS_SE_Solver(Clust_Ans.center, startClustID, endClustID, 0);
                 end
@@ -316,15 +316,14 @@ while(true)
      %重新赋值ans_group
      ANS_GROUP = ANS_GROUP_FAKE;
     %终止条件，只要后面一次循环isover全部是1，即借宿
-     if isCal == 0
+     if sum(isCal) == 0
          break;
      end
      %层数增加
     layer = layer + 1;
 end
 
-t2 = cputime;
-TSP_Solve_Struct.time = t2 - t1';
+TSP_Solve_Struct.time = toc(stp);
 
 %%解析路径，并求解最短路
 if length(ANS_GROUP) == 1

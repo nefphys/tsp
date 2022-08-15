@@ -59,14 +59,8 @@ else
     position = zeros(length(s),2);
     for i = 1:length(s)
         %判断第一个字符是否是空格，是则删除
-        temp1 = convertStringsToChars(s{i});
-        if temp1(1) == ' '
-            temp1(1) = [];
-            temp1 = temp1 + "";
-        else
-            temp1 = temp1 + "";
-        end
-        temp = strsplit(temp1,' ');
+        
+        temp = strsplit(s{i},' ');
         position(i,1) = str2double(temp{2});
         position(i,2) = str2double(temp{3});
     end

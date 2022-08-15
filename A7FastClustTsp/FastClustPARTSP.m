@@ -1,11 +1,11 @@
-function [TSP_Solve_Struct] = FastClustTSP(tspData,MaxDistNum)
+function [TSP_Solve_Struct] = FastClustPARTSP(tspData,MaxDistNum)
 %% 先编写主体框架
 % 后续传入聚类参数，智能算法参数，设置智能算法的选择
 % tspData 数据路径
 % MaxDistNum 最大可计算距离矩阵的大小 n*n, 数据量大于此值则不计算距离矩阵
 % 计算TSP则不改变层数，不赋值TSP则改变层数
 %算法内智能算法求解TSP最多可以计算999个点的情况
-t1 = cputime;
+stp = tic;
 MaxTspSize = 50;%可计算的最大规模TSP
 MaxKmeans = 50;%kmeans最大K值
 StdKmeans = 500;%kmeans数据集分割大小
@@ -36,13 +36,13 @@ while(true)
     ANS_GROUP_FAKE = [];
     %是否还需要计算
     isCal = 0;
-    for i = 1:length(ANS_GROUP)
+    parfor i = 1:length(ANS_GROUP)
         tarStruct = ANS_GROUP(i);
         tempStruct = std_struct;
         %isover==0则需要继续计算，否则返回原来的结构体
         %计算之后返回的也是一个结构体数组, 如果有变化则删除原本的结构体，并拼接新的
         if tarStruct.isover == 0
-            isCal = 1;
+            isCal(i) = 1;
             %判断集合内点的数量，以确定是聚类还是计算TSP
             setSize = length(tarStruct.set);
             
@@ -200,8 +200,8 @@ while(true)
 %                         end
                     end
                     %重新判断中心点，用平均距离构建
-                    for i = 1:length(unique(Clust_Ans.cluster))
-                        Clust_Ans.center(i,:) = mean(tempCity(Clust_Ans.cluster==i,:));
+                    for h = 1:length(unique(Clust_Ans.cluster))
+                        Clust_Ans.center(h,:) = mean(tempCity(Clust_Ans.cluster==h,:));
                     end
                     [ACS_TEMP_SOLVE]  =  Tool_ACS_SE_Solver(Clust_Ans.center, startClustID, endClustID, 0);
                 end
@@ -225,7 +225,12 @@ while(true)
                 CX1 = []; %起点团簇的坐标集
                 CX2 = []; %终点团簇的坐标集
                 tempStruct = [tempStruct tempStruct(1)];
-                for h = 1:Centers
+                if tarStruct.inID ~= 0
+                    CentersA = Centers -1;
+                else
+                    CentersA = Centers;
+                end
+                for h = 1:CentersA
 % %                     %判断第1簇是否有出点。第2簇是否有入点
 % %                     if tempStruct(h).outID == 0 && tempStruct(h+1).inID == 0
 % %                         %没有指定入点和起点
@@ -243,7 +248,7 @@ while(true)
 % %                     end
 % %                 
                     %如果有出点了，则进入下一次循环
-                    if 
+                    
                     EX1 = 0;
                     EX2 = 0;
                     if tempStruct(h).outID ~= 0
@@ -311,15 +316,14 @@ while(true)
      %重新赋值ans_group
      ANS_GROUP = ANS_GROUP_FAKE;
     %终止条件，只要后面一次循环isover全部是1，即借宿
-     if isCal == 0
+     if sum(isCal) == 0
          break;
      end
      %层数增加
     layer = layer + 1;
 end
 
-t2 = cputime;
-TSP_Solve_Struct.time = t2 - t1';
+TSP_Solve_Struct.time = toc(stp);
 
 %%解析路径，并求解最短路
 if length(ANS_GROUP) == 1

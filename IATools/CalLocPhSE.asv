@@ -1,29 +1,21 @@
 function [ant_tours, tau] = CalLocPhSE(m, ant_tours, n, alpha, beta,tau, rho, c, d)
     %% 生成新的路径以及局部信息素
-    tp = sum(1:n);
     for  s  =   2  : (n-1) %维数
         for  k  =   1  : m %蚂蚁
             current_node  =  ant_tours(k,s - 1 );
 %             visited  =  ant_tours(k,:);
 %             visited = visited(visited ~= 0);
             visited = ant_tours(k,:);
-            to_visit = [];
             if sum(visited) == 0
                 to_visit = 1:n;
             else
                 %
-                tq = sum(visited);
-                %visited(visited == 0) = [];
+                visited(visited == 0) = [];
                 for i = 1:n
-                    if ~sum((visited - i) == 0)
-                        to_visit = [to_visit i];
-                        if (sum(to_visit)+tq) == tp
-                            break
-                        end
-                    end
+                    
                 end
             end
-            %to_visit  =  MY_setdiff(1:n,visited);
+            to_visit  =  MY_setdiff(1:n,);
             c_tv  =  length(to_visit);
             p = zeros(1,c_tv);
             for i = 1:c_tv
