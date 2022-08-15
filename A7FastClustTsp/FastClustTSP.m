@@ -174,7 +174,7 @@ while(true)
                         %则将终点踢出去单独成为一个簇
                         
                         %找到含有起点和终点的簇，将它设置为起点簇
-                        tempStruct(startClustID).set = MY_setdiff(tempStruct(startClustID).set,endID);
+                        tempStruct(startClustID).set = MY_setdiff(tempStruct(startClustID).set,endID,2);%集合类型
                         tempStruct(startClustID).outID = 0;
                         tempStruct(end+1) = tempStruct(1);
                         tempStruct(end).inID = endID;

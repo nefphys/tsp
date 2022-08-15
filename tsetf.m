@@ -72,6 +72,7 @@ cd('.\A7FastClustTsp')
 profile on
 FC_TSP_Solve_Struct = FastClustTSP(City,10000);
 profile viewer
+profile off
 cd('..\')
 %profile viewer
 DrawCluster(City, FC_TSP_Solve_Struct.cate, FC_TSP_Solve_Struct.route)

@@ -5,7 +5,7 @@ function [ant_tours, tau] = CalLocPh(m, ant_tours, n, alpha, beta,tau, rho, c, d
             current_node  =  ant_tours(k,s - 1 );
 %             visited  =  ant_tours(k,:);
 %             visited = visited(visited ~= 0);
-            to_visit  =  MY_setdiff(1:n,ant_tours(k,:));
+            to_visit  =  MY_setdiff(n,ant_tours(k,:),1);%顺序参数
             c_tv  =  length(to_visit);
             p = zeros(1,c_tv);
             for i = 1:c_tv
@@ -22,11 +22,12 @@ function [ant_tours, tau] = CalLocPh(m, ant_tours, n, alpha, beta,tau, rho, c, d
 end
 
 function [select] = CalSelect(p,c_tv,to_visit)
-    p  =  p  /  sum(p);
-    for  i  =   2  : c_tv
-        p(i)  =  p(i)  +  p(i - 1 );
-    end
-    r  =  rand; %这个就是q0 这里是每次都更新
+%当前方法提升速度4倍
+%     p  =  p  /  sum(p);
+%     for  i  =   2  : c_tv
+%         p(i)  =  p(i)  +  p(i - 1 );
+%     end
+    r  =  rand*sum(p); %这个就是q0 这里是每次都更新
     select   =  to_visit(c_tv);
     for  i  =   1  : c_tv
         if  (r  <=  p(i))
@@ -36,4 +37,3 @@ function [select] = CalSelect(p,c_tv,to_visit)
     end
     %select = to_visit(find(r <= p,1));
 end
-

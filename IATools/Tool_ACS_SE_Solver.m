@@ -1,4 +1,4 @@
-function  [TSP_Solve_Struct]  =  ACS_SE_Solver(tspData, startP, endP, target_length)
+function  [TSP_Solve_Struct]  =  Tool_ACS_SE_Solver(tspData, startP, endP, target_length)
 
 
     %% Ant Colony System  for  the TSP

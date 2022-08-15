@@ -35,6 +35,7 @@ while(true)
     % 双倍内存的形式，生成一个伴生的空结构体
     ANS_GROUP_FAKE = [];
     %是否还需要计算
+    
     isCal = 0;
     parfor i = 1:length(ANS_GROUP)
         tarStruct = ANS_GROUP(i);
