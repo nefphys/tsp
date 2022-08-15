@@ -61,7 +61,7 @@ fid = fopen([concordeDir 'm.txt'],'rt');
 s = fscanf(fid,'%f %f');
 fclose('all');
 cmdout = strsplit(cmdout,'\n')';
-TSP_Solve_Struct.route = [s(2:end);s(2)];
+TSP_Solve_Struct.route = s(2:end);
 
 %% 正则表达式提取cmdout输出的距离
 for i = 1:length(cmdout)

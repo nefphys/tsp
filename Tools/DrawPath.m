@@ -1,4 +1,4 @@
-function DrawPath(route,City)
+function DrawPath(City,route)
     %判断route中的最小值
     mr = min(route);
     if mr == 0 

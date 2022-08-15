@@ -1,4 +1,4 @@
-function  [TSP_Solve_Struct]  =  ACS_SE_Solver(tspData, MaxIterations, startP, endP, target_length)
+function  [TSP_Solve_Struct]  =  ACS_SE_Solver(tspData, startP, endP, target_length)
 
 
     %% Ant Colony System  for  the TSP
@@ -23,28 +23,29 @@ function  [TSP_Solve_Struct]  =  ACS_SE_Solver(tspData, MaxIterations, startP, e
     %% 初始化参数
     [Distance, City] = readfile(tspData,1);
     distances_matrix = Distance;
-    number_of_ants = int32(size(City,1)*0.8);
+    %number_of_ants = int32(size(City,1)*0.8);
+    number_of_ants = ceil(0.2*size(City,1))+1;
     %MaxIterations = 1000;
     %target_length = 100;
 
     alpha  =   1;
     beta_0 = 1;
     beta = beta_0;
-    beta_max = 15;
-    rho  =   0.9;
-    xi = 0.05;
-    xi_max = 1;
+    beta_max = 7;
+    rho  =   0.1;
+    xi = 0.01;
+    xi_max = 0.5;
 
     d  =  distances_matrix;
     n  =  max(size(d));
     m  =   number_of_ants ;
-    t_max  =   MaxIterations ;
+    t_max  =   15*size(City,1) ;
     L_target  =  target_length ;
 
     L_best  =  inf;
     T_best  =   0 ;
 
-    t1 = cputime;
+    tic;
     %% 初始化信息素和路径
     % INITIALIZATION  ===========================================================
 
@@ -82,7 +83,7 @@ function  [TSP_Solve_Struct]  =  ACS_SE_Solver(tspData, MaxIterations, startP, e
         ant_tours(:, end) = startP;
         ant_tours(:,(end-1)) = endP;
         %% 生成新的路径以及局部信息素
-         [ant_tours, tau] = CalLocPh(m, ant_tours, n, alpha, beta,tau, rho, c, d);
+         [ant_tours, tau] = CalLocPhSE(m, ant_tours, n, alpha, beta,tau, rho, c, d);
         
 
 
@@ -139,39 +140,9 @@ function  [TSP_Solve_Struct]  =  ACS_SE_Solver(tspData, MaxIterations, startP, e
     end  % ends  while
     t2 = cputime;
     
-    TSP_Solve_Struct.time = t2-t1;
+    TSP_Solve_Struct.time = toc;
     TSP_Solve_Struct.length = L_best;
     TSP_Solve_Struct.route = T_best(1:(end-1)); %点下标从1开始
     TSP_Solve_Struct.City = City;
     TSP_Solve_Struct.BestLine = allrev;
-end
-
-function [ant_tours, tau] = CalLocPh(m, ant_tours, n, alpha, beta,tau, rho, c, d)
-     %% 生成新的路径以及局部信息素
-    for  s  =   2  : (n-1) %维数
-        for  k  =   1  : m %蚂蚁
-            current_node  =  ant_tours(k,s - 1 );
-            visited  =  ant_tours(k,:);
-            visited = visited(visited ~= 0);
-            to_visit  =  MY_setdiff(1:n,visited);
-            c_tv  =  length(to_visit);
-            p  =  (tau(current_node,to_visit)) .^ alpha  .*  ( 1 ./ d(current_node,to_visit)) .^ beta;
-            p  =  p  /  sum(p);
-            for  i  =   2  : c_tv
-                p(i)  =  p(i)  +  p(i - 1 );
-            end
-            r  =  rand; %这个就是q0 这里是每次都更新
-            select   =  to_visit(c_tv);
-            for  i  =   1  : c_tv
-                if  (r  <=  p(i))
-                    select   =  to_visit(i);
-                    break;
-                end
-            end
-            city_to_visit  =   select ;
-            ant_tours(k,s)  =  city_to_visit;
-            %原始是1-rho * tau + tau0
-            tau(current_node,city_to_visit)  =  ( 1   -  rho)  *  tau(current_node,city_to_visit)  +  rho * c;
-        end
-    end
 end

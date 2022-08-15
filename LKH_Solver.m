@@ -72,7 +72,7 @@ route = [];
 for i = 7 :(length(s)-2)
     route(i-6) = str2num(s{i});
 end
-TSP_Solve_Struct.route = [route'; route(1)];
+TSP_Solve_Struct.route = route';
 fid = fopen([LKHDir 'cmdout.txt'],'rt');
 index = 1;
 while ~feof(fid)

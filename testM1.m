@@ -23,6 +23,12 @@ for mm = 2:length(ANS_GROUP)
     hold on
     scatter(F(:,1),F(:,2),'filled')
     hold on
+    %添加路径
+    if ANS_GROUP(mm).tsp ~= 0
+        DrawPath(City,ANS_GROUP(mm).tsp);
+        hold on
+    end
+    
 end
 
 temp = pdist2(City(tempStruct(1).set,:),City(tempStruct(2).set,:))

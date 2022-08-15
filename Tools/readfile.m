@@ -2,7 +2,7 @@ function [data,position] = readfile(fileAddress,isdist)
 %首先判断是否是文本文件，如果本身就是数组，则只用计算距离即可
 %可以指定是否需要返回距离 部分算法不需要返回距离，因为时间空间消耗比较大
 data = 0;
-if size(fileAddress,1) > 1
+if isnumeric(fileAddress) 
     position = fileAddress;
     if isdist
         data = squareform(pdist(position));
@@ -19,10 +19,29 @@ else
     index = 1;
     s = [];
     while ~feof(fid)
-        s{index} = fgetl(fid);
+        temp = fgetl(fid);
+        if temp == "EOF"
+        else
+            s{index} = temp +"";
+        end
         index = index + 1;
     end
     s = s';
+    %删除空行
+    while(true)
+        isrm = 0;
+        for i = 1:length(s)
+            if isempty(s{i}) || s{i} == ""
+                s(i) = [];
+                isrm = 1;
+                break
+            end
+        end
+        if ~isrm
+            break
+        end
+    end
+    
     %找到开始的数据所在的行
     for i = 1:length(s)
         if ~isempty(str2num(s{i}))

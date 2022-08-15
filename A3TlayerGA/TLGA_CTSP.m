@@ -13,7 +13,7 @@ function TSP_Solve_Struct = TLGA_CTSP(tspData, K)
         clust_struct.length = size(temp,1);
         clust_struct.position = temp(:,[2 3]);
         %迭代和种群参数自适应调整
-        varargin = struct('xy',clust_struct.position, 'popSize', 30, 'numIter', 1e3);
+        varargin = struct('xy',clust_struct.position);
         temp = Tool_CGA_Solver(varargin);
         clust_struct.route = temp.route;
         clust_struct.routeID = clust_struct.id(temp.route);

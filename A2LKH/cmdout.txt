@@ -53,18 +53,14 @@ SUBSEQUENT_PATCHING = YES
 # TOUR_FILE = 
 TRACE_LEVEL = 1
 
-Lower bound = 50436.8, Ascent time = 0.13 sec.
-Cand.min = 5, Cand.avg = 5.0, Cand.max = 5
-Preprocessing time = 0.14 sec.
-* 1: Cost = 51013, Time = 0.02 sec.
+Lower bound = 7542.0, Ascent time = 0.01 sec.
+Cand.min = 4, Cand.avg = 4.9, Cand.max = 5
+Preprocessing time = 0.01 sec.
 Writing OUTPUT_TOUR_FILE: "out.txt" ... done
-* 2: Cost = 50785, Time = 0.03 sec.
-Writing OUTPUT_TOUR_FILE: "out.txt" ... done
-* 25: Cost = 50778, Time = 0.22 sec.
-Writing OUTPUT_TOUR_FILE: "out.txt" ... done
-Writing OUTPUT_TOUR_FILE: "out.txt" ... done
-Run 1: Cost = 50778, Time = 0.35 sec. 
-
-* 1: Cost = 50971, Time = 0.03 sec.
-* 2: Cost = 50831, Time = 0.04 sec.
-* 3: Cost = 50825, Time = 0.04 sec.
+Successes/Runs = 1/0
+Cost.min = 7542, Cost.avg = 7542.00, Cost.max = 7542
+Gap.min = 0.0000%, Gap.avg = 0.0000%, Gap.max = 0.0000%
+Trials.min = 0, Trials.avg = 0.0, Trials.max = 0
+Time.min = 0.01 sec., Time.avg = 0.01 sec., Time.max = 0.01 sec.
+Time.total = 0.01 sec.
+请按任意键继续. . . 

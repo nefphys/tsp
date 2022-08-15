@@ -225,12 +225,7 @@ while(true)
                 CX1 = []; %起点团簇的坐标集
                 CX2 = []; %终点团簇的坐标集
                 tempStruct = [tempStruct tempStruct(1)];
-                if tarStruct.inID ~= 0
-                    CentersA = Centers -1;
-                else
-                    CentersA = Centers;
-                end
-                for h = 1:CentersA
+                for h = 1:Centers
 % %                     %判断第1簇是否有出点。第2簇是否有入点
 % %                     if tempStruct(h).outID == 0 && tempStruct(h+1).inID == 0
 % %                         %没有指定入点和起点
@@ -248,7 +243,7 @@ while(true)
 % %                     end
 % %                 
                     %如果有出点了，则进入下一次循环
-                    
+                    if 
                     EX1 = 0;
                     EX2 = 0;
                     if tempStruct(h).outID ~= 0
