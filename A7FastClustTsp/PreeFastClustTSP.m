@@ -417,6 +417,8 @@ TSP_Solve_Struct.clust  = length(ANS_GROUP);
 TSP_Solve_Struct.cate = cate;
 TSP_Solve_Struct.layer = layer - 2;
 TSP_Solve_Struct.Od = Ord2;
+
+%%对条带进行优化，从小团簇开始进行
 end
 
 

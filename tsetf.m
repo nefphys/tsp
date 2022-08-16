@@ -70,6 +70,11 @@ DrawCluster(City, TLACS_PAR_TSP_Solve_Struct.cate, TLACS_PAR_TSP_Solve_Struct.ro
 %profile on
 cd('.\A7FastClustTsp')
 profile on
+AQ = 0;
+for i = 1:10
+    FC_TSP_Solve_Struct = FastClustTSP(City,10000);
+    AQ(i) = FC_TSP_Solve_Struct.length;
+end
 FC_TSP_Solve_Struct = FastClustTSP(City,10000);
 profile viewer
 profile off

@@ -21,8 +21,15 @@ function  [TSP_Solve_Struct]  =  ACS_Solver(tspData, target_length)
 
 
     %% 初始化参数
-    [Distance, City] = readfile(tspData,1);
-    distances_matrix = Distance;
+    %判断tspdata是不是大于1的方阵
+    %如果是，则传入的是距离矩阵
+    if size(tspData,1) == size(tspData,2) && size(tspData,1) > 1
+        distances_matrix = tspData;
+        City = tspData;
+    else
+        [Distance, City] = readfile(tspData,1);
+        distances_matrix = Distance;
+    end
     %number_of_ants = int32(size(City,1)*0.8);
     number_of_ants = ceil(0.2*size(City,1))+1;
     %MaxIterations = 1000;

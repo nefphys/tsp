@@ -54,17 +54,8 @@ DrawPath([SETSP_Solve_Struct.route]-1,SETSP_Solve_Struct.City)
 %测试不同距离计算方法对结果的影响
 for i = 1:10
     i
-    DFM1(i) = FastClustTSP(City,10000,1);
+    DFM1(i) = FastClustTSP(City,10000,2).length;
     DFM2(i) = FastClustTSP(City,10000,2);
     DFM3(i) = FastClustTSP(City,10000,3);
     DFM4(i) = FastClustTSP(City,10000,4);
 end
-
-
-plot([DFM1.length])
-hold on
-plot([DFM2.length])
-hold on
-plot([DFM3.length])
-hold on
-plot([DFM4.length])
