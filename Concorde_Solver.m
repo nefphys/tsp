@@ -49,11 +49,11 @@ end
 
 %% 就使用默认参数，(→_→)还没看懂原始的参数有哪些，该怎么用，记录时间
 % 输出结果为\\concorde\\ans.txt
-start_time = cputime;
+tic;
 concorde_cmd = ['E:' ' && ' 'cd ' concordeDir ' && ' 'concorde -o m.txt temp.tsp'];
 [status,cmdout] = system(concorde_cmd);
-end_time = cputime;
-TSP_Solve_Struct.time = end_time-start_time;
+end_time = toc;
+TSP_Solve_Struct.time = end_time;
 
 %% 返回结果
 %读取路径和长度

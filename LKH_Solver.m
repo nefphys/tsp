@@ -51,10 +51,10 @@ end
 % 输出结果为\\LKH\\ans.txt
 msd = dir();
 cd(LKHDir)
-t1 = cputime;
+tic;
 [status,cmdout] = system(['LKH-2 ' 'par.txt' ' > cmdout.txt' ' &']);
-t2 = cputime;
-system('taskkill /f /t /im LKH-2.exe')
+t2 = toc;
+%system('taskkill /f /t /im LKH-2.exe')
 cd(msd(2).folder)
 %% 返回结果
 %读取路径和长度
@@ -87,7 +87,7 @@ s = s';
 %         break
 %     end
 % end
-TSP_Solve_Struct.time = t2 - t1;
+TSP_Solve_Struct.time = t2;
 fclose('all');
 delete([LKHDir 'out.txt'])
 delete([LKHDir 'temp.tsp'])

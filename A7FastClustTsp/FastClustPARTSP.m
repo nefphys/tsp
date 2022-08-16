@@ -35,7 +35,6 @@ while(true)
     % 双倍内存的形式，生成一个伴生的空结构体
     ANS_GROUP_FAKE = [];
     %是否还需要计算
-    
     isCal = 0;
     parfor i = 1:length(ANS_GROUP)
         tarStruct = ANS_GROUP(i);
@@ -175,14 +174,16 @@ while(true)
                         %则将终点踢出去单独成为一个簇
                         
                         %找到含有起点和终点的簇，将它设置为起点簇
-                        tempStruct(startClustID).set = MY_setdiff(tempStruct(startClustID).set,endID);
+                        tempStruct(startClustID).set = MY_setdiff(tempStruct(startClustID).set,endID,2);%集合类型
                         tempStruct(startClustID).outID = 0;
                         tempStruct(end+1) = tempStruct(1);
-                        tempStruct(end).inID = endID;
+                           tempStruct(end).inID = endID;
                         tempStruct(end).outID = endID;
                         tempStruct(end).set = endID;
                         endClustID = length(tempStruct);
+                        
                         Centers = Centers + 1;
+                        Clust_Ans.cluster(tarStruct.set == endID) = Centers;
                         %判断剔除的点是否是原始簇的中心点
                         if pdist2(Clust_Ans.center(startClustID,:),City(endID,:)) == 0
                             %换一个点作为顶点
@@ -200,10 +201,55 @@ while(true)
 %                                 ACS_TEMP_SOLVE.route(1:(StrPos-1))];
 %                         end
                     end
+                    
                     %重新判断中心点，用平均距离构建
-                    for h = 1:length(unique(Clust_Ans.cluster))
-                        Clust_Ans.center(h,:) = mean(tempCity(Clust_Ans.cluster==h,:));
+                    %无论是kmeans还是snn都一样
+%                     if dfm == 1
+%                     %method1 不再做操作
+%                     
+%                     %method2 平均中心点
+%                     elseif dfm ==2
+%                         for h = 1:length(unique(Clust_Ans.cluster))
+%                             Clust_Ans.center(h,:) = mean(tempCity(Clust_Ans.cluster==h,:));
+%                         end
+%                     %method3 最近距离
+%                     elseif dfm ==3
+%                         ClustClass = length(unique(Clust_Ans.cluster));
+%                         Clust_Ans.center = zeros(ClustClass,ClustClass);
+%                         for h = 1:(ClustClass-1)
+%                             for j = (h+1):ClustClass
+%                                 Clust_Ans.center(h,j) = min(min(pdist2(...
+%                                     tempCity(Clust_Ans.cluster==h,:),...
+%                                     tempCity(Clust_Ans.cluster==j,:))));
+%                             end
+%                         end
+%                         Clust_Ans.center = Clust_Ans.center + Clust_Ans.center';
+%                     %method4 hausdorff 度量
+%                     else
+%                         ClustClass = length(unique(Clust_Ans.cluster));
+%                         Clust_Ans.center = zeros(ClustClass,ClustClass);
+%                         for h = 1:(ClustClass-1)
+%                             for j = (h+1):ClustClass
+%                                 Clust_Ans.center(h,j) = max(min(pdist2(...
+%                                     tempCity(Clust_Ans.cluster==h,:),...
+%                                     tempCity(Clust_Ans.cluster==j,:))));
+%                             end
+%                         end
+%                         Clust_Ans.center = Clust_Ans.center + Clust_Ans.center';
+%                     end
+                    
+
+                    ClustClass = length(unique(Clust_Ans.cluster));
+                    Clust_Ans.center = zeros(ClustClass,ClustClass);
+                    for h = 1:(ClustClass-1)
+                        for j = (h+1):ClustClass
+                            Clust_Ans.center(h,j) = min(min(pdist2(...
+                                tempCity(Clust_Ans.cluster==h,:),...
+                                tempCity(Clust_Ans.cluster==j,:))));
+                        end
                     end
+                    Clust_Ans.center = Clust_Ans.center + Clust_Ans.center';
+
                     [ACS_TEMP_SOLVE]  =  Tool_ACS_SE_Solver(Clust_Ans.center, startClustID, endClustID, 0);
                 end
                 
@@ -221,7 +267,7 @@ while(true)
                 %按照顺序重排
                 tempStruct = tempStruct(ACS_TEMP_SOLVE.route);
                 
-                %寻找起点和终点，有的团簇已经有了起点或者终点
+                %% 寻找起点和终点，有的团簇已经有了起点或者终点
                 %同一个点不能同时是起点或者终点，除非是单点集
                 CX1 = []; %起点团簇的坐标集
                 CX2 = []; %终点团簇的坐标集
@@ -282,7 +328,7 @@ while(true)
                 end
                 
                 tempStruct(1).inID = tempStruct(end).inID;
-                %判断是否有既是起点也是终点的情况
+                %% 判断是否有既是起点也是终点的情况
                 for h = 1:Centers
                     if tempStruct(h).outID == tempStruct(h).inID
                         if length(tempStruct(h).set) > 1
@@ -326,7 +372,7 @@ end
 
 TSP_Solve_Struct.time = toc(stp);
 
-%%解析路径，并求解最短路
+%% 解析路径，并求解最短路
 if length(ANS_GROUP) == 1
     %仅有一个簇，则不需要拼接
     TSP_Solve_Struct.route = ANS_GROUP.tsp;
@@ -349,7 +395,7 @@ else
     [Ord1, Ord2] = sort(Morder);
     route = [];
     cate = [];
-    for i = 1:length(ANS_GROUP);
+    for i = 1:length(ANS_GROUP)
         temp = ANS_GROUP(Ord2(i)).tsp;
         route = [route temp];
         cate(temp) = i;
@@ -370,6 +416,7 @@ TSP_Solve_Struct.City = City;
 TSP_Solve_Struct.clust  = length(ANS_GROUP);
 TSP_Solve_Struct.cate = cate;
 TSP_Solve_Struct.layer = layer - 2;
+TSP_Solve_Struct.Od = Ord2;
 end
 
 
