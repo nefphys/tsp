@@ -372,6 +372,11 @@ end
 
 TSP_Solve_Struct.time = toc(stp);
 
+%删除ans_group多余的第一个0
+for i = 1:length(ANS_GROUP)
+    ANS_GROUP(i).order = replaceBetween(ANS_GROUP(i).order,1,1,'0');
+end
+
 %% 解析路径，并求解最短路
 if length(ANS_GROUP) == 1
     %仅有一个簇，则不需要拼接

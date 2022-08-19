@@ -123,13 +123,6 @@ profile on
 [Tabu] = Tool_Tabu_FC(City, ANS_GROUP)
 profile viewer
 
-t = 0;
 
-
-tic
-for i = 1:1e7
-    if isequal(1:10,1:10)
-        t = 1;
-    end
+if (1:10 - 1:10) == 0
 end
-toc
