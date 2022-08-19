@@ -9,15 +9,27 @@ function [Rdist Route] = Cal_Route_Dist_FC(City, ANS_GROUP, RouteSheet)
     std_order = Cal_Sheet_Ans_Group(RouteSheet);
     %新的std_order 与ans_group对应 找到顺序
     ans_order = zeros(1, length(ANS_GROUP));
-    for i = 1:length(std_order)
-        for h = 1:length(ANS_GROUP)
-            if std_order(i) == ANS_GROUP(h).order
-                ans_order(i) = h;
-                break
-            end
-        end
+    tmp_order = std_order;
+    for i = 1:length(ANS_GROUP)
+        tmp_order(i) = ANS_GROUP(i).order;
     end
     
+    [C ix] = sort(std_order);
+    [C iy] = sort(tmp_order);
+    
+    for i = 1:length(iy)
+        ans_order(i) = iy(ix == i);
+    end
+    
+%     for i = 1:length(std_order)
+%         for h = 1:length(ANS_GROUP)
+%             if std_order(i) == ANS_GROUP(h).order
+%                 ans_order(i) = h;
+%                 break
+%             end
+%         end
+%     end
+%     
     %利用得到的顺序和转向算子合并生成路线
     new_route = [];
     Rdist = 0;
@@ -32,13 +44,16 @@ function [Rdist Route] = Cal_Route_Dist_FC(City, ANS_GROUP, RouteSheet)
             Rdist = Rdist + temp.gdist;
             new_route = [new_route t_route];
         else
-            tdist = sqrt((City(new_route(end),1) - City((t_route(1),1))^2 +(City(new_route(end),2) - City((t_route(1),2))^2);
+            tdist = sqrt(...
+                (City(new_route(end),1) - City(t_route(1),1))^2 ...
+            +(City(new_route(end),2) - City(t_route(1),2))^2 ...
+            );
             Rdist = Rdist + temp.gdist + tdist;
             new_route = [new_route t_route];
         end
     end
     
-    Rdist = Rdist + sqrt((City(1,1) - City(end,1))^2 +(City(1,2) - City(end,2)^2));
+    Rdist = Rdist + sqrt((City(1,1) - City(end,1))^2 +(City(1,2) - City(end,2))^2);
     
     %根据new_route计算总路径长度
 %     Rdist = 0;

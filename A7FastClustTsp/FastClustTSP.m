@@ -374,7 +374,17 @@ TSP_Solve_Struct.time = toc(stp);
 
 %删除ans_group多余的第一个0
 for i = 1:length(ANS_GROUP)
-    ANS_GROUP(i).order = replaceBetween(ANS_GROUP(i).order,1,1,'0');
+    ANS_GROUP(i).order = replaceBetween(ANS_GROUP(i).order,1,2,'0');
+end
+
+%计算ansgroup内部距离
+for i = 1:length(ANS_GROUP)
+    tdist = 0;
+    temp = ANS_GROUP(i).tsp;
+    for h = 1:(length(temp)-1)
+        tdist = tdist + sqrt((City(temp(h),1) - City(temp(h+1),1))^2 +(City(temp(h),2) - City(temp(h+1),2))^2);
+    end
+    ANS_GROUP(i).gdist = tdist;
 end
 
 %% 解析路径，并求解最短路
@@ -391,29 +401,20 @@ else
     for i = 1:length(ANS_GROUP);
         Mdiff = MAXMlen - Mlen(i);
         if Mdiff ~= 0
-            Morder(i) = [ANS_GROUP(i).order repelem('0',Mdiff)] + "";
+            ANS_GROUP(i).order = [ANS_GROUP(i).order repelem('0',Mdiff)] + "";
         else
-            Morder(i) = ANS_GROUP(i).order + "";
+            ANS_GROUP(i).order = ANS_GROUP(i).order + "";
         end
     end
-    %对Morder进行从小到大排序
-    [Ord1, Ord2] = sort(Morder);
-    route = [];
-    cate = [];
-    for i = 1:length(ANS_GROUP)
-        temp = ANS_GROUP(Ord2(i)).tsp;
-        route = [route temp];
-        cate(temp) = i;
-        %cate = [cate repelem(i, length(ANS_GROUP(Ord2(i)).tsp))];
-    end
+    
+    %将ans_group 变为表格形式
+    %[Ans2Sheet] = Cal_Ans_Sheet_Group(ANS_GROUP);
+    
+    %由计算表计算当前的距离
+    [Rdist route] = Cal_Route_Dist_FC(City, ANS_GROUP, Ans2Sheet);
+    
+    %[EA_Struct] = Tool_EA_FC(City, ANS_GROUP);
 end
-
-sLen = 0;
-route = [route route(1)];
-for i = 1:(length(route)-1)
-    sLen = sLen + pdist([City(route(i),:);City(route(i+1),:)]);
-end
-route(end) = [];
 
 TSP_Solve_Struct.length = sLen;
 TSP_Solve_Struct.route = route; %City个数据
@@ -423,23 +424,6 @@ TSP_Solve_Struct.cate = cate;
 TSP_Solve_Struct.layer = layer - 2;
 TSP_Solve_Struct.Od = Ord2;
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

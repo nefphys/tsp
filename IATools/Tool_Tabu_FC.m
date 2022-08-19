@@ -1,27 +1,33 @@
 %% tabu + 变异进化算法 主程序
 function [Tabu] = Tool_Tabu_FC(City, ANS_GROUP)
     %% 算法框架
+    tt1 = tic;
     popSheet = Cal_Ans_Sheet_Group(ANS_GROUP);
     %% 给定算法参数，产生初始解，禁忌表为空
     % 根据popSheet生成指定数量的tabu结构体
     mstr = "";
     [nrow ncol] = size(popSheet);
     Num = 1;
+    NumSt.IDNum = 0;
     for i = 1:nrow
         for j = 1:(ncol-2)  %最后两列不参与禁忌搜索
             mstr(Num) = num2str(popSheet(i,1:j),'%03d');
             Num = Num + 1;
+            %NumSt(Num).IDNum = zeros(1,ncol-2);
+            NumSt(Num).IDNum(1:j) = popSheet(i,1:j);
         end
     end
-    mstr_UN = unique(mstr);
+    [mstr_UN ia]= unique(mstr);
     Num = length(mstr_UN);
     %对每个smtr建立初始禁忌表
     %第一层
     TabuSheet.ID = "0";
+    TabuSheet.IDNum = 0;
     TabuSheet.Sheet = zeros(length(unique(popSheet(:,1))));
     for i = 1:Num
         TabuSheet(i+1).ID = mstr_UN(i);
         TabuSheet(i+1).Sheet = zeros(sum(mstr == mstr_UN(i)));
+        TabuSheet(i+1).IDNum = NumSt(ia(i)+1).IDNum;
     end
     mstr_UN = ["0" mstr_UN];
     % 初始化参数
@@ -35,11 +41,12 @@ function [Tabu] = Tool_Tabu_FC(City, ANS_GROUP)
     HBestR = popSheet; %历史最优解对应的路径
     
     iter = 1; %迭代次数
-    MaxIter = 10; %最大迭代次数
+    MaxIter = Num; %最大迭代次数
     genBest = 0; %每次循环得到的最优解
     
+    MuteProb = 0.2 * (0.1 + sqrt(1/Num));
     while iter <= MaxIter
-        iter
+        %iter
         % 计算邻域
         CandiSolu = Cal_Neib(S0, Candi, mstr_UN);
       
@@ -54,7 +61,7 @@ function [Tabu] = Tool_Tabu_FC(City, ANS_GROUP)
         for i = 1:Candi
             %变异
             for h = 1:size(S0,1)
-                if rand < 0.025
+                if rand < MuteProb
                     CandiSoluMute{i}(h,end) = ~CandiSoluMute{i}(h,end)+0;
                 end
             end
@@ -105,9 +112,10 @@ function [Tabu] = Tool_Tabu_FC(City, ANS_GROUP)
         
         iter = iter + 1;
     end
-    Tabu.HBest = HBest;
+    Tabu.length = HBest;
     Tabu.BestL = BestL;
-    Tabu.HBestR = HBestR;
+    Tabu.route = HBestR;
+    Tabu.time = toc(tt1);
 end
 
 %% 计算两个种群的交换的位置，返回新的禁忌表
@@ -154,26 +162,43 @@ function [TabuSheet istabu] = Cal_Loc_Change(pop1, pop2, TabuSheet)
     end
     %需要多层循环，恼火
     for i = 2:length(TabuSheet)
-        mstr = TabuSheet(i).ID;
-        mstr = convertStringsToChars(mstr);
-        tc = [];
-        while ~isempty(mstr)
-            tc = [tc str2num(mstr(1:3))];
-            mstr(1:3) = [];
-        end
+%         mstr = TabuSheet(i).ID;
+%         mstr = convertStringsToChars(mstr);
+%         tc = [];
+%         while ~isempty(mstr)
+%             tc = [tc str2num(mstr(1:3))];
+%             mstr(1:3) = [];
+%         end
+        tc = TabuSheet(i).IDNum;
         %找到哪些行是这一个类的，记录行的id
-        fid1 = [];
-        fid2 = [];
+%         fid1 = [];
+%         fid2 = [];
+%         tcL = length(tc);
+%         temp1 = pop1(:,1:tcL);
+%         temp2 = pop2(:,1:tcL);
+%         for h = 1:size(pop1,1)
+%             if temp1(h,:) == tc
+%                 fid1 = [fid1 h];
+%             end
+%             
+%             if temp2(h,:) == tc
+%                 fid2 = [fid2 h];
+%             end
+%         end
+%         
         tcL = length(tc);
-        for h = 1:size(pop1,1)
-            if pop1(h,1:tcL) == tc
-                fid1 = [fid1 h];
-            end
-            
-            if pop2(h,1:tcL) == tc
-                fid2 = [fid2 h];
-            end
-        end
+
+        Matr = pop1(:,1:tcL) - tc;
+        Matr = sum(abs(Matr),2);
+        fid1 = find(Matr == 0);
+
+        Matr = pop2(:,1:tcL) - tc;
+        Matr = sum(abs(Matr),2);
+        fid2 = find(Matr == 0);
+        
+        
+%         fid1 = Cal_Mat_Ary(pop1(:,1:tcL), tc);
+%         fid2 = Cal_Mat_Ary(pop2(:,1:tcL), tc);
         
         if length(fid1) > 2
             %如果fid只有一个数，则肯定没有计算的必要
@@ -220,11 +245,22 @@ function [TabuSheet istabu] = Cal_Loc_Change(pop1, pop2, TabuSheet)
     end
 end
 
+
+function fid = Cal_Mat_Ary(Matr, Arry)
+    fid = [];
+    for h = 1:size(Matr,1)
+        if ~(Matr(h,:) - Arry)  
+            fid = [fid h];
+        end
+    end
+end
+
+
 %% 给定起点，初始化一个种群
 function Neib = Cal_Neib(popSheet, Candi, mstr_UN)
     %每个子单位只更新一段
     %给定一个2opt概率
-    probOpt = 0.2;
+    probOpt = 0.2*(0.1 + sqrt(1/length(mstr_UN)));
     
     %计算Candi次
     Neib = repelem({popSheet},Candi);

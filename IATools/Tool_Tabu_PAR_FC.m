@@ -1,27 +1,33 @@
 %% tabu + 变异进化算法 主程序
-function [Tabu] = Tool_Tabu_FC(City, ANS_GROUP)
+function [Tabu] = Tool_Tabu_PAR_FC(City, ANS_GROUP)
     %% 算法框架
+    tt1 = tic;
     popSheet = Cal_Ans_Sheet_Group(ANS_GROUP);
     %% 给定算法参数，产生初始解，禁忌表为空
     % 根据popSheet生成指定数量的tabu结构体
     mstr = "";
     [nrow ncol] = size(popSheet);
     Num = 1;
+    NumSt.IDNum = 0;
     for i = 1:nrow
         for j = 1:(ncol-2)  %最后两列不参与禁忌搜索
             mstr(Num) = num2str(popSheet(i,1:j),'%03d');
             Num = Num + 1;
+            %NumSt(Num).IDNum = zeros(1,ncol-2);
+            NumSt(Num).IDNum(1:j) = popSheet(i,1:j);
         end
     end
-    mstr_UN = unique(mstr);
+    [mstr_UN ia]= unique(mstr);
     Num = length(mstr_UN);
     %对每个smtr建立初始禁忌表
     %第一层
     TabuSheet.ID = "0";
+    TabuSheet.IDNum = 0;
     TabuSheet.Sheet = zeros(length(unique(popSheet(:,1))));
     for i = 1:Num
         TabuSheet(i+1).ID = mstr_UN(i);
         TabuSheet(i+1).Sheet = zeros(sum(mstr == mstr_UN(i)));
+        TabuSheet(i+1).IDNum = NumSt(ia(i)+1).IDNum;
     end
     mstr_UN = ["0" mstr_UN];
     % 初始化参数
@@ -35,26 +41,27 @@ function [Tabu] = Tool_Tabu_FC(City, ANS_GROUP)
     HBestR = popSheet; %历史最优解对应的路径
     
     iter = 1; %迭代次数
-    MaxIter = 10; %最大迭代次数
+    MaxIter = Num; %最大迭代次数
     genBest = 0; %每次循环得到的最优解
     
+    MuteProb = 0.2 * (0.1 + sqrt(1/Num));
     while iter <= MaxIter
-        iter
+        %iter
         % 计算邻域
         CandiSolu = Cal_Neib(S0, Candi, mstr_UN);
       
         % 计算邻域解的表现
         NeibFit = 0;
-        for i = 1:Candi
+        parfor i = 1:Candi
             [Rdist Route] = Cal_Route_Dist_FC(City, ANS_GROUP, CandiSolu{i});
             NeibFit(i) =  Rdist;
         end
         
         CandiSoluMute = CandiSolu;
-        for i = 1:Candi
+        parfor i = 1:Candi
             %变异
             for h = 1:size(S0,1)
-                if rand < 0.025
+                if rand < MuteProb
                     CandiSoluMute{i}(h,end) = ~CandiSoluMute{i}(h,end)+0;
                 end
             end
@@ -77,7 +84,7 @@ function [Tabu] = Tool_Tabu_FC(City, ANS_GROUP)
             %每个子部分都没有限制
             %BestL(iter+1) = BestL(iter);
             
-            for i = 1:(Candi*2)
+            parfor i = 1:(Candi*2)
                 [temp istabu(i)] = Cal_Loc_Change(S0, CandiSolu{IDX(i)}, TabuSheet);
             end
             
@@ -105,9 +112,10 @@ function [Tabu] = Tool_Tabu_FC(City, ANS_GROUP)
         
         iter = iter + 1;
     end
-    Tabu.HBest = HBest;
+    Tabu.length = HBest;
     Tabu.BestL = BestL;
-    Tabu.HBestR = HBestR;
+    Tabu.route = HBestR;
+    Tabu.time = toc(tt1);
 end
 
 %% 计算两个种群的交换的位置，返回新的禁忌表
@@ -154,26 +162,43 @@ function [TabuSheet istabu] = Cal_Loc_Change(pop1, pop2, TabuSheet)
     end
     %需要多层循环，恼火
     for i = 2:length(TabuSheet)
-        mstr = TabuSheet(i).ID;
-        mstr = convertStringsToChars(mstr);
-        tc = [];
-        while ~isempty(mstr)
-            tc = [tc str2num(mstr(1:3))];
-            mstr(1:3) = [];
-        end
+%         mstr = TabuSheet(i).ID;
+%         mstr = convertStringsToChars(mstr);
+%         tc = [];
+%         while ~isempty(mstr)
+%             tc = [tc str2num(mstr(1:3))];
+%             mstr(1:3) = [];
+%         end
+        tc = TabuSheet(i).IDNum;
         %找到哪些行是这一个类的，记录行的id
-        fid1 = [];
-        fid2 = [];
+%         fid1 = [];
+%         fid2 = [];
+%         tcL = length(tc);
+%         temp1 = pop1(:,1:tcL);
+%         temp2 = pop2(:,1:tcL);
+%         for h = 1:size(pop1,1)
+%             if temp1(h,:) == tc
+%                 fid1 = [fid1 h];
+%             end
+%             
+%             if temp2(h,:) == tc
+%                 fid2 = [fid2 h];
+%             end
+%         end
+%         
         tcL = length(tc);
-        for h = 1:size(pop1,1)
-            if pop1(h,1:tcL) == tc
-                fid1 = [fid1 h];
-            end
-            
-            if pop2(h,1:tcL) == tc
-                fid2 = [fid2 h];
-            end
-        end
+
+        Matr = pop1(:,1:tcL) - tc;
+        Matr = sum(abs(Matr),2);
+        fid1 = find(Matr == 0);
+
+        Matr = pop2(:,1:tcL) - tc;
+        Matr = sum(abs(Matr),2);
+        fid2 = find(Matr == 0);
+        
+        
+%         fid1 = Cal_Mat_Ary(pop1(:,1:tcL), tc);
+%         fid2 = Cal_Mat_Ary(pop2(:,1:tcL), tc);
         
         if length(fid1) > 2
             %如果fid只有一个数，则肯定没有计算的必要
@@ -220,11 +245,22 @@ function [TabuSheet istabu] = Cal_Loc_Change(pop1, pop2, TabuSheet)
     end
 end
 
+
+function fid = Cal_Mat_Ary(Matr, Arry)
+    fid = [];
+    for h = 1:size(Matr,1)
+        if ~(Matr(h,:) - Arry)  
+            fid = [fid h];
+        end
+    end
+end
+
+
 %% 给定起点，初始化一个种群
 function Neib = Cal_Neib(popSheet, Candi, mstr_UN)
     %每个子单位只更新一段
     %给定一个2opt概率
-    probOpt = 0.2;
+    probOpt = 0.2*(0.1 + sqrt(1/length(mstr_UN)));
     
     %计算Candi次
     Neib = repelem({popSheet},Candi);
@@ -283,115 +319,4 @@ function Neib = Cal_Neib(popSheet, Candi, mstr_UN)
             end
         end
     end
-end
-
-%%%%%%%%%%%%%%%%%%%% 2-opt %%%%%%%%%%%%%%%%%%%%%%%
-%2-opt含有的点大于2个
-function route = opt2(route)
-    %输入的R不包含终点
-    N = length(route);
-    route = [route; route(1)];
-    t = randsample(2:N,2,'false');
-    if t(1) < t(2)
-        route(t(1):t(2)) = flip(route(t(1):t(2)));
-    else
-        route(t(2):t(1)) = flip(route(t(2):t(1)));
-    end
-    %逆转顺序？？来源blog 书上直接交换
-    route(end) = [];
-end
-
-%% 通用函数，给定数据计算路径长度
-function [Rdist Route] = Cal_Route_Dist_FC(City, ANS_GROUP, RouteSheet)
-    %% City 为坐标
-    % ANS_GROUP 为第一次求解结果
-    % ANS_GROUP 增加属性每个组的距离 gdist
-    % Route 表示顺序表， 设计为第一层id，第二层id，以及转向算子
-    % 转向算子0 表示用ANS_GROUP默认的顺序，1 表示倒序
-    % replaceBetween("0011101",1,1,'0')
-    std_order = Cal_Sheet_Ans_Group(RouteSheet);
-    %新的std_order 与ans_group对应 找到顺序
-    ans_order = zeros(1, length(ANS_GROUP));
-    for i = 1:length(std_order)
-        for h = 1:length(ANS_GROUP)
-            if std_order(i) == ANS_GROUP(h).order
-                ans_order(i) = h;
-                break
-            end
-        end
-    end
-    
-    %利用得到的顺序和转向算子合并生成路线
-    new_route = [];
-    Rdist = 0;
-    for i = 1:length(ans_order)
-        temp = ANS_GROUP(ans_order(i));
-        if RouteSheet(i,end) == 0
-            t_route = temp.tsp;
-        else
-            t_route = fliplr(temp.tsp);
-        end
-        if i == 1
-            Rdist = Rdist + temp.gdist;
-            new_route = [new_route t_route];
-        else
-            Rdist = Rdist + temp.gdist + (City(new_route(end),:) - City(t_route(1),:)).^ 
-            new_route = [new_route t_route];
-        end
-    end
-    
-    %根据new_route计算总路径长度
-    Rdist = 0;
-    City = City(new_route,:); %将city按照new_route 排序
-    for i = 2:length(new_route)
-        Rdist = Rdist + sqrt((City(i-1,1) - City(i,1))^2 +(City(i-1,2) - City(i,2))^2);
-        %pdist2(City(i-1,:),City(i,:),'euclidean');
-    end
-    Rdist = Rdist + pdist2(City(1,:),City(end,:),'euclidean');
-    Route = new_route;
-end
-
-%% 将一个路径返回成一个分组后的
-function [Sheet2Ans] = Cal_Sheet_Ans_Group(Route)
-    [Lrow Lcol] = size(Route);
-    Sheet2Ans = repelem("", Lrow, 1);
-    for i = 1:Lrow
-        for h = 1:(Lcol-1)
-            
-            if Route(i,h) == 0
-                Sheet2Ans(i) = Sheet2Ans(i) + "000000";
-            else
-                Sheet2Ans(i) = Sheet2Ans(i) + num2str(h,'%03d') + num2str(Route(i,h),'%03d');
-            end
-        end
-    end
-end
-
-%% 给出ansgroup，返回标准
-function [Ans2Sheet] = Cal_Ans_Sheet_Group(ANS_GROUP)
-    %% 按照ans_group给定的顺序排序，并生成顺序表
-    
-    AG_order = "";
-    for i = 1:length(ANS_GROUP)
-        AG_order(i) = ANS_GROUP(i).order;
-    end
-    
-    %对order进行排序
-    [ord1 ord2] = sort(AG_order);
-    
-    %生成ans2sheet，默认转子是0
-    Ans2Sheet = zeros(length(AG_order), strlength(ord1(1))/6+1);
-    
-    for i = 1:size(Ans2Sheet,1)
-        temp = convertStringsToChars(ord1(i));
-        for h = 1:(size(Ans2Sheet,2)-1)
-            temp1 = temp(1:6);
-            temp(1:6) = [];
-            if temp1(1:3) == '0'
-            else
-                Ans2Sheet(i,h) = str2num(temp1(4:6)+"");
-            end
-        end
-    end
-
 end

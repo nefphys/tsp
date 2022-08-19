@@ -8,7 +8,7 @@ rmpath(genpath('.\Tools'));
 %profile on viewer off 性能分析工具
 
 
-tspData = 'tspdata/tsplib/pcb3038.tsp'
+tspData = 'tspdata/tsplib/d2103.tsp'
 [Distance,City] = readfile(tspData,1);
 
 %% concorde 求解器
@@ -95,41 +95,6 @@ DrawPath(City,FC_PAR_TSP_Solve_Struct.route)
 
 
 
+Tabu_FC_TSP_Solve_Struct = Tabu_PAR_OP_FastClustTSP(City,10000);
+plot(Tabu_FC_TSP_Solve_Struct.TabuLine)
 
-
-EA_FC_TSP_Solve_Struct = EA_OP_FastClustTSP(City,10000);
-save('City.mat','City')
-save('ANS_GROUP.mat','ANS_GROUP');
-load('City.mat')
-load('ANS_GROUP.mat')
-profile on 
-tic
-temp = Tool_Tabu_FC(City, ANS_GROUP);
-toc
-profile viewer
-
-Tool_Tabu_FC(City, ANS_GROUP)
-
-
-%验算解是否完整
-for i = 1:100
-    if length(unique(CandiSolu{i}(:,1))) == 61
-    else
-        i
-    end
-end
-
-profile on
-[Tabu] = Tool_Tabu_FC(City, ANS_GROUP)
-profile viewer
-
-t = 0;
-
-
-tic
-for i = 1:1e7
-    if isequal(1:10,1:10)
-        t = 1;
-    end
-end
-toc

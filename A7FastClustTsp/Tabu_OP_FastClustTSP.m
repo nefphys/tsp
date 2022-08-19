@@ -382,8 +382,9 @@ for i = 1:length(ANS_GROUP)
     tdist = 0;
     temp = ANS_GROUP(i).tsp;
     for h = 1:(length(temp)-1)
-        tdist = tdist + sqrt((City(temp(h),1) - City(temp(h+1),1))^2 +(City(temp(h),2) - City(temp(h+1),2)^2));
+        tdist = tdist + sqrt((City(temp(h),1) - City(temp(h+1),1))^2 +(City(temp(h),2) - City(temp(h+1),2))^2);
     end
+    ANS_GROUP(i).gdist = tdist;
 end
 
 %% 解析路径，并求解最短路
