@@ -1,5 +1,8 @@
 %% 通用函数，给定数据计算路径长度
 function [Rdist Route] = Cal_Route_Dist_FC(City, ANS_GROUP, RouteSheet)
+    if RouteSheet == 0
+        [RouteSheet idx] = Cal_Ans_Sheet_Group(ANS_GROUP);
+    end
     %% City 为坐标
     % ANS_GROUP 为第一次求解结果
     % ANS_GROUP 增加属性每个组的距离 gdist
@@ -53,7 +56,8 @@ function [Rdist Route] = Cal_Route_Dist_FC(City, ANS_GROUP, RouteSheet)
         end
     end
     
-    Rdist = Rdist + sqrt((City(1,1) - City(end,1))^2 +(City(1,2) - City(end,2))^2);
+    Rdist = Rdist + sqrt((City(new_route(1),1) - City(new_route(end),1))^2 + ...
+         (City(new_route(1),2) - City(new_route(end),2))^2);
     
     %根据new_route计算总路径长度
 %     Rdist = 0;

@@ -408,7 +408,7 @@ else
     end
     
     %将ans_group 变为表格形式
-    %[Ans2Sheet] = Cal_Ans_Sheet_Group(ANS_GROUP);
+    [Ans2Sheet] = Cal_Ans_Sheet_Group(ANS_GROUP);
     
     %由计算表计算当前的距离
     [Rdist route] = Cal_Route_Dist_FC(City, ANS_GROUP, Ans2Sheet);
@@ -416,13 +416,13 @@ else
     %[EA_Struct] = Tool_EA_FC(City, ANS_GROUP);
 end
 
-TSP_Solve_Struct.length = sLen;
+TSP_Solve_Struct.length = Rdist;
 TSP_Solve_Struct.route = route; %City个数据
 TSP_Solve_Struct.City = City;
 TSP_Solve_Struct.clust  = length(ANS_GROUP);
-TSP_Solve_Struct.cate = cate;
+%TSP_Solve_Struct.cate = cate;
 TSP_Solve_Struct.layer = layer - 2;
-TSP_Solve_Struct.Od = Ord2;
+%TSP_Solve_Struct.Od = Ord2;
 end
 
 

@@ -8,7 +8,7 @@ rmpath(genpath('.\Tools'));
 %profile on viewer off 性能分析工具
 
 
-tspData = 'tspdata/tsplib/d2103.tsp'
+tspData = 'tspdata/tsplib/fl1577.tsp'
 [Distance,City] = readfile(tspData,1);
 
 %% concorde 求解器
@@ -93,8 +93,21 @@ cd('..\')
 DrawCluster(City, FC_PAR_TSP_Solve_Struct.cate, FC_PAR_TSP_Solve_Struct.route)
 DrawPath(City,FC_PAR_TSP_Solve_Struct.route)
 
+%% 并行混合聚类蚁群算法+Tabu进化优化
+
+Tabu_PAR_FC_TSP_Solve_Struct = Tabu_PAR_OP_FastClustTSP(City,10000);
+plot(Tabu_PAR_FC_TSP_Solve_Struct.TabuLine)
+
+[TSP_Struct] = Sopt2(Tabu_PAR_FC_TSP_Solve_Struct.route, City)
+
+save('ANS_GROUP.mat','ANS_GROUP')
+save('City.mat','City')
 
 
-Tabu_FC_TSP_Solve_Struct = Tabu_PAR_OP_FastClustTSP(City,10000);
-plot(Tabu_FC_TSP_Solve_Struct.TabuLine)
+%%
+[EA_OP_FastClustTSP_S] = EA_OP_FastClustTSP(City, 10000);
 
+
+for i = 1:0
+    1
+end

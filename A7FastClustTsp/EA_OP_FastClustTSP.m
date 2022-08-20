@@ -1,4 +1,4 @@
-function [TSP_Solve_Struct] = Tabu_PAR_OP_FastClustTSP(tspData, MaxDistNum)
+function [TSP_Solve_Struct] = EA_OP_FastClustTSP(tspData, MaxDistNum)
 %% 先编写主体框架
 % 后续传入聚类参数，智能算法参数，设置智能算法的选择
 % tspData 数据路径
@@ -36,7 +36,7 @@ while(true)
     ANS_GROUP_FAKE = [];
     %是否还需要计算
     isCal = 0;
-    parfor i = 1:length(ANS_GROUP)
+    for i = 1:length(ANS_GROUP)
         tarStruct = ANS_GROUP(i);
         tempStruct = std_struct;
         %isover==0则需要继续计算，否则返回原来的结构体
@@ -391,7 +391,6 @@ end
 if length(ANS_GROUP) == 1
     %仅有一个簇，则不需要拼接
     TSP_Solve_Struct.route = ANS_GROUP.tsp;
-    TSP_Solve_Struct.TabuLine = 0;
 else
     %提取order并进行排序，记录最长的order
     Mlen = 1:length(ANS_GROUP);
@@ -410,21 +409,22 @@ else
     
     %将ans_group 变为表格形式
     %[Ans2Sheet] = Cal_Ans_Sheet_Group(ANS_GROUP);
+    
     %由计算表计算当前的距离
     %[Rdist route] = Cal_Route_Dist_FC(City, ANS_GROUP, Ans2Sheet);
     
-    [Tabu_Struct] = Tool_Tabu_PAR_FC(City, ANS_GROUP);
-    TSP_Solve_Struct.TabuLine = Tabu_Struct.BestL;
-    TSP_Solve_Struct.time = TSP_Solve_Struct.time + Tabu_Struct.time;
+    [EA_Struct] = EA_PAR_2Opt(ANS_GROUP, City, 100, 50, 1e2, 1e3);
+    TSP_Solve_Struct.bestline = EA_Struct.bestline;
+    TSP_Solve_Struct.time = TSP_Solve_Struct.time + EA_Struct.time;
 end
 
-TSP_Solve_Struct.length = Tabu_Struct.length;
-TSP_Solve_Struct.route = Tabu_Struct.route; %City个数据
+TSP_Solve_Struct.length = EA_Struct.dist;
+TSP_Solve_Struct.route = EA_Struct.route; %City个数据
 TSP_Solve_Struct.City = City;
 TSP_Solve_Struct.clust  = length(ANS_GROUP);
-TSP_Solve_Struct.cate = 0;
+%TSP_Solve_Struct.cate = 0;
 TSP_Solve_Struct.layer = layer - 2;
-TSP_Solve_Struct.Od = 0;
+%TSP_Solve_Struct.Od = 0;
 end
 
 

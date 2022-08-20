@@ -416,13 +416,13 @@ else
     %[EA_Struct] = Tool_EA_FC(City, ANS_GROUP);
 end
 
-TSP_Solve_Struct.length = sLen;
+TSP_Solve_Struct.length = Rdist;
 TSP_Solve_Struct.route = route; %City个数据
 TSP_Solve_Struct.City = City;
 TSP_Solve_Struct.clust  = length(ANS_GROUP);
-TSP_Solve_Struct.cate = cate;
+%TSP_Solve_Struct.cate = cate;
 TSP_Solve_Struct.layer = layer - 2;
-TSP_Solve_Struct.Od = Ord2;
+%TSP_Solve_Struct.Od = Ord2;
 end
 
 

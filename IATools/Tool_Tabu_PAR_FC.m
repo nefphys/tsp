@@ -112,9 +112,10 @@ function [Tabu] = Tool_Tabu_PAR_FC(City, ANS_GROUP)
         
         iter = iter + 1;
     end
+    [Rdist Route] = Cal_Route_Dist_FC(City, ANS_GROUP, HBestR);
     Tabu.length = HBest;
     Tabu.BestL = BestL;
-    Tabu.route = HBestR;
+    Tabu.route = Route;
     Tabu.time = toc(tt1);
 end
 
