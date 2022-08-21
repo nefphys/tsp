@@ -9,26 +9,28 @@ function EA_Struct = EA_PAR_2Opt(ANS_GROUP, City, calLayer, popSize, EAmaxIt, op
     %EAmaxIt = 100;
     %optMaxIt = 1e3;
     
-   
-    
+     %初始解情况
+    [Rdist Route] = Cal_Route_Dist_FC(City, ANS_GROUP, 0);
     % 首先生成目标染色体形式
     [New_Group Chrom SCity] = Cal_Layer_Group(calLayer, ANS_GROUP, City);
-    
-    %初始解情况
-    [Rdist Route] = Cal_Route_Dist_FC(City, ANS_GROUP, 0);
+    bestGroup = New_Group;
+    BestRo = Chrom;
+    BKS = Rdist;
+    BestLine(1) = Rdist;
+   
     
     %% 2-opt 生成种群
     initPop = repmat(0,popSize,length(Chrom));
     initFit = [];
-    parfor i = 1:popSize
+    for i = 1:popSize
         [TSP_Struct] = Cal_2Opt_EA(Chrom, New_Group, SCity, optMaxIt);
         initPop(i,:) = TSP_Struct.route;
         initFit(i) = TSP_Struct.length;
     end
-    BestLine(1) = min(initFit);
-    BKS = BestLine(1);
-    figure(1);
+    %figure(1);
     iter = 0;
+    
+    init_Group = repelem({New_Group},popSize);
     %进入遗传算法中
     while iter < EAmaxIt
         %交叉 - 单点交叉，即每层选择一个，进入则变为单点
@@ -38,47 +40,51 @@ function EA_Struct = EA_PAR_2Opt(ANS_GROUP, City, calLayer, popSize, EAmaxIt, op
         nextPop = Cal_Mutate_EA(nextPop);
         %对种群进行2opt计算，并行计算
         newxtFit = [];
+        next_Group = init_Group;
         parfor i = 1:popSize
-            [TSP_Struct] = Cal_2Opt_EA(nextPop(i,:), New_Group, SCity, optMaxIt);
+            [TSP_Struct temp_Group] = Cal_2Opt_EA(nextPop(i,:), init_Group{i}, SCity, optMaxIt);
+            next_Group{i} = temp_Group;
             nextPop(i,:) = TSP_Struct.route;
             newxtFit(i) = TSP_Struct.length;
         end
-        %轮盘选择？
-        
         
         tempfit = [initFit newxtFit];
         % [ix iy] = sort(tempfit);
         tempPop = [initPop; nextPop];
-        initPop = Cal_Select_EA(tempfit, tempPop, popSize);
+        tempGroup = [init_Group next_Group];
+        [initPop sl] = Cal_Select_EA(tempfit, tempPop, popSize);
+        init_Group = tempGroup(sl);
         
         initFit = [];
         parfor i = 1:popSize
-            [TSP_Struct] = Cal_2Opt_EA(Chrom, New_Group, SCity, optMaxIt);
+            [TSP_Struct temp_Group] = Cal_2Opt_EA(initPop(i,:), init_Group{i}, SCity, optMaxIt);
+            init_Group{i} = temp_Group;
             initPop(i,:) = TSP_Struct.route;
             initFit(i) = TSP_Struct.length;
         end
         
         
-        plot(initFit)
+        %plot(initFit)
         %initPop = tempPop(iy(1:popSize),:);
         %initFit = tempfit(iy(1:popSize));
         %结束
-        iter = iter + 1
+        iter = iter + 1;
         bkp = min(initFit);
         
         if BKS > bkp
             BKS = bkp;
             BestLine(iter+1) = bkp;
             BestRo = initPop(initFit == bkp,:);
+            bestGroup = init_Group{initFit == bkp};
         else
             BestLine(iter+1) = BestLine(iter);
         end
     end
     
-    [REVStruct] = Cal_2Opt_EA(BestRo, New_Group, SCity, 0); %还原路径
-    
-    EA_Struct.dist = REVStruct.length;
-    EA_Struct.route = REVStruct.route;
+    %[REVStruct] = Cal_2Opt_EA(BestRo, New_Group, SCity, 0); %还原路径
+    [route1 dist1] = Cal_New_Dist(bestGroup, BestRo, City);
+    EA_Struct.dist = dist1;
+    EA_Struct.route = route1;
     EA_Struct.bestline = BestLine;
     EA_Struct.time = toc(tt1);
 end
@@ -114,17 +120,26 @@ function nextPop = Cal_Mutate_EA(mPop)
 end
 
 
-function selecPop = Cal_Select_EA(mfit, mpop, popsize)
+function [selecPop sl] = Cal_Select_EA(mfit, mpop, popsize)
+    %始终保留最优种群一半
+    
     selecPop = mpop(1:popsize,:);
-    LL = 1:length(mfit);
-    for i = 1:popsize
+    [mx my] = sort(mfit);
+    selecPop(1:(popsize/2),:) = mpop(my(1:(popsize/2)),:);
+    
+    LL = (popsize/2+1):length(mfit);
+    sl = [];
+    mfit = mfit(my(LL));
+    sl(1:(popsize/2)) = my(1:(popsize/2));
+    for i = (popsize/2+1):popsize
         mprob = mfit/sum(mfit);
         for h = 2:length(mprob)
             mprob(h) = sum(mprob(1:h));
         end
         for h = 1:length(mprob)
             if rand > mprob(h)
-                selecPop(i,:) = mpop(LL(h),:);
+                selecPop(i,:) = mpop(my(LL(h)),:);
+                sl(i) = my(LL(h));
                 LL(h) = [];
                 mfit(h) = [];
                 break
