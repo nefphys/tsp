@@ -8,7 +8,7 @@ rmpath(genpath('.\Tools'));
 %profile on viewer off 性能分析工具
 
 
-tspData = 'tspdata/tsplib/d1291.tsp'
+tspData = 'tspdata/tsplib/fl3795.tsp'
 [Distance,City] = readfile(tspData,1);
 
 %% concorde 求解器
@@ -118,7 +118,7 @@ profile off
 [route1 dist1] = Cal_New_Dist(New_Group, Chrom(1:(end-1)), City);
 
 dist0 = 0;
-route0 = EA_Struct.route;
+route0 = EA_OP_FastClustTSP_S.route(1:(end-1));
 route0 = [route0 route0(1)];
 for i = 2:length(route0)
     dist0 = dist0 + pdist2(City(route0(i-1),:), City(route0(i),:));

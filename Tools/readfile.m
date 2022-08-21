@@ -60,15 +60,14 @@ else
     for i = 1:length(s)
         %判断第一个字符是否是空格，是则删除
         temp1 = convertStringsToChars(s{i});
-        if temp1(1) == ' '
-            temp1(1) = [];
-            temp1 = temp1 + "";
-        else
-            temp1 = temp1 + "";
-        end
         temp = strsplit(temp1,' ');
-        position(i,1) = str2double(temp{2});
-        position(i,2) = str2double(temp{3});
+        if temp1(1) == ' '
+            position(i,1) = str2double(temp{3});
+            position(i,2) = str2double(temp{4});
+        else
+            position(i,1) = str2double(temp{2});
+            position(i,2) = str2double(temp{3});
+        end 
     end
     if isdist 
         data = squareform(pdist(position));

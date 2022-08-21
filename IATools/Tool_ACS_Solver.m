@@ -31,7 +31,7 @@ function  [TSP_Solve_Struct]  =  ACS_Solver(tspData, target_length)
         distances_matrix = Distance;
     end
     %number_of_ants = int32(size(City,1)*0.8);
-    number_of_ants = ceil(0.2*size(City,1))+1;
+    number_of_ants = min(ceil(0.2*size(City,1))+1,100);
     %MaxIterations = 1000;
     %target_length = 100;
 

@@ -413,7 +413,7 @@ else
     %由计算表计算当前的距离
     %[Rdist route] = Cal_Route_Dist_FC(City, ANS_GROUP, Ans2Sheet);
     
-    [EA_Struct] = EA_2Opt(ANS_GROUP, City, 100, 50, 1e2, 1e3);
+    [EA_Struct] = EA_2Opt(ANS_GROUP, City, 100, 50, 5e2, 1e3);
     TSP_Solve_Struct.bestline = EA_Struct.bestline;
     TSP_Solve_Struct.time = TSP_Solve_Struct.time + EA_Struct.time;
 end
