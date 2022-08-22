@@ -408,7 +408,7 @@ else
     end
     
     %将ans_group 变为表格形式
-    %[Ans2Sheet] = Cal_Ans_Sheet_Group(ANS_GROUP);
+    [Ans2Sheet] = Cal_Ans_Sheet_Group(ANS_GROUP);
     
     %由计算表计算当前的距离
     [Rdist route] = Cal_Route_Dist_FC(City, ANS_GROUP, Ans2Sheet);

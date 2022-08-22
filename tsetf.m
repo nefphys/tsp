@@ -1,14 +1,14 @@
 addpath(genpath('.\IATools'));
 addpath(genpath('.\Tools'));
 
-%删除路径
+%删除路径 
 rmpath(genpath('.\IATools'));
 rmpath(genpath('.\Tools'));
 
 %profile on viewer off 性能分析工具
 
 
-tspData = 'tspdata/tsplib/fl3795.tsp'
+tspData = 'tspdata/tsplib/rl11849.tsp'
 [Distance,City] = readfile(tspData,1);
 
 %% concorde 求解器
@@ -51,7 +51,7 @@ DrawCluster(City, TLGA_PAR_TSP_Solve_Struct.cate, TLGA_PAR_TSP_Solve_Struct.rout
 %% 双层蚁群算法求解器 ,时间还需要优化，结果已经相近
 cd('.\A4TL_ACS_Solver')
 %profile on
-TLACS_TSP_Solve_Struct = TLACS_Solver(City,int32(size(City,1)/20))
+TLACS_TSP_Solve_Struct = TLACS_Solver(City,60);
 %profile viewer
 cd('..\')
 DrawCluster(City, TLACS_TSP_Solve_Struct.cate, TLACS_TSP_Solve_Struct.route)
@@ -60,7 +60,7 @@ DrawCluster(City, TLACS_TSP_Solve_Struct.cate, TLACS_TSP_Solve_Struct.route)
 %% 双层并行蚁群算法求解器 ,时间还需要优化，结果已经相近
 cd('.\A4TL_ACS_Solver')
 %profile on
-TLACS_PAR_TSP_Solve_Struct = TLACS_PAR_Solver(City,int32(size(City,1)/20))
+TLACS_PAR_TSP_Solve_Struct = TLACS_PAR_Solver(City,60)
 %profile viewer
 cd('..\')
 DrawCluster(City, TLACS_PAR_TSP_Solve_Struct.cate, TLACS_PAR_TSP_Solve_Struct.route)
@@ -95,7 +95,7 @@ DrawPath(City,FC_PAR_TSP_Solve_Struct.route)
 
 %% 并行混合聚类蚁群算法+Tabu进化优化
 
-Tabu_PAR_FC_TSP_Solve_Struct = Tabu_PAR_OP_FastClustTSP(City,10000);
+EA_PAR_FC_TSP_Solve_Struct = EA_PAR_OP_FastClustTSP(City,10000);
 plot(Tabu_PAR_FC_TSP_Solve_Struct.TabuLine)
 
 [TSP_Struct] = Sopt2(Tabu_PAR_FC_TSP_Solve_Struct.route, City)

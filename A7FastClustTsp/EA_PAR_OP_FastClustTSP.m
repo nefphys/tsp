@@ -1,4 +1,4 @@
-function [TSP_Solve_Struct] = EA_PAR_OP_FastClustTSP(tspData, MaxDistNum)
+function [TSP_Solve_Struct] = EA_OP_FastClustTSP(tspData, MaxDistNum)
 %% 先编写主体框架
 % 后续传入聚类参数，智能算法参数，设置智能算法的选择
 % tspData 数据路径
@@ -391,7 +391,7 @@ end
 if length(ANS_GROUP) == 1
     %仅有一个簇，则不需要拼接
     TSP_Solve_Struct.route = ANS_GROUP.tsp;
-    TSP_Solve_Struct.TabuLine = 0;
+    TSP_Solve_Struct.bestline = 0;
 else
     %提取order并进行排序，记录最长的order
     Mlen = 1:length(ANS_GROUP);
@@ -399,7 +399,7 @@ else
         Mlen(i) = strlength(ANS_GROUP(i).order);
     end
     MAXMlen = max(Mlen);
-    for i = 1:length(ANS_GROUP);
+    for i = 1:length(ANS_GROUP)
         Mdiff = MAXMlen - Mlen(i);
         if Mdiff ~= 0
             ANS_GROUP(i).order = [ANS_GROUP(i).order repelem('0',Mdiff)] + "";
@@ -410,12 +410,13 @@ else
     
     %将ans_group 变为表格形式
     %[Ans2Sheet] = Cal_Ans_Sheet_Group(ANS_GROUP);
+    
     %由计算表计算当前的距离
     %[Rdist route] = Cal_Route_Dist_FC(City, ANS_GROUP, Ans2Sheet);
     
-    [EA_Struct] = EA_PAR_2Opt(ANS_GROUP, City, 100, 50, 1e2, 1e3);
+    [EA_Struct] = EA_PAR_2Opt(ANS_GROUP, City, 100, 50, length(ANS_GROUP), 1e3);
     TSP_Solve_Struct.bestline = EA_Struct.bestline;
-    TSP_Solve_Struct.time = TSP_Solve_Struct.time + EA_Struct.time;
+    TSP_Solve_Struct.time2 = TSP_Solve_Struct.time + EA_Struct.time;
 end
 
 TSP_Solve_Struct.length = EA_Struct.dist;

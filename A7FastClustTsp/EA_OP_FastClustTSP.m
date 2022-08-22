@@ -391,6 +391,7 @@ end
 if length(ANS_GROUP) == 1
     %仅有一个簇，则不需要拼接
     TSP_Solve_Struct.route = ANS_GROUP.tsp;
+    TSP_Solve_Struct.bestline = 0;
 else
     %提取order并进行排序，记录最长的order
     Mlen = 1:length(ANS_GROUP);
@@ -398,7 +399,7 @@ else
         Mlen(i) = strlength(ANS_GROUP(i).order);
     end
     MAXMlen = max(Mlen);
-    for i = 1:length(ANS_GROUP);
+    for i = 1:length(ANS_GROUP)
         Mdiff = MAXMlen - Mlen(i);
         if Mdiff ~= 0
             ANS_GROUP(i).order = [ANS_GROUP(i).order repelem('0',Mdiff)] + "";
@@ -413,9 +414,9 @@ else
     %由计算表计算当前的距离
     %[Rdist route] = Cal_Route_Dist_FC(City, ANS_GROUP, Ans2Sheet);
     
-    [EA_Struct] = EA_2Opt(ANS_GROUP, City, 100, 50, 5e2, 1e3);
+    [EA_Struct] = EA_2Opt(ANS_GROUP, City, 100, 50, length(ANS_GROUP)*2, 5e3);
     TSP_Solve_Struct.bestline = EA_Struct.bestline;
-    TSP_Solve_Struct.time = TSP_Solve_Struct.time + EA_Struct.time;
+    TSP_Solve_Struct.time2 = TSP_Solve_Struct.time + EA_Struct.time;
 end
 
 TSP_Solve_Struct.length = EA_Struct.dist;

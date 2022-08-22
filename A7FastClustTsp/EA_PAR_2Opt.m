@@ -1,4 +1,4 @@
-function EA_Struct = EA_PAR_2Opt(ANS_GROUP, City, calLayer, popSize, EAmaxIt, optMaxIt)
+function EA_Struct = EA_2Opt(ANS_GROUP, City, calLayer, popSize, EAmaxIt, optMaxIt)
     %ans_group 本身不会有什么变化，因此后续只需要进行查找
     tt1 = tic();
     %calLayer = 3;
@@ -22,15 +22,17 @@ function EA_Struct = EA_PAR_2Opt(ANS_GROUP, City, calLayer, popSize, EAmaxIt, op
     %% 2-opt 生成种群
     initPop = repmat(0,popSize,length(Chrom));
     initFit = [];
-    for i = 1:popSize
-        [TSP_Struct] = Cal_2Opt_EA(Chrom, New_Group, SCity, optMaxIt);
+    init_Group = repelem({New_Group},popSize);
+    parfor i = 1:popSize
+        [TSP_Struct AGN] = Cal_2Opt_EA(Chrom, New_Group, SCity, optMaxIt);
         initPop(i,:) = TSP_Struct.route;
         initFit(i) = TSP_Struct.length;
+        init_Group{i} = AGN;
     end
     %figure(1);
     iter = 0;
     
-    init_Group = repelem({New_Group},popSize);
+  
     %进入遗传算法中
     while iter < EAmaxIt
         %交叉 - 单点交叉，即每层选择一个，进入则变为单点
