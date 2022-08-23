@@ -1,4 +1,4 @@
-function  [TSP_Solve_Struct]  =  ACS_Solver(tspData, target_length)
+function  [TSP_Solve_Struct]  =  Tool_ACS_Solver(tspData, target_length)
 
 
     %% Ant Colony System  for  the TSP
@@ -31,7 +31,7 @@ function  [TSP_Solve_Struct]  =  ACS_Solver(tspData, target_length)
         distances_matrix = Distance;
     end
     %number_of_ants = int32(size(City,1)*0.8);
-    number_of_ants = min(ceil(0.2*size(City,1))+1,100);
+    number_of_ants = min(ceil(0.5*size(City,1))+1, 100);
     %MaxIterations = 1000;
     %target_length = 100;
 
@@ -46,7 +46,7 @@ function  [TSP_Solve_Struct]  =  ACS_Solver(tspData, target_length)
     d  =  distances_matrix;
     n  =  max(size(d));
     m  =   number_of_ants ;
-    t_max  =   15*size(City,1) ;
+    t_max  =  10 + size(City,1) ;
     L_target  =  target_length ;
 
     L_best  =  inf;
@@ -71,6 +71,7 @@ function  [TSP_Solve_Struct]  =  ACS_Solver(tspData, target_length)
     %% 主循环
     t  =   1 ;
     kp = 1;
+    kq = 1;
     allrev = 0;
     
      %% 预分配内存
@@ -84,7 +85,7 @@ function  [TSP_Solve_Struct]  =  ACS_Solver(tspData, target_length)
     
     while  ((t  <=  t_max)  &&  (L_target  <=  L_best))
 
-
+        
         % CREATE TOURS  =============================================================
 
         %% 生成新的路径以及局部信息素
@@ -106,7 +107,7 @@ function  [TSP_Solve_Struct]  =  ACS_Solver(tspData, target_length)
         end
         L_min  =  min(L_T);
         T_min  =  ant_tours(best_ant,:);
-
+        
         %% 如果这次的路径和上次的路径一样，即都是best route，则更新beta和xi
         if(t >  5) %5次之后再判断
             if(L_best <= L_min)
@@ -134,7 +135,7 @@ function  [TSP_Solve_Struct]  =  ACS_Solver(tspData, target_length)
         for  i  =   1  : n
             tau(T_min(i),T_min(i + 1 ))  =  ( 1   -  xi)  *  tau(T_min(i),T_min(i + 1 ))  +  xi  /  L_min;
         end
-
+        %tau = (1 - xi) * tau + xi / L_min;
         % COMPLETE  ================================================================
         t  =  t  +   1;
         current_cities  =  ant_tours(:,n);

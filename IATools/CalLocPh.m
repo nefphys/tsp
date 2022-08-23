@@ -31,13 +31,19 @@ function [select] = CalSelect(p,c_tv,to_visit)
 %     for  i  =   2  : c_tv
 %         p(i)  =  p(i)  +  p(i - 1 );
 %     end
-    r  =  rand*sum(p); %这个就是q0 这里是每次都更新
-    select   =  to_visit(c_tv);
-    for  i  =   1  : c_tv
-        if  (r  <=  p(i))
-            select   =  to_visit(i);
-            break;
+    if rand < 0.9
+        [ix iy] = max(p);
+        select   =  to_visit(iy);
+    else
+        r  =  rand*sum(p); %这个就是q0 这里是每次都更新
+        select   =  to_visit(c_tv);
+        for  i  =   1  : c_tv
+            if  (r  <=  p(i))
+                select   =  to_visit(i);
+                break;
+            end
         end
     end
+    
     %select = to_visit(find(r <= p,1));
 end

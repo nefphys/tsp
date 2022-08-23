@@ -22,14 +22,7 @@ function [ant_tours, tau] = CalLocPhSE(m, ant_tours, n, alpha, beta,tau, rho, c,
             %向量化计算会更慢
             %p  =  (tau(current_node,to_visit)) .^ alpha  .*  ( 1 ./ d(current_node,to_visit)) .^ beta;
             %city_to_visit  =   CalSelect(p,c_tv,to_visit) ;
-            r  =  rand*sum(p); %这个就是q0 这里是每次都更新
-            city_to_visit   =  to_visit(c_tv);
-            for  i  =   1  : c_tv
-                if  (r  <=  p(i))
-                    city_to_visit   =  to_visit(i);
-                    break;
-                end
-            end
+            city_to_visit  =   CalSelect(p,c_tv,to_visit) ;
             ant_tours(k,s)  =  city_to_visit;
             %原始是1-rho * tau + tau0
             tau(current_node,city_to_visit)  =  ( 1   -  rho)  *  tau(current_node,city_to_visit)  +  rho * c;
@@ -38,20 +31,26 @@ function [ant_tours, tau] = CalLocPhSE(m, ant_tours, n, alpha, beta,tau, rho, c,
 end
 
 %不调用函数会更快
+
 function [select] = CalSelect(p,c_tv,to_visit)
 %当前方法提升速度4倍
 %     p  =  p  /  sum(p);
 %     for  i  =   2  : c_tv
 %         p(i)  =  p(i)  +  p(i - 1 );
 %     end
-    r  =  rand*sum(p); %这个就是q0 这里是每次都更新
-    select   =  to_visit(c_tv);
-    for  i  =   1  : c_tv
-        if  (r  <=  p(i))
-            select   =  to_visit(i);
-            break;
+    if rand < 0.9
+        [ix iy] = max(p);
+        select   =  to_visit(iy);
+    else
+        r  =  rand*sum(p); %这个就是q0 这里是每次都更新
+        select   =  to_visit(c_tv);
+        for  i  =   1  : c_tv
+            if  (r  <=  p(i))
+                select   =  to_visit(i);
+                break;
+            end
         end
     end
+    
     %select = to_visit(find(r <= p,1));
 end
-
