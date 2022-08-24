@@ -29,7 +29,7 @@ ans_str.time = 0;
 MaxTspSize = 50; %写死
 MaxKmeans = 50;
 MaxDistNum = 20000;
-parthread = 6;
+parthread = 10;
 
 for jj = 1:size(EAPAR,1)
     FCroute = zeros(length(tarTsp), parthread);
@@ -81,3 +81,4 @@ for i = 1:length(tarTsp)
         FCtime(i,h) = TSP_Solve_Struct.time2;
     end
 end
+save('test4_2.mat', 'FCroute','FCtime')
