@@ -125,7 +125,7 @@ while(true)
 %                     Centers = min(MaxKmeans,ceil(setSize/StdKmeans));
 %                     
                     Centers = ceil(setSize/MaxTspSize);
-                    [cidx, cc] = kmeans(tempCity, Centers);
+                    [cidx, cc] = kmeans(tempCity, Centers, 'MaxIter', 10000);
                     Clust_Ans.cluster = cidx;
                     Clust_Ans.center = cc;
                     
