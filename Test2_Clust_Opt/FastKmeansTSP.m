@@ -6,8 +6,8 @@ function [TSP_Solve_Struct] = FastKmeansTSP(tspData, MaxDistNum, MaxTspSize, Max
 % 计算TSP则不改变层数，不赋值TSP则改变层数
 %算法内智能算法求解TSP最多可以计算999个点的情况
 stp = tic;
-MaxTspSize = 50;%可计算的最大规模TSP
-MaxKmeans = 50;%kmeans最大K值
+%MaxTspSize = 50;%可计算的最大规模TSP
+%MaxKmeans = 50;%kmeans最大K值
 StdKmeans = 500;%kmeans数据集分割大小
 MaxDP = 10000;%基于密度聚类的最大点集
 ACSTimes = 5;
