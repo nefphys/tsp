@@ -122,6 +122,7 @@ while(true)
                     Clust_Ans = SnnDpc(tempCity,1:setSize,K,'AutoPick',...
                         Centers,'Distance',tempCityDist,'Ui',false);
                     Clust_Ans.center = tempCity(Clust_Ans.center,:);
+                    Centers = size(Clust_Ans.center,1);
                 else
                     %如果点的数量大于10000，则进行kmeans聚类
                     Centers = min(MaxKmeans,ceil(setSize/StdKmeans));
