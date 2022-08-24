@@ -13,7 +13,6 @@ route = zeros(length(tarTsp), 30);
 time = zeros(length(tarTsp), 30);
 
 for i = 1:length(tarTsp)
-    i
     tarPath = tarTsp(i).folder + "\" + tarTsp(i).name;
     [Distance City] = readfile(tarPath,1);
     City = rand(i*10,2);
@@ -46,5 +45,5 @@ profile off
 
 
 % 仅研究小规模数据集下的精度和时间
-xt = 1000;
-p = 0.007596 * xt^2 - 0.2554 *xt + 2.929
+xt = 0
+p = 0.02953 * xt^3 -0.1806 * xt^2 + 0.5235 *xt - 0.4098;
