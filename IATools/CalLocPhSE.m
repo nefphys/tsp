@@ -9,7 +9,7 @@ function [ant_tours, tau] = CalLocPhSE(m, ant_tours, n, alpha, beta,tau, rho, c,
 %            
 %             to_visit  =  MY_setdiff(n,visited,1);%顺序类型
 %             
-            visited  =  ant_tours(k,1:(s-1));
+            visited  =  [ant_tours(k,1:(s-1)) ant_tours(k,(end-1))];
             to_visit = stdr;
             to_visit(visited) = [];
             
