@@ -89,9 +89,9 @@ FCtime = zeros(length(tarTsp), 30);
 FKroute = zeros(length(tarTsp), 30);
 FKtime = zeros(length(tarTsp), 30);
 
+MaxDistNum = 20000;
 MaxTspSize = 100;
 MaxKmeans = 100;
-MaxDistNum = 20000;
 
 parthread = 30;
 for i = 1:length(tarTsp)
