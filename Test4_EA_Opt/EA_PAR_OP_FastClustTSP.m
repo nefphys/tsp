@@ -420,7 +420,7 @@ else
         popSize = popSize + 1;
     end
     EAmaxIt = 10 + ceil(length(ANS_GROUP)*EAPAR(2));
-    optMaxIt = 100 + ceil(length(ANS_GROUP)*EAPAR(3));
+    optMaxIt = 10 + ceil(length(ANS_GROUP)*EAPAR(3));
     
     [EA_Struct] = EA_PAR_2Opt(ANS_GROUP, City, 100, popSize, EAmaxIt, optMaxIt);
     TSP_Solve_Struct.bestline = EA_Struct.bestline;
