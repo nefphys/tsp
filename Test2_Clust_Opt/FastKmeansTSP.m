@@ -132,7 +132,7 @@ while(true)
                 else
                     %如果点的数量大于10000，则进行kmeans聚类
                     Centers = min(MaxKmeans,ceil(setSize/StdKmeans));
-                    [cidx, cc] = kmeans(tempCity,Centers);
+                    [cidx, cc] = kmeans(tempCity,Centers, 'MaxIter', 10000);
                     Clust_Ans.cluster = cidx;
                     Clust_Ans.center = cc;
                     
