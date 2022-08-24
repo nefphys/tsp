@@ -1,4 +1,4 @@
-function [TSP_Solve_Struct] = EA_OP_FastClustTSP(tspData, MaxDistNum)
+function [TSP_Solve_Struct] = EA_OP_FastClustTSP(tspData, MaxDistNum, MaxTspSize, MaxKmeans, EAPAR)
 %% 先编写主体框架
 % 后续传入聚类参数，智能算法参数，设置智能算法的选择
 % tspData 数据路径
@@ -6,8 +6,8 @@ function [TSP_Solve_Struct] = EA_OP_FastClustTSP(tspData, MaxDistNum)
 % 计算TSP则不改变层数，不赋值TSP则改变层数
 %算法内智能算法求解TSP最多可以计算999个点的情况
 stp = tic;
-MaxTspSize = 50;%可计算的最大规模TSP
-MaxKmeans = 50;%kmeans最大K值
+%MaxTspSize = 50;%可计算的最大规模TSP
+%MaxKmeans = 50;%kmeans最大K值
 StdKmeans = 500;%kmeans数据集分割大小
 MaxDP = 10000;%基于密度聚类的最大点集
 ACSTimes = 5;
@@ -413,8 +413,15 @@ else
     
     %由计算表计算当前的距离
     %[Rdist route] = Cal_Route_Dist_FC(City, ANS_GROUP, Ans2Sheet);
+    popSize = ceil(min(10+length(ANS_GROUP)*EAPAR(1), 150)); %只能为偶数
+    if mod(popSize,2) == 0
+    else
+        popSize = popSize + 1;
+    end
+    EAmaxIt = 10 + ceil(length(ANS_GROUP)*EAPAR(2));
+    optMaxIt = 100 + ceil(length(ANS_GROUP)*EAPAR(3));
     
-    [EA_Struct] = EA_PAR_2Opt(ANS_GROUP, City, 100, 50, length(ANS_GROUP), 1e3);
+    [EA_Struct] = EA_PAR_2Opt(ANS_GROUP, City, 100, popSize, EAmaxIt, optMaxIt);
     TSP_Solve_Struct.bestline = EA_Struct.bestline;
     TSP_Solve_Struct.time2 = TSP_Solve_Struct.time + EA_Struct.time;
 end

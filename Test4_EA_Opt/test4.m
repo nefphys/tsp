@@ -29,15 +29,17 @@ ans_str.time = 0;
 MaxTspSize = 50; %写死
 MaxKmeans = 50;
 MaxDistNum = 20000;
-parthread = 10;
+parthread = 6;
 
 for jj = 1:size(EAPAR,1)
+    FCroute = zeros(length(tarTsp), parthread);
+    FCtime = zeros(length(tarTsp), parthread);
     for i = 1:length(tarTsp)
         tarPath = tarTsp(i).folder + "\" + tarTsp(i).name;
         [Distance City] = readfile(tarPath,1);
         parfor h = 1:parthread
             sprintf('%10s',i+"",h+"",tarTsp(i).name)
-            [TSP_Solve_Struct] = EA_OP_FastClustTSP(tspData, MaxDistNum, MaxTspSize, MaxKmeans, EAPAR);
+            [TSP_Solve_Struct] = EA_OP_FastClustTSP(City, MaxDistNum, MaxTspSize, MaxKmeans, EAPAR(jj,:));
             FCroute(i,h) = TSP_Solve_Struct.length;
             FCtime(i,h) = TSP_Solve_Struct.time2;
         end
@@ -46,10 +48,36 @@ for jj = 1:size(EAPAR,1)
     ans_str(jj).time = FCtime;
 end
 
+rout = [TSP_Solve_Struct.route TSP_Solve_Struct.route(1)];
+mdist = 0;
+for i = 2:length(rout)
+    mdist = mdist + pdist2(City(rout(i-1),:), City(rout(i),:));
+end
+
+
 save('test4_1.mat', 'ans_str')
 
-%记录结果 
-save('test2_50.mat','FCroute','FCtime','FKroute','FKtime');
+%% 选择一组最好的结果，然后作为参数跑30轮
+bestPar = 0;
+tarTsp = dir("data");
+tarTsp = tarTsp(3:end);
 
+ans_str.length = 0;
+ans_str.time = 0;
 
-
+MaxTspSize = 50; %写死
+MaxKmeans = 50;
+MaxDistNum = 20000;
+parthread = 30;
+FCroute = zeros(length(tarTsp), parthread);
+FCtime = zeros(length(tarTsp), parthread);
+for i = 1:length(tarTsp)
+    tarPath = tarTsp(i).folder + "\" + tarTsp(i).name;
+    [Distance City] = readfile(tarPath,1);
+    parfor h = 1:parthread
+        sprintf('%10s',i+"",h+"",tarTsp(i).name)
+        [TSP_Solve_Struct] = EA_OP_FastClustTSP(City, MaxDistNum, MaxTspSize, MaxKmeans, EAPAR(jj,:));
+        FCroute(i,h) = TSP_Solve_Struct.length;
+        FCtime(i,h) = TSP_Solve_Struct.time2;
+    end
+end

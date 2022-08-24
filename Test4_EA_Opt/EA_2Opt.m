@@ -134,9 +134,11 @@ function [selecPop sl] = Cal_Select_EA(mfit, mpop, popsize)
     mfit = mfit(my(LL));
     sl(1:(popsize/2)) = my(1:(popsize/2));
     for i = (popsize/2+1):popsize
-        mprob = mfit/sum(mfit);
+        mprob = 1 ./ mfit; % 大的概率小
+        mprob = mprob /sum(mprob);
+        %mprob = 1/mprob;
         for h = 2:length(mprob)
-            mprob(h) = sum(mprob(1:h));
+            mprob(h) = mprob(h) + mprob(h-1);
         end
         for h = 1:length(mprob)
             if rand > mprob(h)

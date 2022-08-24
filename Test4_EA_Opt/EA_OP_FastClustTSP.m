@@ -413,9 +413,13 @@ else
     
     %由计算表计算当前的距离
     %[Rdist route] = Cal_Route_Dist_FC(City, ANS_GROUP, Ans2Sheet);
-    popSize = min(10+length(ANS_GROUP)*EAPAR(1), 150);
-    EAmaxIt = length(ANS_GROUP)*EAPAR(2);
-    optMaxIt = 100 + length(ANS_GROUP)*EAPAR(3);
+    popSize = ceil(min(10+length(ANS_GROUP)*EAPAR(1), 150)); %只能为偶数
+    if mod(popSize,2) == 0
+    else
+        popSize = popSize + 1;
+    end
+    EAmaxIt = 10 + ceil(length(ANS_GROUP)*EAPAR(2));
+    optMaxIt = 100 + ceil(length(ANS_GROUP)*EAPAR(3));
     [EA_Struct] = EA_2Opt(ANS_GROUP, City, 100, popSize, EAmaxIt, optMaxIt);
     TSP_Solve_Struct.bestline = EA_Struct.bestline;
     TSP_Solve_Struct.time2 = TSP_Solve_Struct.time + EA_Struct.time;
