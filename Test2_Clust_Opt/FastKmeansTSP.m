@@ -342,7 +342,12 @@ while(true)
                             %先判断是否有指定起点或者终点，如果是指定的则不能动
                             if tempStruct(h).outID == endID
                                 %修改起点 -- tempStruct已经按照标准order排序
-                                CX1 = City(tempStruct(s-1).outID,:);
+                                if h == 1
+                                    CX1 = City(tempStruct(end).outID,:);
+                                else
+                                    CX1 = City(tempStruct(h-1).outID,:);
+                                end
+                                
                                 CX2 = City(tempStruct(h).set,:);
                                 %将终点的坐标进行大量偏移
                                 CX2(tempStruct(h).set == tempStruct(h).inID,:) = [-1e20 -1e20];
@@ -350,9 +355,14 @@ while(true)
                                 tempStruct(h).inID = tempStruct(h).set(C2);
                             else
                                 %修改终点
+                                if h == length(tempStruct)
+                                     CX2 = City(tempStruct(1).inID,:);
+                                else
+                                     CX2 = City(tempStruct(h+1).inID,:);
+                                end
                                 CX1 = City(tempStruct(h).set,:);
                                 CX1(tempStruct(h).set == tempStruct(h).outID,:) = [-1e20 -1e20];
-                                CX2 = City(tempStruct(h+1).inID,:);
+                               
                                 [minDist C1 C2] = setMinDist(CX1,CX2,0,0);
                                 tempStruct(h).outID = tempStruct(h).set(C1);
                             end
@@ -360,6 +370,9 @@ while(true)
                     end
                 end
                 tempStruct(end) = [];
+                if tempStruct(1).inID == 404
+                    1
+                end
             end   
             ANS_GROUP_FAKE = [ANS_GROUP_FAKE tempStruct];
         else
