@@ -1,4 +1,4 @@
-function [TSP_Solve_Struct] = FastClustTSP(tspData, MaxDistNum,MaxTspSize,MaxKmeans)
+function [TSP_Solve_Struct] = FastClustTSP(tspData, MaxDistNum,MaxTspSize,MaxKmeans,MK)
 %% 先编写主体框架
 % 后续传入聚类参数，智能算法参数，设置智能算法的选择
 % tspData 数据路径
@@ -118,7 +118,7 @@ while(true)
                     %cluster 一个数组，每个点对应的分类，最小为1
                     %center 中心点的id
                     Centers = ceil(setSize/MaxTspSize)*DPTSPTimes; 
-                    K = 10;
+                    K = MK;
                     Clust_Ans = SnnDpc(tempCity,1:setSize,K,'AutoPick',...
                         Centers,'Distance',tempCityDist,'Ui',false);
                     Clust_Ans.center = tempCity(Clust_Ans.center,:);
@@ -210,9 +210,9 @@ while(true)
 %                     
 %                     %method2 平均中心点
 %                     elseif dfm ==2
-%                         for h = 1:length(unique(Clust_Ans.cluster))
-%                             Clust_Ans.center(h,:) = mean(tempCity(Clust_Ans.cluster==h,:));
-%                         end
+                        for h = 1:length(unique(Clust_Ans.cluster))
+                            Clust_Ans.center(h,:) = mean(tempCity(Clust_Ans.cluster==h,:));
+                        end
 %                     %method3 最近距离
 %                     elseif dfm ==3
 %                         ClustClass = length(unique(Clust_Ans.cluster));
@@ -409,6 +409,7 @@ else
         Mlen(i) = strlength(ANS_GROUP(i).order);
     end
     MAXMlen = max(Mlen);
+    cate = [];
     for i = 1:length(ANS_GROUP);
         Mdiff = MAXMlen - Mlen(i);
         if Mdiff ~= 0
@@ -416,6 +417,7 @@ else
         else
             ANS_GROUP(i).order = ANS_GROUP(i).order + "";
         end
+        cate(ANS_GROUP(i).set) = i;
     end
     
     %将ans_group 变为表格形式
@@ -431,7 +433,7 @@ TSP_Solve_Struct.length = Rdist;
 TSP_Solve_Struct.route = route; %City个数据
 TSP_Solve_Struct.City = City;
 TSP_Solve_Struct.clust  = length(ANS_GROUP);
-%TSP_Solve_Struct.cate = cate;
+TSP_Solve_Struct.cate = cate;
 TSP_Solve_Struct.layer = layer - 2;
 %TSP_Solve_Struct.Od = Ord2;
 end

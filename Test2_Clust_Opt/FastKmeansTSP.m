@@ -415,6 +415,7 @@ else
         Mlen(i) = strlength(ANS_GROUP(i).order);
     end
     MAXMlen = max(Mlen);
+    cate = [];
     for i = 1:length(ANS_GROUP);
         Mdiff = MAXMlen - Mlen(i);
         if Mdiff ~= 0
@@ -422,6 +423,7 @@ else
         else
             ANS_GROUP(i).order = ANS_GROUP(i).order + "";
         end
+        cate(ANS_GROUP(i).set) = i;
     end
     
     %将ans_group 变为表格形式
@@ -437,7 +439,7 @@ TSP_Solve_Struct.length = Rdist;
 TSP_Solve_Struct.route = route; %City个数据
 TSP_Solve_Struct.City = City;
 TSP_Solve_Struct.clust  = length(ANS_GROUP);
-%TSP_Solve_Struct.cate = cate;
+TSP_Solve_Struct.cate = cate;
 TSP_Solve_Struct.layer = layer - 2;
 %TSP_Solve_Struct.Od = Ord2;
 end
