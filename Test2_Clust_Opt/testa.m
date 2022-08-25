@@ -25,8 +25,8 @@ LL = 0;
 for h = 4:2:20
     h
     CC = 0;
-    for j = 1:6
-        TSP_FC = FastClustTSP(City, MaxDistNum,MaxTspSize,MaxKmeans,h);
+    parfor j = 1:10
+        TSP_FC = FastClustTSP(City, MaxDistNum,i*10,i*10);
         CC(j) = TSP_FC.length;
     end
     LL(h) = mean(CC);
@@ -46,11 +46,11 @@ DrawCluster(City,TSP_FK.cate,TSP_FK.route)
 dist0 = 0;
 dist1 = 0;
 RFC = [TSP_FC.route TSP_FC.route(1)];
-RFK = [TSP_FK.route TSP_FK.route(1)];
+%RFK = [TSP_FK.route TSP_FK.route(1)];
 
 for i = 2:length(RFC)
     dist0 = dist0 + pdist2(City(RFC(i-1),:),City(RFC(i),:));
-    dist1 = dist1 + pdist2(City(RFK(i-1),:),City(RFK(i),:));
+    %dist1 = dist1 + pdist2(City(RFK(i-1),:),City(RFK(i),:));
 end
 
 
