@@ -2,6 +2,8 @@
 % 不进行并行化计算
 
 
+
+
 %% 使用TSPlib里面所有的？ 欧几里得2D距离的例子
 % CGA 算法太慢了，不用于计算
 clc
@@ -13,6 +15,11 @@ tarTsp = tarTsp(3:end);
 %CGA 参数
 varargin = struct('xy',City, 'popSize', 100, 'numIter', 1e3);
 CGA_TSP_Solve_Struct = CGA_Solver(varargin);
+
+LKH_TSP_Solve_Struct = LKH_Solver([tarTsp(48).folder '\' tarTsp(48).name], 'A2LKH\', 'EUC_2D')
+system('taskkill /f /t /im cmd.exe')
+DrawPath(City, LKH_TSP_Solve_Struct.route)
+
 %双层GA 参数
 
 %双层ACS 参数
