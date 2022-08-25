@@ -118,7 +118,7 @@ while(true)
                     %cluster 一个数组，每个点对应的分类，最小为1
                     %center 中心点的id
                     Centers = ceil(setSize/MaxTspSize)*DPTSPTimes; 
-                    K = 10;
+                    K = MaxTspSize;
                     Clust_Ans = SnnDpc(tempCity,1:setSize,K,'AutoPick',...
                         Centers,'Distance',tempCityDist,'Ui',false);
                     Clust_Ans.center = tempCity(Clust_Ans.center,:);
@@ -210,9 +210,9 @@ while(true)
 %                     
 %                     %method2 平均中心点
 %                     elseif dfm ==2
-                        for h = 1:length(unique(Clust_Ans.cluster))
-                            Clust_Ans.center(h,:) = mean(tempCity(Clust_Ans.cluster==h,:));
-                        end
+%                         for h = 1:length(unique(Clust_Ans.cluster))
+%                             Clust_Ans.center(h,:) = mean(tempCity(Clust_Ans.cluster==h,:));
+%                         end
 %                     %method3 最近距离
 %                     elseif dfm ==3
 %                         ClustClass = length(unique(Clust_Ans.cluster));

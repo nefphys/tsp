@@ -12,14 +12,17 @@ FCtime = zeros(length(tarTsp), 30);
 FKroute = zeros(length(tarTsp), 30);
 FKtime = zeros(length(tarTsp), 30);
 
-MaxTspSize = 50;
-MaxKmeans = 50;
+MaxTspSize = 100;
+MaxKmeans = 100;
 MaxDistNum = 20000;
 
 i = 1;
+for i = 1:20
 tarPath = tarTsp(i).folder + "\" + tarTsp(i).name;
 [Distance City] = readfile(tarPath,1);
 scatter(City(:,1),City(:,2))
+pause(2)
+end
 
 LL = 0;
 for h = 4:2:20
@@ -32,7 +35,7 @@ for h = 4:2:20
     LL(h) = mean(CC);
 end
 
-TSP_FC = FastClustTSP(City, MaxDistNum,MaxTspSize,MaxKmeans,MK);
+TSP_FC = FastClustTSP(City, MaxDistNum,MaxTspSize,MaxKmeans);
 TSP_FK = FastKmeansTSP(City, MaxDistNum, MaxTspSize, MaxKmeans);
 DrawPath(City,TSP_FC.route)
 figure(2)
