@@ -350,7 +350,7 @@ while(true)
                                 
                                 CX2 = City(tempStruct(h).set,:);
                                 %将终点的坐标进行大量偏移
-                                CX2(tempStruct(h).set == tempStruct(h).inID,:) = [-1e20 -1e20];
+                                CX2(tempStruct(h).set == tempStruct(h).inID,:) = [Inf Inf];
                                 [minDist C1 C2] = setMinDist(CX1,CX2,0,0);
                                 tempStruct(h).inID = tempStruct(h).set(C2);
                             else
@@ -361,7 +361,7 @@ while(true)
                                      CX2 = City(tempStruct(h+1).inID,:);
                                 end
                                 CX1 = City(tempStruct(h).set,:);
-                                CX1(tempStruct(h).set == tempStruct(h).outID,:) = [-1e20 -1e20];
+                                CX1(tempStruct(h).set == tempStruct(h).outID,:) = [Inf Inf];
                                
                                 [minDist C1 C2] = setMinDist(CX1,CX2,0,0);
                                 tempStruct(h).outID = tempStruct(h).set(C1);
@@ -370,9 +370,6 @@ while(true)
                     end
                 end
                 tempStruct(end) = [];
-                if tempStruct(1).inID == 404
-                    1
-                end
             end   
             ANS_GROUP_FAKE = [ANS_GROUP_FAKE tempStruct];
         else
