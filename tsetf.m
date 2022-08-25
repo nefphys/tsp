@@ -22,7 +22,7 @@ system('taskkill /f /t /im cmd.exe')
 DrawPath(City, LKH_TSP_Solve_Struct.route)
 
 %% CGA 求解器
-varargin = struct('xy',City);
+varargin = struct('xy',City, 'popSize', 100, 'numIter', 1e3);
 CGA_TSP_Solve_Struct = Tool_CGA_Solver(varargin);
 DrawPath(City,CGA_TSP_Solve_Struct.route)
 

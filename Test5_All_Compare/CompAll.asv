@@ -1,0 +1,68 @@
+%% 比较经典遗传算法 双层遗传算法 双层ACS 以及所 提出来的算法 在TSPLIB数据集上的表现
+
+%% 使用TSPlib里面所有的？ 欧几里得2D距离的例子
+
+clc
+clear
+
+tarTsp = dir("data");
+tarTsp = tarTsp(3:end);
+
+%CGA 参数
+
+%双层GA 参数
+
+%双层ACS 参数
+
+%所提出的算法 参数
+
+%实验参数
+RecTimes = 30;
+
+%结果存储
+ans_str.name = 'CGA';
+ans_str.route = 0;
+ans_str.time = 0;
+ans_str = repelem(ans_str, 4);
+ans_str(2).name = 'TLGA';
+ans_str(3).name = 'TLACS';
+ans_str(4).name = 'ERACS';
+
+%% 同时进行计算
+for i = 1:length(tarTsp)
+    Route = zeros(length(tarTsp), RecTimes);
+    Time = zeros(length(tarTsp), RecTimes);
+    parfor h = 1:RecTimes
+        
+    end
+end
+
+
+FCroute = zeros(length(tarTsp), 30);
+FCtime = zeros(length(tarTsp), 30);
+
+FKroute = zeros(length(tarTsp), 30);
+FKtime = zeros(length(tarTsp), 30);
+
+MaxTspSize = 50;
+MaxKmeans = 50;
+MaxDistNum = 20000;
+
+parthread = 30;
+for i = 1:length(tarTsp)
+    tarPath = tarTsp(i).folder + "\" + tarTsp(i).name;
+    [Distance City] = readfile(tarPath,1);
+    parfor h = 1:parthread
+        sprintf('%10s',i+"",h+"",tarTsp(i).name)
+        [TSP_Solve_Struct]  =  FastClustTSP(City, MaxDistNum,MaxTspSize,MaxKmeans);
+        FCroute(i,h) = TSP_Solve_Struct.length;
+        FCtime(i,h) = TSP_Solve_Struct.time;
+        [TSP_Solve_Struct]  = FastKmeansTSP(City, MaxDistNum, MaxTspSize, MaxKmeans);
+        FKroute(i,h) = TSP_Solve_Struct.length;
+        FKtime(i,h) = TSP_Solve_Struct.time;
+    end
+end
+
+%记录结果 
+save('test2_50.mat','FCroute','FCtime','FKroute','FKtime');
+

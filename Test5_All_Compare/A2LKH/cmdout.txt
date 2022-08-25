@@ -1,0 +1,259 @@
+PARAMETER_FILE = par.txt
+Reading PROBLEM_FILE: "temp.tsp" ... done
+ASCENT_CANDIDATES = 50
+BACKBONE_TRIALS = 0
+BACKTRACKING = NO
+# CANDIDATE_FILE =
+CANDIDATE_SET_TYPE = ALPHA
+# EDGE_FILE =
+EXCESS = 0.0208333
+EXTRA_CANDIDATES = 0 
+EXTRA_CANDIDATE_SET_TYPE = QUADRANT
+GAIN23 = YES
+GAIN_CRITERION = YES
+INITIAL_PERIOD = 100
+INITIAL_STEP_SIZE = 1
+INITIAL_TOUR_ALGORITHM = WALK
+# INITIAL_TOUR_FILE = 
+INITIAL_TOUR_FRACTION = 1.000
+# INPUT_TOUR_FILE = 
+KICK_TYPE = 0
+KICKS = 1
+# MAX_BREADTH =
+MAX_CANDIDATES = 5 
+MAX_SWAPS = 48
+MAX_TRIALS = 48
+# MERGE_TOUR_FILE =
+MOVE_TYPE = 5
+# NONSEQUENTIAL_MOVE_TYPE = 5
+# OPTIMUM =
+OUTPUT_TOUR_FILE = out.txt
+PATCHING_A = 1 
+PATCHING_C = 0 
+# PI_FILE = 
+POPMUSIC_INITIAL_TOUR = NO
+POPMUSIC_MAX_NEIGHBORS = 5
+POPMUSIC_SAMPLE_SIZE = 10
+POPMUSIC_SOLUTIONS = 50
+POPMUSIC_TRIALS = 1
+# POPULATION_SIZE = 0
+PRECISION = 100
+PROBLEM_FILE = temp.tsp
+RECOMBINATION = IPT
+RESTRICTED_SEARCH = YES
+RUNS = 10
+SEED = 1
+STOP_AT_OPTIMUM = YES
+SUBGRADIENT = YES
+# SUBPROBLEM_SIZE =
+# SUBPROBLEM_TOUR_FILE = 
+SUBSEQUENT_MOVE_TYPE = 5
+SUBSEQUENT_PATCHING = YES
+# TIME_LIMIT =
+# TOUR_FILE = 
+TRACE_LEVEL = 1
+
+Lower bound = 5750492.5, Ascent time = 2244.52 sec.
+Cand.min = 5, Cand.avg = 5.0, Cand.max = 5
+Preprocessing time = 3466.70 sec.
+* 1: Cost = 5759669, Time = 6.16 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+* 2: Cost = 5759523, Time = 9.48 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+* 3: Cost = 5759491, Time = 12.79 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+* 4: Cost = 5759305, Time = 15.32 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+* 5: Cost = 5759247, Time = 18.11 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+* 6: Cost = 5759194, Time = 19.91 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+* 7: Cost = 5759141, Time = 22.28 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+* 8: Cost = 5759096, Time = 24.80 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+* 9: Cost = 5759023, Time = 27.58 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+* 10: Cost = 5758907, Time = 29.80 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+* 11: Cost = 5758858, Time = 31.88 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+* 12: Cost = 5758839, Time = 33.86 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+* 13: Cost = 5758817, Time = 35.62 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+* 14: Cost = 5758787, Time = 37.12 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+* 15: Cost = 5758782, Time = 39.12 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+* 16: Cost = 5758740, Time = 40.91 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+* 17: Cost = 5758724, Time = 42.62 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+* 18: Cost = 5758680, Time = 44.16 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+* 19: Cost = 5758670, Time = 45.63 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+* 20: Cost = 5758659, Time = 47.30 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+* 21: Cost = 5758627, Time = 49.10 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+* 22: Cost = 5758610, Time = 50.37 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+* 23: Cost = 5758586, Time = 52.01 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+* 24: Cost = 5758567, Time = 53.78 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+* 25: Cost = 5758563, Time = 55.56 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+* 26: Cost = 5758552, Time = 56.95 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+* 27: Cost = 5758538, Time = 58.55 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+* 28: Cost = 5758529, Time = 60.30 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+* 29: Cost = 5758518, Time = 61.94 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+* 30: Cost = 5758509, Time = 63.40 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+* 31: Cost = 5758500, Time = 65.10 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+* 32: Cost = 5758495, Time = 66.73 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+* 33: Cost = 5758483, Time = 68.53 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+* 34: Cost = 5758470, Time = 69.86 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+* 35: Cost = 5758464, Time = 71.54 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+* 36: Cost = 5758455, Time = 72.87 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+* 37: Cost = 5758446, Time = 74.28 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+* 38: Cost = 5758440, Time = 75.81 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+* 39: Cost = 5758429, Time = 77.11 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+* 40: Cost = 5758418, Time = 79.03 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+* 41: Cost = 5758410, Time = 81.07 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+* 42: Cost = 5758408, Time = 82.84 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+* 44: Cost = 5758402, Time = 85.57 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+* 45: Cost = 5758397, Time = 87.08 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+* 47: Cost = 5758387, Time = 90.02 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+* 48: Cost = 5758384, Time = 91.38 sec.
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+Writing OUTPUT_TOUR_FILE: "out.txt" ... done
+Run 1: Cost = 5758384, Time = 91.52 sec. 
+
+* 1: Cost = 5760095, Time = 5.01 sec.
+* 2: Cost = 5759935, Time = 8.29 sec.
+* 3: Cost = 5759480, Time = 11.48 sec.
+* 4: Cost = 5759476, Time = 14.68 sec.
+* 5: Cost = 5759397, Time = 16.37 sec.
+* 6: Cost = 5759378, Time = 18.71 sec.
+* 7: Cost = 5759293, Time = 20.31 sec.
+* 8: Cost = 5759257, Time = 22.59 sec.
+* 9: Cost = 5759243, Time = 24.74 sec.
+* 10: Cost = 5759221, Time = 26.71 sec.
+* 11: Cost = 5759208, Time = 29.13 sec.
+* 12: Cost = 5759169, Time = 31.00 sec.
+* 13: Cost = 5759155, Time = 33.41 sec.
+* 14: Cost = 5759125, Time = 35.00 sec.
+* 15: Cost = 5759088, Time = 36.64 sec.
+* 16: Cost = 5759058, Time = 38.65 sec.
+* 17: Cost = 5759024, Time = 40.50 sec.
+* 18: Cost = 5759002, Time = 42.09 sec.
+* 19: Cost = 5758951, Time = 43.64 sec.
+* 20: Cost = 5758918, Time = 45.37 sec.
+* 21: Cost = 5758886, Time = 47.28 sec.
+* 22: Cost = 5758878, Time = 49.10 sec.
+* 23: Cost = 5758864, Time = 50.57 sec.
+* 24: Cost = 5758851, Time = 52.56 sec.
+* 25: Cost = 5758832, Time = 54.42 sec.
+* 26: Cost = 5758815, Time = 56.09 sec.
+* 27: Cost = 5758806, Time = 57.55 sec.
+* 28: Cost = 5758798, Time = 59.36 sec.
+* 29: Cost = 5758769, Time = 61.06 sec.
+* 30: Cost = 5758765, Time = 62.83 sec.
+* 31: Cost = 5758749, Time = 64.07 sec.
+* 33: Cost = 5758742, Time = 68.02 sec.
+* 34: Cost = 5758727, Time = 69.71 sec.
+* 35: Cost = 5758713, Time = 71.91 sec.
+* 36: Cost = 5758711, Time = 73.27 sec.
+* 37: Cost = 5758697, Time = 74.69 sec.
+* 38: Cost = 5758692, Time = 76.76 sec.
+* 39: Cost = 5758681, Time = 78.29 sec.
+* 40: Cost = 5758669, Time = 79.89 sec.
+* 41: Cost = 5758667, Time = 81.11 sec.
+* 42: Cost = 5758658, Time = 82.74 sec.
+* 43: Cost = 5758651, Time = 84.29 sec.
+* 44: Cost = 5758647, Time = 85.76 sec.
+* 45: Cost = 5758639, Time = 87.32 sec.
+* 46: Cost = 5758619, Time = 88.82 sec.
+* 48: Cost = 5758613, Time = 92.58 sec.
+Run 2: Cost = 5758613, Time = 92.76 sec. 
+
+* 1: Cost = 5759985, Time = 4.86 sec.
+* 2: Cost = 5759632, Time = 8.00 sec.
+* 3: Cost = 5759609, Time = 11.60 sec.
+* 4: Cost = 5759551, Time = 13.59 sec.
+* 5: Cost = 5759525, Time = 15.97 sec.
+* 6: Cost = 5759512, Time = 17.83 sec.
+* 7: Cost = 5759468, Time = 20.07 sec.
+* 8: Cost = 5759405, Time = 21.76 sec.
+* 9: Cost = 5759397, Time = 24.32 sec.
+* 10: Cost = 5759344, Time = 26.14 sec.
+* 11: Cost = 5759335, Time = 28.52 sec.
+* 12: Cost = 5759282, Time = 30.50 sec.
+* 13: Cost = 5759068, Time = 32.52 sec.
+* 14: Cost = 5759045, Time = 34.86 sec.
+* 15: Cost = 5758947, Time = 37.16 sec.
+* 16: Cost = 5758930, Time = 39.45 sec.
+* 17: Cost = 5758919, Time = 41.56 sec.
+* 18: Cost = 5758899, Time = 42.86 sec.
+* 19: Cost = 5758877, Time = 44.44 sec.
+* 20: Cost = 5758865, Time = 46.08 sec.
+* 21: Cost = 5758788, Time = 47.82 sec.
+* 22: Cost = 5758743, Time = 49.86 sec.
+* 23: Cost = 5758717, Time = 51.75 sec.
+* 24: Cost = 5758677, Time = 53.51 sec.
+* 25: Cost = 5758653, Time = 55.65 sec.
+* 26: Cost = 5758630, Time = 57.36 sec.
+* 27: Cost = 5758624, Time = 59.36 sec.
+* 28: Cost = 5758601, Time = 61.39 sec.
+* 29: Cost = 5758570, Time = 63.00 sec.
+* 30: Cost = 5758553, Time = 64.66 sec.
+* 31: Cost = 5758547, Time = 66.15 sec.
+* 32: Cost = 5758544, Time = 68.32 sec.
+* 33: Cost = 5758535, Time = 69.83 sec.
+* 34: Cost = 5758507, Time = 71.41 sec.
+* 35: Cost = 5758506, Time = 73.02 sec.
+* 36: Cost = 5758505, Time = 74.70 sec.
+* 37: Cost = 5758494, Time = 76.67 sec.
+* 38: Cost = 5758485, Time = 78.36 sec.
+* 39: Cost = 5758475, Time = 80.05 sec.
+* 40: Cost = 5758470, Time = 81.50 sec.
+* 41: Cost = 5758445, Time = 82.72 sec.
+* 42: Cost = 5758441, Time = 84.53 sec.
+* 43: Cost = 5758436, Time = 86.30 sec.
+* 44: Cost = 5758431, Time = 88.08 sec.
+* 45: Cost = 5758422, Time = 89.73 sec.
+* 46: Cost = 5758420, Time = 91.30 sec.
+* 47: Cost = 5758418, Time = 92.71 sec.
+* 48: Cost = 5758416, Time = 94.69 sec.
+Run 3: Cost = 5758416, Time = 94.84 sec. 
+
+* 1: Cost = 5759822, Time = 4.56 sec.
+* 2: Cost = 5759573, Time = 7.66 sec.
+* 3: Cost = 5759400, Time = 10.76 sec.
+* 4: Cost = 5759393, Time = 13.64 sec.
+* 5: Cost = 5759309, Time = 15.48 sec.
+* 6: Cost = 5759281, Time = 17.61 sec.
+* 7: Cost = 5759266, Time = 20.47 sec.
+* 8: Cost = 5759243, Time = 22.15 sec.
