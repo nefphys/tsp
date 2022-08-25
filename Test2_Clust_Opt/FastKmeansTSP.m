@@ -342,7 +342,7 @@ while(true)
                             %先判断是否有指定起点或者终点，如果是指定的则不能动
                             if tempStruct(h).outID == endID
                                 %修改起点 -- tempStruct已经按照标准order排序
-                                CX1 = City(tempStruct(h-1).outID,:);
+                                CX1 = City(tempStruct(s-1).outID,:);
                                 CX2 = City(tempStruct(h).set,:);
                                 %将终点的坐标进行大量偏移
                                 CX2(tempStruct(h).set == tempStruct(h).inID,:) = [-1e20 -1e20];
