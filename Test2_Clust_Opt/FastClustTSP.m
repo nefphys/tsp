@@ -1,4 +1,4 @@
-function [TSP_Solve_Struct] = FastClustTSP(tspData, MaxDistNum,MaxTspSize,MaxKmeans,MK)
+function [TSP_Solve_Struct] = FastClustTSP(tspData, MaxDistNum,MaxTspSize,MaxKmeans)
 %% 先编写主体框架
 % 后续传入聚类参数，智能算法参数，设置智能算法的选择
 % tspData 数据路径
@@ -118,7 +118,7 @@ while(true)
                     %cluster 一个数组，每个点对应的分类，最小为1
                     %center 中心点的id
                     Centers = ceil(setSize/MaxTspSize)*DPTSPTimes; 
-                    K = MK;
+                    K = 10;
                     Clust_Ans = SnnDpc(tempCity,1:setSize,K,'AutoPick',...
                         Centers,'Distance',tempCityDist,'Ui',false);
                     Clust_Ans.center = tempCity(Clust_Ans.center,:);
