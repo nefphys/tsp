@@ -123,3 +123,8 @@ route0 = [route0 route0(1)];
 for i = 2:length(route0)
     dist0 = dist0 + pdist2(City(route0(i-1),:), City(route0(i),:));
 end
+
+
+for jk = 1:30
+    [TSP_Solve_Struct]  = FastKmeansTSP(City, MaxDistNum, MaxTspSize, MaxKmeans);
+end
