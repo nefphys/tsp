@@ -25,7 +25,7 @@ N=size(data,1);
 % if ~K
 %   K=round(N/30);
 % end
-K = round(N/K)+1;
+K = round(N/K*2)+1;
 
 %Normalization
 data=(data-min(data))./(max(data)-min(data));
