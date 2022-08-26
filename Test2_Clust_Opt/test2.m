@@ -21,7 +21,7 @@ for i = 1:length(tarTsp)
     tarPath = tarTsp(i).folder + "\" + tarTsp(i).name;
     [Distance City] = readfile(tarPath,1);
     parfor h = 1:parthread
-        sprintf('%10s',i+"",h+"",tarTsp(i).name)
+        sprintf('%10s',i+"",h+"",tarTsp(i).name,"50")
         [TSP_Solve_Struct]  =  FastClustTSP(City, MaxDistNum,MaxTspSize,MaxKmeans);
         FCroute(i,h) = TSP_Solve_Struct.length;
         FCtime(i,h) = TSP_Solve_Struct.time;
@@ -59,7 +59,7 @@ for i = 1:length(tarTsp)
     tarPath = tarTsp(i).folder + "\" + tarTsp(i).name;
     [Distance City] = readfile(tarPath,1);
     parfor h = 1:parthread
-        sprintf('%10s',i+"",h+"",tarTsp(i).name)
+        sprintf('%10s',i+"",h+"",tarTsp(i).name,"30")
         [TSP_Solve_Struct]  =  FastClustTSP(City, MaxDistNum,MaxTspSize,MaxKmeans);
         FCroute(i,h) = TSP_Solve_Struct.length;
         FCtime(i,h) = TSP_Solve_Struct.time;
@@ -90,15 +90,15 @@ FKroute = zeros(length(tarTsp), 30);
 FKtime = zeros(length(tarTsp), 30);
 
 MaxDistNum = 20000;
-MaxTspSize = 100;
-MaxKmeans = 100;
+MaxTspSize = 70;
+MaxKmeans = 70;
 
 parthread = 30;
 for i = 1:length(tarTsp)
     tarPath = tarTsp(i).folder + "\" + tarTsp(i).name;
     [Distance City] = readfile(tarPath,1);
     parfor h = 1:parthread
-        sprintf('%10s',i+"",h+"",tarTsp(i).name)
+        sprintf('%10s',i+"",h+"",tarTsp(i).name,"70")
         [TSP_Solve_Struct]  =  FastClustTSP(City, MaxDistNum,MaxTspSize,MaxKmeans);
         FCroute(i,h) = TSP_Solve_Struct.length;
         FCtime(i,h) = TSP_Solve_Struct.time;
@@ -109,4 +109,4 @@ for i = 1:length(tarTsp)
 end
 
 %记录结果 
-save('test2_100.mat','FCroute','FCtime','FKroute','FKtime');
+save('test2_70.mat','FCroute','FCtime','FKroute','FKtime');
