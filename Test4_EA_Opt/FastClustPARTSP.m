@@ -6,8 +6,8 @@ function [TSP_Solve_Struct] = FastClustPARTSP(tspData,MaxDistNum)
 % 计算TSP则不改变层数，不赋值TSP则改变层数
 %算法内智能算法求解TSP最多可以计算999个点的情况
 stp = tic;
-MaxTspSize = 50;%可计算的最大规模TSP
-MaxKmeans = 50;%kmeans最大K值
+%MaxTspSize = 50;%可计算的最大规模TSP
+%MaxKmeans = 50;%kmeans最大K值
 StdKmeans = 500;%kmeans数据集分割大小
 MaxDP = 10000;%基于密度聚类的最大点集
 ACSTimes = 5;
@@ -118,10 +118,11 @@ while(true)
                     %cluster 一个数组，每个点对应的分类，最小为1
                     %center 中心点的id
                     Centers = ceil(setSize/MaxTspSize)*DPTSPTimes; 
-                    K = 10;
+                    K = MaxTspSize;
                     Clust_Ans = SnnDpc(tempCity,1:setSize,K,'AutoPick',...
                         Centers,'Distance',tempCityDist,'Ui',false);
                     Clust_Ans.center = tempCity(Clust_Ans.center,:);
+                    Centers = size(Clust_Ans.center,1);
                 else
                     %如果点的数量大于10000，则进行kmeans聚类
                     Centers = min(MaxKmeans,ceil(setSize/StdKmeans));
@@ -408,6 +409,7 @@ else
         Mlen(i) = strlength(ANS_GROUP(i).order);
     end
     MAXMlen = max(Mlen);
+    cate = [];
     for i = 1:length(ANS_GROUP);
         Mdiff = MAXMlen - Mlen(i);
         if Mdiff ~= 0
@@ -415,6 +417,7 @@ else
         else
             ANS_GROUP(i).order = ANS_GROUP(i).order + "";
         end
+        cate(ANS_GROUP(i).set) = i;
     end
     
     %将ans_group 变为表格形式
@@ -430,7 +433,7 @@ TSP_Solve_Struct.length = Rdist;
 TSP_Solve_Struct.route = route; %City个数据
 TSP_Solve_Struct.City = City;
 TSP_Solve_Struct.clust  = length(ANS_GROUP);
-%TSP_Solve_Struct.cate = cate;
+TSP_Solve_Struct.cate = cate;
 TSP_Solve_Struct.layer = layer - 2;
 %TSP_Solve_Struct.Od = Ord2;
 end
