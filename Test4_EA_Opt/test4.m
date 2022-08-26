@@ -26,14 +26,15 @@ tarTsp = tarTsp(3:end);
 ans_str.length = 0;
 ans_str.time = 0;
 
-MaxTspSize = 50; %写死
-MaxKmeans = 50;
+MaxTspSize = 30; %写死 30 最快
+MaxKmeans = 30;
 MaxDistNum = 20000;
 parthread = 6;
 
 for jj = 1:size(EAPAR,1)
     FCroute = zeros(length(tarTsp), parthread);
     FCtime = zeros(length(tarTsp), parthread);
+    FCImp = zeros(length(tarTsp), parthread);
     for i = 1:length(tarTsp)
         tarPath = tarTsp(i).folder + "\" + tarTsp(i).name;
         [Distance City] = readfile(tarPath,1);
@@ -42,11 +43,16 @@ for jj = 1:size(EAPAR,1)
             [TSP_Solve_Struct] = EA_OP_FastClustTSP(City, MaxDistNum, MaxTspSize, MaxKmeans, EAPAR(jj,:));
             FCroute(i,h) = TSP_Solve_Struct.length;
             FCtime(i,h) = TSP_Solve_Struct.time2;
+            FCImp(i,h) = TSP_Solve_Struct.bestline(end) / TSP_Solve_Struct.bestline(1);
         end
     end
     ans_str(jj).length = FCroute;
     ans_str(jj).time = FCtime;
+    ans_str(jj).Imp = FCImp;
 end
+
+save('test4_1.mat', 'ans_str')
+
 
 rout = [TSP_Solve_Struct.route TSP_Solve_Struct.route(1)];
 mdist = 0;
@@ -55,7 +61,17 @@ for i = 2:length(rout)
 end
 
 
-save('test4_1.mat', 'ans_str')
+
+
+
+tarPath = tarTsp(3).folder + "\" + tarTsp(3).name;
+[Distance City] = readfile(tarPath,1);
+jj = 1;
+profile on
+[TSP_Solve_Struct] = EA_OP_FastClustTSP(City, MaxDistNum, MaxTspSize, MaxKmeans, EAPAR(jj,:));
+profile viewer
+profile off
+
 
 %% 选择一组最好的结果，然后作为参数跑30轮
 bestPar = 0;

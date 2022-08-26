@@ -6,21 +6,19 @@ function [TSP_Struct An_G] = Cal_2Opt_EA(Chrom, New_Group, SCity, maxIt)
     CLArr = 2:CL;
     Chrom = [Chrom Chrom(1)];
     CT = CL-1;
-    %当前总距离
-     %Scity更改为一种可以直接索引的数据
+    %Scity更改为一种可以直接索引的数据
     FScity = SCity(:,1);
+    %当前总距离
     AGdist = sum([New_Group.dist]); %距离求和
     toDist = AGdist;
     for i = 2:(CL+1)
-        C1 = SCity(SCity(:,1) == New_Group(Chrom(i-1)).point(2),2:3);
-        C2 = SCity(SCity(:,1) == New_Group(Chrom(i)).point(1),2:3);
+        C1 = SCity(FScity == New_Group(Chrom(i-1)).point(2),2:3);
+        C2 = SCity(FScity == New_Group(Chrom(i)).point(1),2:3);
         toDist = toDist + ...
             sqrt( (C1(1,1) - C2(1,1))^2 + (C1(1,2) - C2(1,2))^2);
         %pdist2(C1(1,:),C2(1,:))
     end
-    BKS(1) = toDist;
-    
-   
+    BKS(1) = toDist; 
     
     %
     FSMat = [];
@@ -29,31 +27,31 @@ function [TSP_Struct An_G] = Cal_2Opt_EA(Chrom, New_Group, SCity, maxIt)
     else
             seleM = randi(CT,maxIt,2);
             seleM = seleM + 1;
+            City1I = 0;
+            City2I = 0;
+            City3I = 0;
+            City4I = 0;
+            City1 = [0,0];
+            City2 = [0,0];
+            City3 = [0,0];
+            City4 = [0,0];
         for i = 1:maxIt
             %selec = randsample(CLArr,2,'false');
-            selec = seleM(i,:);
-            if selec(1) == selec(2)
-                selec = randsample(CLArr,2,'false');
-            end
-            if selec(1) > selec(2)
-                T = selec(1);
-                selec(1) = selec(2);
-                selec(2) = T;
-            end
+            selec = CalSelem(seleM(i,:), CLArr);
             
             Cind = [Chrom(selec(1)-1) Chrom(selec(1)) Chrom(selec(2)) Chrom(selec(2)+1)];
             
-            City1 = New_Group(Cind(1)).point(2);
-            City1 = FSMat(City1,:);
+            City1I = New_Group(Cind(1)).point(2);
+            City1 = FSMat(City1I,:);
             
-            City2 = New_Group(Cind(2)).point(1);
-            City2 = FSMat(City2,:);
+            City2I = New_Group(Cind(2)).point(1);
+            City2 = FSMat(City2I,:);
             
-            City3 = New_Group(Cind(3)).point(2);
-            City3 = FSMat(City3,:);
+            City3I = New_Group(Cind(3)).point(2);
+            City3 = FSMat(City3I,:);
             
-            City4 = New_Group(Cind(4)).point(1);
-            City4 = FSMat(City4,:);
+            City4I = New_Group(Cind(4)).point(1);
+            City4 = FSMat(City4I,:);
 %             City1 = New_Group(Cind(1)).point(2);
 %             City1 = SCity(FScity == City1,2:3);
 %             City1 = City1(1,:);
@@ -93,4 +91,14 @@ function [TSP_Struct An_G] = Cal_2Opt_EA(Chrom, New_Group, SCity, maxIt)
     TSP_Struct.route = Chrom(1:(end-1));
     TSP_Struct.length = toDist;
     TSP_Struct.BestL = BKS;
+end
+
+function selec = CalSelem(seleM,CLArr)
+    if seleM(1) == seleM(2)
+        selec = randsample(CLArr,2,'false');
+    elseif seleM(1) > seleM(2)
+        selec = [seleM(2) seleM(1)];
+    else
+        selec = seleM;
+    end
 end
