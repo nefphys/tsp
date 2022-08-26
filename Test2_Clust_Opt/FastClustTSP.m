@@ -410,7 +410,7 @@ else
     end
     MAXMlen = max(Mlen);
     cate = [];
-    for i = 1:length(ANS_GROUP);
+    for i = 1:length(ANS_GROUP)
         Mdiff = MAXMlen - Mlen(i);
         if Mdiff ~= 0
             ANS_GROUP(i).order = [ANS_GROUP(i).order repelem('0',Mdiff)] + "";

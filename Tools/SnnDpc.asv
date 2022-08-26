@@ -162,11 +162,7 @@ while unasCount
     if K > N
         % 均匀直线数据，直接从中间分割即可
         cluster = repelem(1:KBackup, ceil(N/KBackup));
-        cluster = cluster(1:N);
-        center = 0;
-        for jk = 1:KBackup
-            center(jk) = find(cluster == jk, 1);
-        end
+        cluster = cluster
         break
     end
   end

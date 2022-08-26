@@ -29,7 +29,7 @@ ans_str.time = 0;
 MaxTspSize = 50; %写死
 MaxKmeans = 50;
 MaxDistNum = 20000;
-parthread = 10;
+parthread = 6;
 
 for jj = 1:size(EAPAR,1)
     FCroute = zeros(length(tarTsp), parthread);
@@ -38,7 +38,7 @@ for jj = 1:size(EAPAR,1)
         tarPath = tarTsp(i).folder + "\" + tarTsp(i).name;
         [Distance City] = readfile(tarPath,1);
         parfor h = 1:parthread
-            sprintf('%10s',i+"",h+"",tarTsp(i).name)
+            sprintf('%10s',i+"",h+"",tarTsp(i).name,jj+"")
             [TSP_Solve_Struct] = EA_OP_FastClustTSP(City, MaxDistNum, MaxTspSize, MaxKmeans, EAPAR(jj,:));
             FCroute(i,h) = TSP_Solve_Struct.length;
             FCtime(i,h) = TSP_Solve_Struct.time2;
