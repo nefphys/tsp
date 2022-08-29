@@ -30,7 +30,7 @@ DrawCluster(City, TSP_Solve_Struct_K.cate, TSP_Solve_Struct_K.route)
 %验算距离计算是否正确
 dist0 = 0;
 dist1 = 0;
-RFC = [TSP_Solve_Struct_K.route TSP_Solve_Struct_K.route(1)];
+RFC = [TSP_Solve_Struct.route TSP_Solve_Struct.route(1)];
 %RFK = [TSP_FK.route TSP_FK.route(1)];
 
 for i = 2:length(RFC)
@@ -45,6 +45,8 @@ end
                     
 for jkk = 1:length(ANS_GROUP_FAKE)
     scatter(City(ANS_GROUP_FAKE(jkk).set,1), City(ANS_GROUP_FAKE(jkk).set,2))
+    hold on
+    plot(City(ANS_GROUP_FAKE(jkk).tsp,1), City(ANS_GROUP_FAKE(jkk).tsp,2))
     hold on
     jkk = jkk+1
 end
