@@ -94,4 +94,6 @@ function tempStruct = CalAttempt(tempCity, tarStruct)
         tempStruct.tsp = tsp;
         tempStruct.isover = 1;
     end
+    tempStruct.inID = tempStruct.tsp(1);
+    tempStruct.outID = tempStruct.tsp(end);
 end
