@@ -37,7 +37,7 @@ for i = 1:length(tarTsp)
 end
 
 %记录结果 
-save('test2_30.mat','FCroute','FCtime','FKroute','FKtime');
+save('test2_30.mat','EAFCroute','EAFCtime','EAFCroute_Ori','EAFKroute','EAFKtime','EAFKroute_Ori');
 
 
 
@@ -79,7 +79,7 @@ for i = 1:length(tarTsp)
 end
 
 %记录结果 
-save('test2_50.mat','FCroute','FCtime','FKroute','FKtime');
+save('test2_50.mat','EAFCroute','EAFCtime','EAFCroute_Ori','EAFKroute','EAFKtime','EAFKroute_Ori');
 
 
 
@@ -122,4 +122,5 @@ for i = 1:length(tarTsp)
 end
 
 %记录结果 
-save('test2_70.mat','FCroute','FCtime','FKroute','FKtime');
+save('test2_70.mat','EAFCroute','EAFCtime','EAFCroute_Ori','EAFKroute','EAFKtime','EAFKroute_Ori');
+
