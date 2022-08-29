@@ -16,7 +16,7 @@ MaxTspSize = 50;
 MaxKmeans = 50;
 MaxDistNum = 20000;
 
-parthread = 30;
+parthread = 10;
 for i = 1:length(tarTsp)
     tarPath = tarTsp(i).folder + "\" + tarTsp(i).name;
     [Distance City] = readfile(tarPath,1);
