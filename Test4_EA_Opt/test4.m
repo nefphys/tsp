@@ -20,6 +20,7 @@ EAPAR = [0.3 0.8 5
          0.7 1.5 20 
     ];
 
+%% 使用第七组参数 0.7 0.8 5
 tarTsp = dir("data");
 tarTsp = tarTsp(3:end);
 
@@ -74,7 +75,7 @@ profile off
 
 
 %% 选择一组最好的结果，然后作为参数跑30轮
-bestPar = 0;
+bestPar = [0.7 0.8 5];
 tarTsp = dir("data");
 tarTsp = tarTsp(3:end);
 

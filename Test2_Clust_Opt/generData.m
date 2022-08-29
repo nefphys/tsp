@@ -31,13 +31,13 @@ scatter(d1(:,1),d1(:,2))
 
 
 %% 圆环型
-Num = 2500;
+Num = 500;
 r = 1000;%半径
 a = 1000;%圆心横坐标
 b = 1000;%圆心纵坐标
 theta = 0:pi/Num:2*pi; %角度[0,2*pi] 
 theta = theta(1:(end-1));
-noise = rand(1,length(theta))*200;
+noise = rand(1,length(theta))*400;
 x = a+r*cos(theta) + noise;
 y = b+r*sin(theta) + noise;
 %scatter(x,y)
@@ -47,7 +47,7 @@ a = 1000;%圆心横坐标
 b = 1000;%圆心纵坐标
 theta = 0:pi/Num:2*pi; %角度[0,2*pi] 
 theta = theta(1:(end-1));
-noise = rand(1,length(theta))*200;
+noise = rand(1,length(theta))*400;
 x1 = a+r*cos(theta) + noise;
 y1 = b+r*sin(theta) + noise;
 %scatter(x1,y1)

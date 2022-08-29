@@ -8,8 +8,8 @@ function [TSP_Solve_Struct] = FastClustTSP(tspData, MaxDistNum,MaxTspSize,MaxKme
 stp = tic;
 %MaxTspSize = 50;%可计算的最大规模TSP
 %MaxKmeans = 50;%kmeans最大K值
-StdKmeans = 500;%kmeans数据集分割大小
-MaxDP = 10000;%基于密度聚类的最大点集
+StdKmeans = 2500;%kmeans数据集分割大小
+MaxDP = 2500;%基于密度聚类的最大点集
 ACSTimes = 5;
 DPTSPTimes = 1;%倍数，防止只有极少个聚类中心
 %读取数据
@@ -149,6 +149,18 @@ while(true)
                 endClustID = 0;
                 
                 if startID == 0 && endID == 0
+                    BPCenter = Clust_Ans.center;
+                    ClustClass = length(unique(Clust_Ans.cluster));
+                    Clust_Ans.center = zeros(ClustClass,ClustClass);
+                    for h = 1:(ClustClass-1)
+                        for j = (h+1):ClustClass
+                            Clust_Ans.center(h,j) = min(min(pdist2(...
+                                tempCity(Clust_Ans.cluster==h,:),...
+                                tempCity(Clust_Ans.cluster==j,:))));
+                        end
+                    end
+                    Clust_Ans.center = Clust_Ans.center + Clust_Ans.center';
+                        
                     [ACS_TEMP_SOLVE]  =  Tool_ACS_Solver(Clust_Ans.center, 0);
                 else
                     %查找在哪个团簇
@@ -215,16 +227,16 @@ while(true)
 %                         end
 %                     %method3 最近距离
 %                     elseif dfm ==3
-%                         ClustClass = length(unique(Clust_Ans.cluster));
-%                         Clust_Ans.center = zeros(ClustClass,ClustClass);
-%                         for h = 1:(ClustClass-1)
-%                             for j = (h+1):ClustClass
-%                                 Clust_Ans.center(h,j) = min(min(pdist2(...
-%                                     tempCity(Clust_Ans.cluster==h,:),...
-%                                     tempCity(Clust_Ans.cluster==j,:))));
-%                             end
-%                         end
-%                         Clust_Ans.center = Clust_Ans.center + Clust_Ans.center';
+                        ClustClass = length(unique(Clust_Ans.cluster));
+                        Clust_Ans.center = zeros(ClustClass,ClustClass);
+                        for h = 1:(ClustClass-1)
+                            for j = (h+1):ClustClass
+                                Clust_Ans.center(h,j) = min(min(pdist2(...
+                                    tempCity(Clust_Ans.cluster==h,:),...
+                                    tempCity(Clust_Ans.cluster==j,:))));
+                            end
+                        end
+                       Clust_Ans.center = Clust_Ans.center + Clust_Ans.center';
 %                     %method4 hausdorff 度量
 %                     else
 %                         ClustClass = length(unique(Clust_Ans.cluster));
