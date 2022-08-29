@@ -11,29 +11,8 @@ parthread = 10;
 FCroute = zeros(length(tarTsp), parthread);
 FCtime = zeros(length(tarTsp), parthread);
 
-<<<<<<< Updated upstream
-MaxTspSize = 50;
-MaxKmeans = 50;
-MaxDistNum = 20000;
-
-parthread = 10;
-for i = 1:length(tarTsp)
-    tarPath = tarTsp(i).folder + "\" + tarTsp(i).name;
-    [Distance City] = readfile(tarPath,1);
-    parfor h = 1:parthread
-        sprintf('%10s',i+"",h+"",tarTsp(i).name,"50")
-        [TSP_Solve_Struct]  =  FastClustTSP(City, MaxDistNum,MaxTspSize,MaxKmeans);
-        FCroute(i,h) = TSP_Solve_Struct.length;
-        FCtime(i,h) = TSP_Solve_Struct.time;
-        [TSP_Solve_Struct]  = FastKmeansTSP(City, MaxDistNum, MaxTspSize, MaxKmeans);
-        FKroute(i,h) = TSP_Solve_Struct.length;
-        FKtime(i,h) = TSP_Solve_Struct.time;
-    end
-end
-=======
 FKroute = zeros(length(tarTsp), parthread);
 FKtime = zeros(length(tarTsp), parthread);
->>>>>>> Stashed changes
 
 MaxTspSize = 20;
 MaxKmeans = 20;
