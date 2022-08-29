@@ -26,7 +26,7 @@ N=size(data,1);
 %   K=round(N/30);
 % end
 %K = max(1, round(N/K*5));
-K=round(N/50);
+K=4;%round(N/K); this is the best parameter for TSP
 %Normalization
 data=(data-min(data))./(max(data)-min(data));
 data(isnan(data))=0;

@@ -8,8 +8,8 @@ function [TSP_Solve_Struct] = FastKmeansTSP(tspData, MaxDistNum, MaxTspSize, Max
 stp = tic;
 %MaxTspSize = 50;%可计算的最大规模TSP
 %MaxKmeans = 50;%kmeans最大K值
-StdKmeans = 2500;%kmeans数据集分割大小
-MaxDP = 2500;%基于密度聚类的最大点集
+StdKmeans = MaxKmeans^2;%kmeans数据集分割大小
+MaxDP = MaxKmeans^2;%基于密度聚类的最大点集
 ACSTimes = 5;
 DPTSPTimes = 1;%倍数，防止只有极少个聚类中心
 %读取数据
