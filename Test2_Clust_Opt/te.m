@@ -46,7 +46,7 @@ end
 for jkk = 1:length(ANS_GROUP_FAKE)
     scatter(City(ANS_GROUP_FAKE(jkk).set,1), City(ANS_GROUP_FAKE(jkk).set,2))
     hold on
-    jkk = jkk+1
+    jkk = jkk+1;
 end
 hold off
 

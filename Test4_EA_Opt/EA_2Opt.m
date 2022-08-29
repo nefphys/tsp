@@ -124,16 +124,16 @@ end
 
 function [selecPop sl] = Cal_Select_EA(mfit, mpop, popsize)
     %始终保留最优种群一半
-    
+    IF = 2;
     selecPop = mpop(1:popsize,:);
     [mx my] = sort(mfit);
-    selecPop(1:(popsize/2),:) = mpop(my(1:(popsize/2)),:);
+    selecPop(1:(popsize/IF),:) = mpop(my(1:(popsize/IF)),:);
     
-    LL = (popsize/2+1):length(mfit);
+    LL = (popsize/IF+1):length(mfit);
     sl = [];
     mfit = mfit(my(LL));
-    sl(1:(popsize/2)) = my(1:(popsize/2));
-    for i = (popsize/2+1):popsize
+    sl(1:(popsize/IF)) = my(1:(popsize/IF));
+    for i = (popsize/IF+1):popsize
         mprob = 1 ./ mfit; % 大的概率小
         mprob = mprob /sum(mprob);
         %mprob = 1/mprob;

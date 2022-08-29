@@ -75,7 +75,7 @@ profile off
 
 
 %% 选择一组最好的结果，然后作为参数跑30轮
-bestPar = [0.7 0.8 5];
+bestPar = [0.4 0.4 10];
 tarTsp = dir("data");
 tarTsp = tarTsp(3:end);
 
@@ -85,7 +85,7 @@ ans_str.time = 0;
 MaxTspSize = 50; %写死
 MaxKmeans = 50;
 MaxDistNum = 20000;
-parthread = 30;
+parthread = 20;
 FCroute = zeros(length(tarTsp), parthread);
 FCtime = zeros(length(tarTsp), parthread);
 for i = 1:length(tarTsp)
@@ -93,7 +93,7 @@ for i = 1:length(tarTsp)
     [Distance City] = readfile(tarPath,1);
     parfor h = 1:parthread
         sprintf('%10s',i+"",h+"",tarTsp(i).name)
-        [TSP_Solve_Struct] = EA_OP_FastClustTSP(City, MaxDistNum, MaxTspSize, MaxKmeans, EAPAR(jj,:));
+        [TSP_Solve_Struct] = EA_OP_FastClustTSP(City, MaxDistNum, MaxTspSize, MaxKmeans, bestPar);
         FCroute(i,h) = TSP_Solve_Struct.length;
         FCtime(i,h) = TSP_Solve_Struct.time2;
     end

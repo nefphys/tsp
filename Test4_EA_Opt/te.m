@@ -73,5 +73,7 @@ plot(KF)
 %DrawCluster(City, TSP_Solve_Struct.cate, TSP_Solve_Struct.route)
 
 for jp = 1:length(unique(Clust_Ans.cluster))
-    scatter(tempci)
+    scatter(tempCity(Clust_Ans.cluster == jp,1), tempCity(Clust_Ans.cluster == jp,2)),
+    hold on
+    jp = jp + 1;
 end
