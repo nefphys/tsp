@@ -23,8 +23,9 @@ function EA_Struct = EA_2Opt(ANS_GROUP, City, calLayer, popSize, EAmaxIt, optMax
     initPop = repmat(0,popSize,length(Chrom));
     initFit = [];
     init_Group = repelem({New_Group},popSize);
+    [TCity allDist New_Mat CCBP toDist] = Cal_2Opt_EA_Pre(Chrom, New_Group, SCity, optMaxIt);
     for i = 1:popSize
-        [TSP_Struct AGN] = Cal_2Opt_EA(Chrom, New_Group, SCity, optMaxIt);
+        [TSP_Struct AGN] = Cal_2Opt_EA(Chrom, New_Group, TCity, optMaxIt, allDist, New_Mat, CCBP, toDist);
         initPop(i,:) = TSP_Struct.route;
         initFit(i) = TSP_Struct.length;
         init_Group{i} = AGN;
@@ -44,7 +45,8 @@ function EA_Struct = EA_2Opt(ANS_GROUP, City, calLayer, popSize, EAmaxIt, optMax
         newxtFit = [];
         next_Group = init_Group;
         for i = 1:popSize
-            [TSP_Struct temp_Group] = Cal_2Opt_EA(nextPop(i,:), init_Group{i}, SCity, optMaxIt);
+            [TCity allDist New_Mat CCBP toDist] = Cal_2Opt_EA_Pre(nextPop(i,:), init_Group{i}, SCity, optMaxIt);
+            [TSP_Struct temp_Group] = Cal_2Opt_EA(nextPop(i,:), New_Group, TCity, optMaxIt, allDist, New_Mat, CCBP, toDist);
             next_Group{i} = temp_Group;
             nextPop(i,:) = TSP_Struct.route;
             newxtFit(i) = TSP_Struct.length;
@@ -59,7 +61,8 @@ function EA_Struct = EA_2Opt(ANS_GROUP, City, calLayer, popSize, EAmaxIt, optMax
         
         initFit = [];
         for i = 1:popSize
-            [TSP_Struct temp_Group] = Cal_2Opt_EA(initPop(i,:), init_Group{i}, SCity, optMaxIt);
+            [TCity allDist New_Mat CCBP toDist] = Cal_2Opt_EA_Pre(initPop(i,:), init_Group{i}, SCity, optMaxIt);
+            [TSP_Struct temp_Group] = Cal_2Opt_EA(initPop(i,:), New_Group, TCity, optMaxIt, allDist, New_Mat, CCBP, toDist);
             init_Group{i} = temp_Group;
             initPop(i,:) = TSP_Struct.route;
             initFit(i) = TSP_Struct.length;
@@ -151,22 +154,3 @@ function [selecPop sl] = Cal_Select_EA(mfit, mpop, popsize)
         end
     end
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
