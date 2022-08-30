@@ -3,7 +3,7 @@ clear
 tarTsp = dir("data");
 tarTsp = tarTsp(3:end);
 parthread = 20;
-bestPar = [0.3 0.4 10];
+bestPar = [0.5 0.5 10];
 
 EAFCroute_Ori = zeros(length(tarTsp), parthread);
 EAFCroute = zeros(length(tarTsp), parthread);

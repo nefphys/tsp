@@ -384,11 +384,16 @@ else
     else
         popSize = popSize + 1;
     end
-    EAmaxIt = min(10 + ceil(length(ANS_GROUP)*EAPAR(2)),300);
-    optMaxIt = 10 + ceil(length(ANS_GROUP)*EAPAR(3));
-    [EA_Struct] = EA_2Opt(ANS_GROUP, City, 100, popSize, EAmaxIt, optMaxIt);
-    TSP_Solve_Struct.bestline = EA_Struct.bestline;
-    TSP_Solve_Struct.time2 = TSP_Solve_Struct.time + EA_Struct.time;
+    EAmaxIt = min(30 + ceil((length(ANS_GROUP)^0.9)*EAPAR(2)),300);
+    optMaxIt = min(30 + ceil((length(ANS_GROUP)^0.9)*EAPAR(3)),3000);
+    if length(ANS_GROUP) > 4
+        [EA_Struct] = EA_2Opt(ANS_GROUP, City, 1000, popSize, EAmaxIt, optMaxIt);
+        TSP_Solve_Struct.bestline = EA_Struct.bestline;
+        TSP_Solve_Struct.time2 = TSP_Solve_Struct.time + EA_Struct.time;
+    else
+        TSP_Solve_Struct.bestline = 0;
+        TSP_Solve_Struct.time2 = TSP_Solve_Struct.time;
+    end
 end
 
 TSP_Solve_Struct.length = EA_Struct.dist;
