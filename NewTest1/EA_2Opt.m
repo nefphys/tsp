@@ -87,7 +87,7 @@ function EA_Struct = EA_2Opt(ANS_GROUP, City, calLayer, popSize, EAmaxIt, optMax
     end
     
     %[REVStruct] = Cal_2Opt_EA(BestRo, New_Group, SCity, 0); %还原路径
-    [route1 dist1] = Cal_New_Dist(bestGroup, BestRo, City);
+    [route1 dist1] = Cal_New_Dist(bestGroup, BestRo(1,:), City);
     EA_Struct.dist = dist1;
     EA_Struct.route = route1;
     EA_Struct.bestline = BestLine;
