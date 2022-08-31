@@ -48,6 +48,8 @@ clear
 tarTsp = dir("data");
 tarTsp = tarTsp(3:end);
 parthread = 20;
+bestPar = [0.2 0.2 10];
+
 EAFCroute_Ori = zeros(length(tarTsp), parthread);
 EAFCroute = zeros(length(tarTsp), parthread);
 EAFCtime = zeros(length(tarTsp), parthread);
@@ -55,6 +57,7 @@ EAFCtime = zeros(length(tarTsp), parthread);
 EAFKroute_Ori = zeros(length(tarTsp), parthread);
 EAFKroute = zeros(length(tarTsp), parthread);
 EAFKtime = zeros(length(tarTsp), parthread);
+
 
 MaxTspSize = 50;
 MaxKmeans = 50;
@@ -91,6 +94,8 @@ clear
 tarTsp = dir("data");
 tarTsp = tarTsp(3:end);
 parthread = 20;
+bestPar = [0.2 0.2 10];
+
 EAFCroute_Ori = zeros(length(tarTsp), parthread);
 EAFCroute = zeros(length(tarTsp), parthread);
 EAFCtime = zeros(length(tarTsp), parthread);
@@ -98,6 +103,7 @@ EAFCtime = zeros(length(tarTsp), parthread);
 EAFKroute_Ori = zeros(length(tarTsp), parthread);
 EAFKroute = zeros(length(tarTsp), parthread);
 EAFKtime = zeros(length(tarTsp), parthread);
+
 
 MaxTspSize = 70;
 MaxKmeans = 70;
