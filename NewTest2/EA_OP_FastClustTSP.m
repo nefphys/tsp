@@ -129,29 +129,7 @@ while(true)
                     %没有密度信息的情况, 则使用贪心算法，从最近的开始寻找
                     if Centers == 1
                         % 判断是否有指定的起点或者终点
-                        if size(tempCity,1) > 100
-                            tempStruct = CalAttempt(tempCity, tarStruct);
-                        else
-                            if tarStruct.inID ~= 0
-                                acs_solve = Tool_ACS_SE_Solver(tempCity, ...
-                                    find(tarStruct.inID == tarStruct.set), ...
-                                    find(tarStruct.outID == tarStruct.set), 0);
-                                tempStruct.inID = tarStruct.set(acs_solve.route(1));
-                                tempStruct.outID = tarStruct.set(acs_solve.route(end));
-                                tempStruct.set = tarStruct.set;
-                                tempStruct.tsp = tarStruct.set(acs_solve.route);
-                                tempStruct.isover = 1;
-                                tempStruct.order = tarStruct.order;
-                            else
-                                acs_solve = Tool_ACS_Solver(tempCity,0);
-                                tempStruct.inID = tarStruct.set(acs_solve.route(1));
-                                tempStruct.outID = tarStruct.set(acs_solve.route(end));
-                                tempStruct.set = tarStruct.set;
-                                tempStruct.tsp = tarStruct.set(acs_solve.route);
-                                tempStruct.isover = 1;
-                                tempStruct.order = tarStruct.order;
-                            end
-                        end
+                        tempStruct = CalAttempt(tempCity, tarStruct);
                         %ANS_GROUP_FAKE = [ANS_GROUP_FAKE tempStruct];
                         nodensiy = 1;
                     end

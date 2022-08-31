@@ -1,4 +1,4 @@
-function [TSP_Solve_Struct] = EA_OP_FastClustTSP(tspData, MaxDistNum, MaxTspSize, MaxKmeans, EAPAR)
+function [TSP_Solve_Struct] = FastClustTSP(tspData, MaxDistNum,MaxTspSize,MaxKmeans)
 %% 先编写主体框架
 % 后续传入聚类参数，智能算法参数，设置智能算法的选择
 % tspData 数据路径
@@ -9,7 +9,6 @@ stp = tic;
 %MaxTspSize = 50;%可计算的最大规模TSP
 %MaxKmeans = 50;%kmeans最大K值
 StdKmeans = MaxTspSize^2;%kmeans数据集分割大小
-
 MaxDP = MaxTspSize^2;%基于密度聚类的最大点集
 ACSTimes = 5;
 DPTSPTimes = 1;%倍数，防止只有极少个聚类中心
@@ -121,7 +120,6 @@ while(true)
                     %center 中心点的id
                     Centers = ceil(setSize/MaxTspSize)*DPTSPTimes;
                     K = MaxTspSize;
-                    
                     Clust_Ans = SnnDpc(tempCity,1:setSize,K,'AutoPick',...
                         Centers,'Distance',tempCityDist,'Ui',false);
                     Clust_Ans.center = tempCity(Clust_Ans.center,:);
@@ -129,29 +127,7 @@ while(true)
                     %没有密度信息的情况, 则使用贪心算法，从最近的开始寻找
                     if Centers == 1
                         % 判断是否有指定的起点或者终点
-                        if size(tempCity,1) > 100
-                            tempStruct = CalAttempt(tempCity, tarStruct);
-                        else
-                            if tarStruct.inID ~= 0
-                                acs_solve = Tool_ACS_SE_Solver(tempCity, ...
-                                    find(tarStruct.inID == tarStruct.set), ...
-                                    find(tarStruct.outID == tarStruct.set), 0);
-                                tempStruct.inID = tarStruct.set(acs_solve.route(1));
-                                tempStruct.outID = tarStruct.set(acs_solve.route(end));
-                                tempStruct.set = tarStruct.set;
-                                tempStruct.tsp = tarStruct.set(acs_solve.route);
-                                tempStruct.isover = 1;
-                                tempStruct.order = tarStruct.order;
-                            else
-                                acs_solve = Tool_ACS_Solver(tempCity,0);
-                                tempStruct.inID = tarStruct.set(acs_solve.route(1));
-                                tempStruct.outID = tarStruct.set(acs_solve.route(end));
-                                tempStruct.set = tarStruct.set;
-                                tempStruct.tsp = tarStruct.set(acs_solve.route);
-                                tempStruct.isover = 1;
-                                tempStruct.order = tarStruct.order;
-                            end
-                        end
+                        tempStruct = CalAttempt(tempCity, tarStruct);
                         %ANS_GROUP_FAKE = [ANS_GROUP_FAKE tempStruct];
                         nodensiy = 1;
                     end
@@ -161,6 +137,7 @@ while(true)
                     [cidx, cc] = kmeans(tempCity, Centers, 'MaxIter', 10000);
                     Clust_Ans.cluster = cidx;
                     Clust_Ans.center = cc;
+                    
                 end
                 if nodensiy
                 else
@@ -242,15 +219,13 @@ while(true)
                         Clust_Ans.center = zeros(ClustClass,ClustClass);
                         for h = 1:(ClustClass-1)
                             for j = (h+1):ClustClass
-                                Clust_Ans.center(h,j) = max(min(pdist2(...
+                                Clust_Ans.center(h,j) = min(min(pdist2(...
                                     tempCity(Clust_Ans.cluster==h,:),...
                                     tempCity(Clust_Ans.cluster==j,:))));
                             end
                         end
                         Clust_Ans.center = Clust_Ans.center + Clust_Ans.center';
-                        %                     end
-                        
-                        
+
                         ClustClass = length(unique(Clust_Ans.cluster));
                         Clust_Ans.center = zeros(ClustClass,ClustClass);
                         for h = 1:(ClustClass-1)
@@ -290,7 +265,6 @@ while(true)
                         CentersA = Centers;
                     end
                     for h = 1:CentersA
-                        
                         EX1 = 0;
                         EX2 = 0;
                         if tempStruct(h).outID ~= 0
@@ -360,7 +334,6 @@ while(true)
                     tempStruct(end) = [];
                 end
             end
-            
             ANS_GROUP_FAKE = [ANS_GROUP_FAKE tempStruct];
         else
             ANS_GROUP_FAKE = [ANS_GROUP_FAKE tarStruct];
@@ -398,7 +371,6 @@ end
 if length(ANS_GROUP) == 1
     %仅有一个簇，则不需要拼接
     TSP_Solve_Struct.route = ANS_GROUP.tsp;
-    TSP_Solve_Struct.bestline = 0;
 else
     %提取order并进行排序，记录最长的order
     Mlen = 1:length(ANS_GROUP);
@@ -418,43 +390,22 @@ else
     end
     
     %将ans_group 变为表格形式
-    %[Ans2Sheet] = Cal_Ans_Sheet_Group(ANS_GROUP);
+    [Ans2Sheet] = Cal_Ans_Sheet_Group(ANS_GROUP);
     
     %由计算表计算当前的距离
-    %[Rdist route] = Cal_Route_Dist_FC(City, ANS_GROUP, Ans2Sheet);
-    popSize = ceil(min(30+length(ANS_GROUP)*EAPAR(1), 150)); %只能为偶数
-    if mod(popSize,2) == 0
-    else
-        popSize = popSize + 1;
-    end
-    EAmaxIt = min(50 + ceil(length(ANS_GROUP)*EAPAR(2)),250);
-    optMaxIt = min(1000 + ceil(length(ANS_GROUP)*EAPAR(3)),5e4);
-    if length(ANS_GROUP) > 4
-        [EA_Struct] = EA_2Opt(ANS_GROUP, City, 1000, popSize, EAmaxIt, optMaxIt);
-        TSP_Solve_Struct.bestline = EA_Struct.bestline;
-        TSP_Solve_Struct.time2 = TSP_Solve_Struct.time + EA_Struct.time;
-    else
-        TSP_Solve_Struct.bestline = 0;
-        TSP_Solve_Struct.time2 = TSP_Solve_Struct.time;
-    end
+    [Rdist route] = Cal_Route_Dist_FC(City, ANS_GROUP, Ans2Sheet);
+    
+    %[EA_Struct] = Tool_EA_FC(City, ANS_GROUP);
 end
 
-TSP_Solve_Struct.length = EA_Struct.dist;
-TSP_Solve_Struct.route = EA_Struct.route; %City个数据
+TSP_Solve_Struct.length = Rdist;
+TSP_Solve_Struct.route = route; %City个数据
 TSP_Solve_Struct.City = City;
 TSP_Solve_Struct.clust  = length(ANS_GROUP);
 TSP_Solve_Struct.cate = cate;
 TSP_Solve_Struct.layer = layer - 2;
-%TSP_Solve_Struct.Od = 0;
+%TSP_Solve_Struct.Od = Ord2;
 end
-
-
-
-
-
-
-
-
 
 
 
