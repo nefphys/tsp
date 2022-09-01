@@ -73,7 +73,7 @@ function EA_Struct = EA_2Opt(ANS_GROUP, City, calLayer, popSize, EAmaxIt, optMax
         %initPop = tempPop(iy(1:popSize),:);
         %initFit = tempfit(iy(1:popSize));
         %结束
-        iter = iter + 1
+        iter = iter + 1;
         bkp = min(initFit);
         
         if BKS > bkp
