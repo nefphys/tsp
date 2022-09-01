@@ -1,8 +1,8 @@
 clc
-clear
+ clear
 tarTsp = dir("data");
 tarTsp = tarTsp(3:end);
-parthread = 20;
+parthread = 30;
 bestPar = [0.2 0.2 10];
 
 EAFCroute_Ori = zeros(length(tarTsp), parthread);
@@ -14,8 +14,8 @@ EAFKroute = zeros(length(tarTsp), parthread);
 EAFKtime = zeros(length(tarTsp), parthread);
 
 
-MaxTspSize = 30;
-MaxKmeans = 30;
+MaxTspSize = 40;
+MaxKmeans = 40;
 MaxDistNum = 20000;
 
 for i = 1:length(tarTsp)
@@ -31,13 +31,13 @@ for i = 1:length(tarTsp)
         EAFKroute(i,h) = TSP_Solve_Struct_FK.length;
         EAFKtime(i,h) = TSP_Solve_Struct_FK.time2;
         EAFKroute_Ori(i,h) = TSP_Solve_Struct_FK.bestline(1);
-        parsave('ansmat\FC30_',i,h,TSP_Solve_Struct_FC);
-        parsave('ansmat\FK30_',i,h,TSP_Solve_Struct_FK);
+        parsave('ansmat\FC40_',i,h,TSP_Solve_Struct_FC);
+        parsave('ansmat\FK40_',i,h,TSP_Solve_Struct_FK);
     end
 end
 
 %记录结果 
-save('test2_30.mat','EAFCroute','EAFCtime','EAFCroute_Ori','EAFKroute','EAFKtime','EAFKroute_Ori');
+save('test2_40.mat','EAFCroute','EAFCtime','EAFCroute_Ori','EAFKroute','EAFKtime','EAFKroute_Ori');
 
 
 
@@ -47,7 +47,7 @@ clc
 clear
 tarTsp = dir("data");
 tarTsp = tarTsp(3:end);
-parthread = 20;
+parthread = 30;
 bestPar = [0.2 0.2 10];
 
 EAFCroute_Ori = zeros(length(tarTsp), parthread);
@@ -93,7 +93,7 @@ clc
 clear
 tarTsp = dir("data");
 tarTsp = tarTsp(3:end);
-parthread = 20;
+parthread = 30;
 bestPar = [0.2 0.2 10];
 
 EAFCroute_Ori = zeros(length(tarTsp), parthread);
@@ -105,8 +105,8 @@ EAFKroute = zeros(length(tarTsp), parthread);
 EAFKtime = zeros(length(tarTsp), parthread);
 
 
-MaxTspSize = 70;
-MaxKmeans = 70;
+MaxTspSize = 60;
+MaxKmeans = 60;
 MaxDistNum = 20000;
 
 for i = 1:length(tarTsp)
@@ -122,11 +122,11 @@ for i = 1:length(tarTsp)
         EAFKroute(i,h) = TSP_Solve_Struct_FK.length;
         EAFKtime(i,h) = TSP_Solve_Struct_FK.time2;
         EAFKroute_Ori(i,h) = TSP_Solve_Struct_FK.bestline(1);
-        parsave('ansmat\FC70_',i,h,TSP_Solve_Struct_FC);
-        parsave('ansmat\FK70_',i,h,TSP_Solve_Struct_FK);
+        parsave('ansmat\FC60_',i,h,TSP_Solve_Struct_FC);
+        parsave('ansmat\FK60_',i,h,TSP_Solve_Struct_FK);
     end
 end
 
 %记录结果 
-save('test2_70.mat','EAFCroute','EAFCtime','EAFCroute_Ori','EAFKroute','EAFKtime','EAFKroute_Ori');
+save('test2_60.mat','EAFCroute','EAFCtime','EAFCroute_Ori','EAFKroute','EAFKtime','EAFKroute_Ori');
 
