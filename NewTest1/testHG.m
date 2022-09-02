@@ -67,7 +67,7 @@ for i = 1:length(tarTsp)
     tarPath = tarTsp(i).folder + "\" + tarTsp(i).name;
     [Distance City] = readfile(tarPath,0);
     parfor h = 1:parthread
-        sprintf('%10s',i+"",h+"",tarTsp(i).name,"50")
+        sprintf('%10s',i+"",h+"",tarTsp(i).name,"50 ", datetime())
         [TSP_Solve_Struct_FC]  =  EA_OP_FastClustTSP(City, MaxDistNum,MaxTspSize,MaxKmeans,bestPar);
         EAFCroute(i,h) = TSP_Solve_Struct_FC.length;
         EAFCtime(i,h) = TSP_Solve_Struct_FC.time2;
@@ -113,7 +113,7 @@ for i = 1:length(tarTsp)
     tarPath = tarTsp(i).folder + "\" + tarTsp(i).name;
     [Distance City] = readfile(tarPath,0);
     parfor h = 1:parthread
-        sprintf('%10s',i+"",h+"",tarTsp(i).name,"70")
+        sprintf('%10s',i+"",h+"",tarTsp(i).name,"60 ",datetime())
         [TSP_Solve_Struct_FC]  =  EA_OP_FastClustTSP(City, MaxDistNum,MaxTspSize,MaxKmeans,bestPar);
         EAFCroute(i,h) = TSP_Solve_Struct_FC.length;
         EAFCtime(i,h) = TSP_Solve_Struct_FC.time2;
