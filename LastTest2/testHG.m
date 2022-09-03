@@ -11,8 +11,8 @@ EAFKroute = zeros(length(tarTsp), parthread);
 EAFKtime = zeros(length(tarTsp), parthread);
 
 
-MaxTspSize = 40;
-MaxKmeans = 40;
+MaxTspSize = 60;
+MaxKmeans = 60;
 MaxDistNum = 10000;
 
 for i = 1:length(tarTsp)
@@ -21,6 +21,7 @@ for i = 1:length(tarTsp)
     parfor h = 1:parthread
         sprintf('%10s',i+"",h+"",tarTsp(i).name,"40")
         [TSP_Solve_Struct_FK]  = EA_OP_FastKmeansTSP(City, MaxDistNum, MaxTspSize, MaxKmeans,bestPar);
+        [TSP_Solve_Struct_FG]  = GA_OP_FastKmeansTSP(City, MaxDistNum, MaxTspSize, MaxKmeans,bestPar);
         EAFKroute(i,h) = TSP_Solve_Struct_FK.length;
         EAFKtime(i,h) = TSP_Solve_Struct_FK.time2;
         EAFKroute_Ori(i,h) = TSP_Solve_Struct_FK.bestline(1);
