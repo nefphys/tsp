@@ -183,7 +183,7 @@ clc
 clear
 tarTsp = dir("data2");
 tarTsp = tarTsp(3:end);
-parthread = 30;
+parthread = 1;
 bestPar = [0.2 0.2 10];
 
 EAFCroute_Ori = zeros(length(tarTsp), parthread);
@@ -202,7 +202,7 @@ MaxDistNum = 20000;
 for i = 1:length(tarTsp)
     tarPath = tarTsp(i).folder + "\" + tarTsp(i).name;
     [Distance City] = readfile(tarPath,0);
-    parfor h = 1:parthread
+    for h = 1:parthread
         sprintf('%10s',i+"",h+"",tarTsp(i).name,"big ",datetime())
         [TSP_Solve_Struct_FC]  =  EA_OP_FastClustTSP(City, MaxDistNum,MaxTspSize,MaxKmeans,bestPar);
         EAFCroute(i,h) = TSP_Solve_Struct_FC.length;
