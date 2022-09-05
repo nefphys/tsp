@@ -5,7 +5,7 @@ function [TSP_Solve_Struct] = GA_OP_FastKmeansTSP(tspData, MaxDistNum, MaxTspSiz
 % MaxDistNum 最大可计算距离矩阵的大小 n*n, 数据量大于此值则不计算距离矩阵
 % 计算TSP则不改变层数，不赋值TSP则改变层数
 %算法内智能算法求解TSP最多可以计算999个点的情况
-stp = tic;
+t1 = datetime;
 %MaxTspSize = 50;%可计算的最大规模TSP
 %MaxKmeans = 50;%kmeans最大K值
 StdKmeans = MaxTspSize^2;%kmeans数据集分割大小
@@ -334,7 +334,7 @@ while(true)
     layer = layer + 1;
 end
 
-TSP_Solve_Struct.time = toc(stp);
+TSP_Solve_Struct.time = seconds(datetime - t1);
 
 %删除ans_group多余的第一个0
 for i = 1:length(ANS_GROUP)
@@ -388,12 +388,12 @@ else
 %     optMaxIt = min(1000 + ceil(length(ANS_GROUP)*EAPAR(3)),5e4);
 %     
     CityNum1 = length(ANS_GROUP);
-    popSize = 20 + round((CityNum1)^0.5 * 1.5 );
+    popSize = 20 + round((CityNum1)^0.7 * 1.8 );
     if mod(popSize,2) == 0
     else
         popSize = popSize + 1;
     end
-    EAmaxIt = 20 + round((CityNum1)^0.5 * 1.5);
+    EAmaxIt = 20 + round((CityNum1)^0.5 * 1.8);
     optMaxIt = min(1e5, 1000 + CityNum1*15);
         
     if length(ANS_GROUP) > 4

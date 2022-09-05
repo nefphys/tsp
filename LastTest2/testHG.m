@@ -1,45 +1,3 @@
-%% 50 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-clc
-clear
-tarTsp = dir("data");
-tarTsp = tarTsp(3:end);
-parthread = 30;
-bestPar = [0.2 0.2 10];
-
-EAFKroute_Ori = zeros(length(tarTsp), parthread);
-EAFKroute = zeros(length(tarTsp), parthread);
-EAFKtime = zeros(length(tarTsp), parthread);
-
-
-MaxTspSize = 50;
-MaxKmeans = 50;
-MaxDistNum = 10000;
-
-for i = 1:length(tarTsp)
-    tarPath = tarTsp(i).folder + "\" + tarTsp(i).name;
-    [Distance City] = readfile(tarPath,0);
-    parfor h = 1:parthread
-        sprintf('%10s',i+"",h+"",tarTsp(i).name,"50")
-        [TSP_Solve_Struct_FG]  = GA_OP_FastKmeansTSP(City, MaxDistNum, MaxTspSize, MaxKmeans,bestPar);
-        EAFKroute(i,h) = TSP_Solve_Struct_FG.length;
-        EAFKtime(i,h) = TSP_Solve_Struct_FG.time2;
-        EAFKroute_Ori(i,h) = TSP_Solve_Struct_FG.bestline(1);
-        parsave('ansmat\FK50_',i,h,TSP_Solve_Struct_FG);
-    end
-end
-
-%记录结果 
-save('test2_50.mat','EAFKroute','EAFKtime','EAFKroute_Ori','tarTsp');
-
-
-
-
-
-
-
-
-
-
 
 %% 75 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 clc
@@ -165,7 +123,7 @@ save('test2_125.mat','EAFKroute','EAFKtime','EAFKroute_Ori','tarTsp');
 
 
 
-%% 125 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 150 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 clc
 clear
 tarTsp = dir("data");

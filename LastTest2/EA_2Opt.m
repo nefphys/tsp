@@ -1,6 +1,6 @@
 function EA_Struct = EA_2Opt(ANS_GROUP, City, calLayer, popSize, EAmaxIt, optMaxIt)
     %ans_group 本身不会有什么变化，因此后续只需要进行查找
-    tt1 = tic();
+    t1 = datetime;
     %calLayer = 3;
     %popSize = 50;
     BestLine = 0;
@@ -91,7 +91,7 @@ function EA_Struct = EA_2Opt(ANS_GROUP, City, calLayer, popSize, EAmaxIt, optMax
     EA_Struct.dist = dist1;
     EA_Struct.route = route1;
     EA_Struct.bestline = BestLine;
-    EA_Struct.time = toc(tt1);
+    EA_Struct.time = seconds(datetime - t1);
 end
 
 
