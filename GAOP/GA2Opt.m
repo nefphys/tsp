@@ -3,7 +3,7 @@
 function GA2Opt_Struct = GA2Opt(tspData)
     %判断tspdata是不是大于1的方阵
     %如果是，则传入的是距离矩阵
-    tt1 = tic();
+    tt1 = datetime;
     if size(tspData,1) == size(tspData,2) && size(tspData,1) > 1
         distances_matrix = tspData;
         City = tspData;
@@ -19,21 +19,21 @@ function GA2Opt_Struct = GA2Opt(tspData)
         GA2Opt_Struct.length = 0;
         GA2Opt_Struct.route = 1;
         GA2Opt_Struct.bestline = 0;
-        GA2Opt_Struct.time = toc(tt1);
+        GA2Opt_Struct.time = seconds(datetime - tt1);
     end
     
     if CityNum == 2
         GA2Opt_Struct.length = distances_matrix(1,2);
         GA2Opt_Struct.route = [1 2];
         GA2Opt_Struct.bestline = 0;
-        GA2Opt_Struct.time = toc(tt1);
+        GA2Opt_Struct.time = seconds(datetime - tt1);
     end
     
     if CityNum == 3
         GA2Opt_Struct.length = distances_matrix(1,2) + distances_matrix(2,3) + distances_matrix(1,3);
         GA2Opt_Struct.route = [1 2 3];
         GA2Opt_Struct.bestline = 0;
-        GA2Opt_Struct.time = toc(tt1);
+        GA2Opt_Struct.time = seconds(datetime - tt1);
     end
     
     if CityNum > 3
@@ -108,7 +108,7 @@ function GA2Opt_Struct = GA2Opt(tspData)
         GA2Opt_Struct.length = BKS(end);
         GA2Opt_Struct.route = route;
         GA2Opt_Struct.bestline = BKS;
-        GA2Opt_Struct.time = toc(tt1);
+        GA2Opt_Struct.time = seconds(datetime - tt1);
     end
 end
 

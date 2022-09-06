@@ -1,9 +1,9 @@
 function TSP_Solve_Struct = TLGA_CTSP(tspData, K)
     %% 似乎应该先切分数据？并对子类进行TSP计算
     [Distance, City] = readfile(tspData,1);
-    t1 = tic;
+    t1 = datetime;
     %聚类，生成标准数据
-    [idx C]= kmeans(City,K);
+    [idx C]= kmeans(City,K,'MaxIter',10000);
     Data = [idx City];
     use_data = cell(K,1);
     for i = 1:K
@@ -21,18 +21,18 @@ function TSP_Solve_Struct = TLGA_CTSP(tspData, K)
         clust_struct.Rlength = temp.length;
         use_data{i} = clust_struct;
     end
-    t2 = toc(t1);
+    t2 = seconds(datetime - t1);
     %% 初始化参数
     GGAP=0.3;       %代沟概率
-    Pc=0.5;         %交叉概率
+    Pc=0.9;         %交叉概率
     Pm=0.05;        %变异概率
     
-    MAXGEN= K * 1000;
-    NIND = K; %
-    CF = 0.5;
-    MF_1 = 0.1;
-    MF_21 = 0.1;
-    MF_22 = 0.1;
+    MAXGEN= 100+2*round(K^1.5*1);
+    NIND = 20 + round(K*0.5)*4; %
+    CF = 0.9;
+    MF_1 = 0.05;
+    MF_21 = 0.05;
+    MF_22 = 0.05;
     
     mindis = zeros(1,MAXGEN);
     bestind = 0;
@@ -46,20 +46,27 @@ function TSP_Solve_Struct = TLGA_CTSP(tspData, K)
         for h = 1:K
             %在RouteID 里面随机选择一个点作为起点，然后随机选择前一个或者后一个点作为终点
             LowerChrom{h,1} = use_data{h}.routeID;
+            Dlen(h) = use_data{h}.Rlength;
         end
         temp.LowerChrom = LowerChrom;
+        temp.length = Dlen;
         Chrom(i) = temp;
     end
    
     gen = 1;
     higherChrom = zeros(NIND,K+1); %含终点
+    BKDS = [];
+    
+    [ttlDistance,FitnV]=All_Fitness(City, Chrom);  %计算路径长度
+    [mindisbygen,bestindex] = min(ttlDistance);
+    BKDS(gen) = mindisbygen;
+    mindis(gen) = mindisbygen; % 最Da适应值fit的集
+    bestind = bestindex; % 最优个体集 需要还原成路径吗
+    
+    vrybC = Chrom(bestindex);
     while gen <= MAXGEN
         %% 计算适应度
-        [ttlDistance,FitnV]=All_Fitness(Distance,Chrom);  %计算路径长度
-        [mindisbygen,bestindex] = min(ttlDistance);
         
-        mindis(gen) = mindisbygen; % 最小适应值fit的集
-        bestind = bestindex; % 最优个体集 需要还原成路径吗
         
         %% 上层GA计算, 似乎没有什么需要改的
         for i = 1:NIND
@@ -94,30 +101,38 @@ function TSP_Solve_Struct = TLGA_CTSP(tspData, K)
                 end
             end
          end
+         
+        [ttlDistance,FitnV]=All_Fitness(City, Chrom);  %计算路径长度
+        [mindisbygen,bestindex] = min(ttlDistance);
+        if BKDS(gen) > mindisbygen
+            BKDS(gen+1) = mindisbygen;
+            vrybC = Chrom(bestindex);
+        else
+            BKDS(gen+1) = BKDS(gen);
+        end
+        %BKDS(gen) = mindisbygen;
+        mindis(gen) = mindisbygen; % 最Da适应值fit的集
+        bestind = bestindex; % 最优个体集 需要还原成路径吗
+        
         gen = gen + 1;
         
 
-        for j = 1:length(Chrom)
-            s = [];
-        for i = 1:K
-            s = [s ; Chrom(j).LowerChrom{i}];
-
-        end
-        end
-    mindisever = mindis(MAXGEN);  % 取得历史最优适应值的位置、最优目标函数值
+    end
+    mindisever = mindis(end);  % 取得历史最优适应值的位置、最优目标函数值
     bestroute = bestind; % 取得最优个体
     %还原路径
     route = [];
     for i = 1:K
-        index = Chrom(bestind).HigherChrom(i);
-        route = [route; Chrom(bestind).LowerChrom{index}];
+        index = vrybC.HigherChrom(i);
+        route = [route; vrybC.LowerChrom{index}];
     end
     %plot(mindis)
-    TSP_Solve_Struct.time = toc(t1);
+    TSP_Solve_Struct.time = seconds(datetime - t1);
     TSP_Solve_Struct.FirstTime = t2;
-    TSP_Solve_Struct.length = mindisever;
+    TSP_Solve_Struct.length = BKDS(end);
     TSP_Solve_Struct.route = [route;route(1)];
     TSP_Solve_Struct.city = City;
     TSP_Solve_Struct.cate = idx;
+    TSP_Solve_Struct.bestline = BKDS;
     %DrawCluster(TSP_Solve_Struct.city, TSP_Solve_Struct.cate, TSP_Solve_Struct.route)
 end

@@ -1,3 +1,7 @@
+%% 添加路径
+addpath(genpath('..\IATools'));
+addpath(genpath('..\Tools'));
+addpath(genpath('..\GAOP'));
 
 %% 75 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 clc
@@ -155,3 +159,9 @@ end
 
 %记录结果 
 save('test2_150.mat','EAFKroute','EAFKtime','EAFKroute_Ori','tarTsp');
+
+
+%删除路径 
+rmpath(genpath('..\IATools'));
+rmpath(genpath('..\Tools'));
+rmpath(genpath('..\GAOP'));

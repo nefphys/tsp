@@ -88,6 +88,16 @@
 % Release: 3.0
 % Release Date: 05/01/2014
 
+
+% 时间复杂度O(n^4)
+% Linear model Poly4:
+%      f(x) = 4.123e-08*x^4 -8.306e-06*x^3 + 0.001404*x^2 + -0.05597*x + 0.6126
+% Coefficients (with 95% confidence bounds):
+%        p1 =   4.123e-08  (2.07e-08, 6.176e-08)
+%        p2 =  -8.306e-06  (-1.699e-05, 3.764e-07)
+%        p3 =    0.001404  (0.0001762, 0.002631)
+%        p4 =    -0.05597  (-0.1215, 0.009608)
+%        p5 =      0.6126  (-0.4365, 1.662)
 %varargin = struct('xy',City);
 function TSP_Solve_Struct = CGA_Solver(varargin)
     % Initialize default configuration
@@ -137,12 +147,12 @@ function TSP_Solve_Struct = CGA_Solver(varargin)
         error('Invalid XY or DMAT inputs!')
     end
     n = N;
-    
+    %'numIter',100+n^2*0.5,'popSize',20+round(n*0.5)*4
     % Sanity Checks
-    popSize     = 10+int32(0.25*N);
-    popSize     = 4*ceil(popSize/4);
+    popSize     = 20+round(N*0.25)*4;
+    %popSize     = 4*ceil(popSize/4);
     %numIter     = max(1,round(real(numIter(1))));
-    numIter     = 500*N;
+    numIter     = 500+round(N*1);
     showProg    = logical(showProg(1));
     showResult  = logical(showResult(1));
     showWaitbar = logical(showWaitbar(1));

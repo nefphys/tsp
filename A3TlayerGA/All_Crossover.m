@@ -35,9 +35,9 @@ function [ta tb] = interCross(a, b)
     tb = [b(1:(Ystart-1)) repa b((Yend+1):LY)];
     
     %ta 中重复的城市
-    morea = MY_setdiff(repb+1,repa+1)-1;
+    morea = MY_setdiff(repb+1,repa+1,2)-1;
     %tb 中重复的城市
-    moreb = MY_setdiff(repa+1,repb+1)-1;
+    moreb = MY_setdiff(repa+1,repb+1,2)-1;
     
     j = 1;
     for i = 1:length(morea)

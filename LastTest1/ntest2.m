@@ -3,6 +3,14 @@
 
 clc
 clear
+
+%% 添加路径
+addpath(genpath('..\IATools'));
+addpath(genpath('..\Tools'));
+addpath(genpath('..\GAOP'));
+
+
+
 tarTsp = dir("data");
 tarTsp = tarTsp(3:end);
 parthread = 30;
@@ -22,3 +30,9 @@ for i = 1:length(tarTsp)
 end
 
 save('EA_ANS.mat','EA_ANS','tarTsp');
+
+
+%删除路径 
+rmpath(genpath('..\IATools'));
+rmpath(genpath('..\Tools'));
+rmpath(genpath('..\GAOP'));
