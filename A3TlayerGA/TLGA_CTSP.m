@@ -1,4 +1,15 @@
 function TSP_Solve_Struct = TLGA_CTSP(tspData, K)
+
+%% 时间复杂度
+% Linear model Poly3:
+%      f(x) = p1*x^3 + p2*x^2 + p3*x + p4
+% Coefficients (with 95% confidence bounds):
+%        p1 =   3.463e-06  (2.852e-06, 4.073e-06)
+%        p2 =  -1.809e-05  (-0.0002128, 0.0001766)
+%        p3 =     0.02981  (0.01199, 0.04763)
+%        p4 =     -0.1965  (-0.6394, 0.2464)
+       
+       
     %% 似乎应该先切分数据？并对子类进行TSP计算
     [Distance, City] = readfile(tspData,1);
     t1 = datetime;
@@ -27,7 +38,7 @@ function TSP_Solve_Struct = TLGA_CTSP(tspData, K)
     Pc=0.9;         %交叉概率
     Pm=0.05;        %变异概率
     
-    MAXGEN= 100+2*round(K^1.5*1);
+    MAXGEN= 200+2*round(K*1);
     NIND = 20 + round(K*0.5)*4; %
     CF = 0.9;
     MF_1 = 0.05;
